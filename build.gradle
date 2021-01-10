@@ -1,0 +1,114 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'jacoco'
+    id 'io.codearte.nexus-staging' version '0.11.0'
+//    id "com.github.hierynomus.license" version "0.15.0"
+}
+
+apply plugin: 'com.bmuschko.nexus'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+group 'ru.oleg-cherednik.utils'
+version '2.8.6.1'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+mainClassName = 'unknown'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+configurations {
+    jar.archiveName = "gson-utils-${version}.jar"
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    testImplementation 'org.testng:testng:7.3.0'
+    testImplementation 'org.assertj:assertj-core:3.11.1'
+    testImplementation 'commons-io:commons-io:2.5'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+
+check.dependsOn jacocoTestReport
+
+test {
+    useTestNG()
+}
+
+//license {
+//    header = file('license_header.txt')
+//    include "**/*.java"
+//    exclude "**/*Test.java"
+//}
+
+modifyPom {
+    project {
+        name 'gson-utils'
+        description 'Some utils for Jackson Project'
+        url 'https://github.com/oleg-cherednik/gson-utils'
+        inceptionYear '2021'
+
+        scm {
+            url 'https://github.com/oleg-cherednik/gson-utils'
+            connection 'scm:https://github.com/oleg-cherednik/gson-utils.git'
+            developerConnection 'scm:git@github.com:oleg-cherednik/gson-utils.git'
+        }
+
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'oleg.cherednik'
+                name 'Oleg Cherednik'
+                email 'oleg.cherednik@gmail.com'
+            }
+        }
+    }
+}
+
+extraArchive {
+    sources true
+    tests true
+    javadoc true
+}
+
+nexus {
+    sign true
+    repositoryUrl 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+    snapshotRepositoryUrl 'https://oss.sonatype.org/content/repositories/snapshots'
+}
+
+nexusStaging {
+    packageGroup 'ru.oleg-cherednik'
+    stagingProfileId 'd3835bf60f05b9'
+}
