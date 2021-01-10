@@ -30,7 +30,6 @@ public final class MethodUtils {
     }
 
     private MethodUtils() {
-
     }
 
 }

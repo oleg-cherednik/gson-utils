@@ -32,13 +32,16 @@ public final class Invoke {
 
         try {
             accessibleObject.setAccessible(true);
-            return accessibleObject instanceof Field ? invokeWithModifiers(accessibleObject, task) : task.apply(accessibleObject);
+
+            if (accessibleObject instanceof Field)
+                return invokeWithModifiers((Field)accessibleObject, (Function<Field, R>)task);
+            return task.apply(accessibleObject);
         } finally {
             accessibleObject.setAccessible(accessible);
         }
     }
 
-    private static <T extends AccessibleObject & Member, R> R invokeWithModifiers(T accessibleObject, Function<T, R> task) throws Exception {
+    private static <R> R invokeWithModifiers(Field accessibleObject, Function<Field, R> task) throws Exception {
         Field modifiersField = Field.class.getDeclaredField("modifiers");
         boolean accessible = modifiersField.isAccessible();
         int modifiers = accessibleObject.getModifiers();

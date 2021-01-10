@@ -111,11 +111,9 @@ public class GsonDecorator {
             return null;
 
         return withRuntimeException(() -> {
-            return withRuntimeException(() -> {
-                Gson gson = supplier.get();
-                JsonReader jsonReader = gson.newJsonReader(in);
-                return gson.fromJson(jsonReader, new IteratorParameterizedType<>(valueClass));
-            });
+            Gson gson = supplier.get();
+            JsonReader jsonReader = gson.newJsonReader(in);
+            return gson.fromJson(jsonReader, new IteratorParameterizedType<>(valueClass));
         });
     }
 

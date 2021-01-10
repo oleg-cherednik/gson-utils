@@ -8,9 +8,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.bind.ObjectTypeAdapter;
-import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory;
 import ru.olegcherednik.utils.gson.adapters.CustomObjectTypeAdapter;
-import ru.olegcherednik.utils.gson.adapters.IteratorTypeAdapterFactory;
+import ru.olegcherednik.utils.gson.adapters.IteratorTypeAdapter;
 import ru.olegcherednik.utils.gson.adapters.LocalDateTimeTypeAdapter;
 import ru.olegcherednik.utils.gson.adapters.ZonedDateTimeTypeAdapter;
 import ru.olegcherednik.utils.reflection.FieldUtils;
@@ -39,6 +38,8 @@ public class GsonBuilderDecorator {
     public static final Function<ZoneId, ZoneId> WITH_NO_CHANGE_ZONE = zoneId -> zoneId;
     public static final Function<ZoneId, ZoneId> WITH_UTC_ZONE = zoneId -> ZoneOffset.UTC;
 
+    private static final String GSON_FIELD_FACTORIES = "factories";
+
     protected final List<Consumer<GsonBuilder>> consumers = new ArrayList<>();
 
     protected DateTimeFormatter dateFormatFormatter = ISO_ZONED_DATE_TIME;
@@ -54,10 +55,9 @@ public class GsonBuilderDecorator {
 
     protected Gson postCreate(Gson gson) {
         try {
-            List<TypeAdapterFactory> factories = FieldUtils.getFieldValue(gson, "factories");
+            List<TypeAdapterFactory> factories = FieldUtils.getFieldValue(gson, GSON_FIELD_FACTORIES);
             factories = replaceObjectTypeAdapter(factories);
-            factories = addIteratorTypeAdapterFactory(factories, gson);
-            FieldUtils.setFieldValue(gson, "factories", factories);
+            FieldUtils.setFieldValue(gson, GSON_FIELD_FACTORIES, factories);
             return gson;
         } catch(Exception e) {
             throw new GsonUtilsException(e);
@@ -70,18 +70,6 @@ public class GsonBuilderDecorator {
                         .collect(Collectors.toList());
     }
 
-    protected List<TypeAdapterFactory> addIteratorTypeAdapterFactory(List<TypeAdapterFactory> factories, Gson gson) throws Exception {
-        List<TypeAdapterFactory> res = new ArrayList<>(factories.size() + 1);
-
-        factories.forEach(factory -> {
-            if (factory instanceof ReflectiveTypeAdapterFactory)
-                res.add(new IteratorTypeAdapterFactory());
-            res.add(factory);
-        });
-
-        return res;
-    }
-
     protected GsonBuilder gsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
 
@@ -90,7 +78,7 @@ public class GsonBuilderDecorator {
         builder.enableComplexMapKeySerialization();
         builder.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(withZone, dateFormatFormatter));
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-//        builder.registerTypeAdapterFactory(IteratorTypeAdapter.FACTORY);
+        builder.registerTypeAdapterFactory(IteratorTypeAdapter.FACTORY);
 
         return builder;
     }
