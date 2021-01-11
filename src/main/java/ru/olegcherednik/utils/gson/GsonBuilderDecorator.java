@@ -38,8 +38,6 @@ public class GsonBuilderDecorator {
     public static final Function<ZoneId, ZoneId> ZONE_MODIFIER_USE_ORIGINAL = zoneId -> zoneId;
     public static final Function<ZoneId, ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
 
-    private static final String GSON_FIELD_FACTORIES = "factories";
-
     protected final List<Consumer<GsonBuilder>> consumers = new ArrayList<>();
 
     protected DateTimeFormatter dateTimeFormatter = ISO_ZONED_DATE_TIME;
@@ -55,19 +53,20 @@ public class GsonBuilderDecorator {
 
     protected Gson postCreate(Gson gson) {
         try {
-            List<TypeAdapterFactory> factories = FieldUtils.getFieldValue(gson, GSON_FIELD_FACTORIES);
-            factories = replaceObjectTypeAdapter(factories);
-            FieldUtils.setFieldValue(gson, GSON_FIELD_FACTORIES, factories);
+            updateFactories(gson);
             return gson;
         } catch(Exception e) {
             throw new GsonUtilsException(e);
         }
     }
 
-    protected List<TypeAdapterFactory> replaceObjectTypeAdapter(List<TypeAdapterFactory> factories) {
-        return factories.stream()
-                        .map(factory -> factory == ObjectTypeAdapter.FACTORY ? CustomObjectTypeAdapter.FACTORY : factory)
-                        .collect(Collectors.toList());
+    protected void updateFactories(Gson gson) throws Exception {
+        List<TypeAdapterFactory> factories = FieldUtils.<List<TypeAdapterFactory>>getFieldValue(gson, "factories")
+                .stream()
+                .map(factory -> factory == ObjectTypeAdapter.FACTORY ? CustomObjectTypeAdapter.FACTORY : factory)
+                .collect(Collectors.toList());
+
+        FieldUtils.setFieldValue(gson, "factories", factories);
     }
 
     protected GsonBuilder gsonBuilder() {
