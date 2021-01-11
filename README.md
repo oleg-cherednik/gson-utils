@@ -5,9 +5,8 @@
 [![circle-ci](https://circleci.com/gh/oleg-cherednik/GsonUtils/tree/dev.svg?style=shield)](https://app.circleci.com/pipelines/github/oleg-cherednik/GsonUtils)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![codecov](https://codecov.io/gh/oleg-cherednik/GsonUtils/branch/dev/graph/badge.svg?token=UnqBOd1gbA)](https://codecov.io/gh/oleg-cherednik/GsonUtils)
-[![Known Vulnerabilities](https://snyk.io//test/github/oleg-cherednik/GsonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/GsonUtils?targetFile=build.gradle)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/JacksonUtils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/JacksonUtils&amp;utm_campaign=Badge_Grade)
-     
+[![Known Vulnerabilities](https://snyk.io/test/github/oleg-cherednik/GsonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/oleg-cherednik/GsonUtils?targetFile=build.gradle)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e)](https://www.codacy.com/gh/oleg-cherednik/GsonUtils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/GsonUtils&amp;utm_campaign=Badge_Grade)     
 # JacksonUtils
 > a java tool to make working with [Gson](https://github.com/google/gson) more comfortable
 
