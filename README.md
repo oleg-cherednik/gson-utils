@@ -4,8 +4,8 @@
 [![travis-ci](https://travis-ci.com/oleg-cherednik/GsonUtils.svg?branch=dev)](https://travis-ci.com/oleg-cherednik/GsonUtils)
 [![circle-ci](https://circleci.com/gh/oleg-cherednik/GsonUtils/tree/dev.svg?style=shield)](https://app.circleci.com/pipelines/github/oleg-cherednik/GsonUtils)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
-[![codecov](https://codecov.io/gh/oleg-cherednik/JacksonUtils/branch/dev/graph/badge.svg?token=W8t2rKNOh5)](https://codecov.io/gh/oleg-cherednik/JacksonUtils)
-[![Known Vulnerabilities](https://snyk.io//test/github/oleg-cherednik/JacksonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/JacksonUtils?targetFile=build.gradle)
+[![codecov](https://codecov.io/gh/oleg-cherednik/GsonUtils/branch/dev/graph/badge.svg?token=UnqBOd1gbA)](https://codecov.io/gh/oleg-cherednik/GsonUtils)
+[![Known Vulnerabilities](https://snyk.io//test/github/oleg-cherednik/GsonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/oleg-cherednik/GsonUtils?targetFile=build.gradle)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a2abf7ff8b1b4e82ad2cd0d039aea353)](https://www.codacy.com/gh/oleg-cherednik/JacksonUtils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/JacksonUtils&amp;utm_campaign=Badge_Grade)
      
 # JacksonUtils
