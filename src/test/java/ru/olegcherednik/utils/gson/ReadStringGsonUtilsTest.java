@@ -19,6 +19,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Test
 public class ReadStringGsonUtilsTest {
 
+    public void shouldRetrieveNullWhenObjectNull() {
+        assertThat(GsonUtils.readValue((String)null, Object.class)).isNull();
+        assertThat(GsonUtils.readList((String)null, Object.class)).isNull();
+        assertThat(GsonUtils.readMap((String)null)).isNull();
+        assertThat(GsonUtils.readMap((String)null, String.class, String.class)).isNull();
+    }
+
     public void shouldRetrieveDeserializedObjectWhenReadJson() {
         Data expected = new Data(666, "omen");
         Data actual = GsonUtils.readValue("{\"intVal\":666,\"strVal\":\"omen\"}", Data.class);

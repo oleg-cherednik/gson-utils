@@ -23,7 +23,7 @@
 ## Gradle
 
 ```groovy
-compile 'ru.oleg-cherednik.utils:jackson-utils:2.12.0.4'
+compile 'ru.oleg-cherednik.utils:gson-utils:2.8.6.1'
 ```
 
 ## Maven
@@ -31,13 +31,13 @@ compile 'ru.oleg-cherednik.utils:jackson-utils:2.12.0.4'
 ```xml
 <dependency>
     <groupId>ru.oleg-cherednik.utils</groupId>
-    <artifactId>jackson-utils</artifactId>
-    <version>2.12.0.4</version>
+    <artifactId>gson-utils</artifactId>
+    <version>2.8.6.1</version>
 </dependency>
 ```                                                    
 
-In the version, first 3 places are the version of `Jackson` that is used in this utils.
-The last section is the `jackson-utils` version. This number is unique. 
+In the version, first 3 places are the version of `Gson` that is used in this utils.
+The last section is the `gson-utils` version. This number is unique. 
 
 ## Usage 
 

@@ -46,13 +46,13 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
         }
 
         private Type getIteratorElementType(Type context, Class<?> contextRawType) throws Exception {
-            Type iteratorType = MethodUtils.invokeStaticMethod($Gson$Types.class, "getSupertype",
+            Type type = MethodUtils.invokeStaticMethod($Gson$Types.class, "getSupertype",
                     new Class[] { Type.class, Class.class, Class.class }, new Object[] { context, contextRawType, Iterator.class });
 
-            if (iteratorType instanceof WildcardType)
-                iteratorType = ((WildcardType)iteratorType).getUpperBounds()[0];
-            if (iteratorType instanceof ParameterizedType)
-                return ((ParameterizedType)iteratorType).getActualTypeArguments()[0];
+            if (type instanceof WildcardType)
+                type = ((WildcardType)type).getUpperBounds()[0];
+            if (type instanceof ParameterizedType)
+                return ((ParameterizedType)type).getActualTypeArguments()[0];
 
             return Object.class;
         }

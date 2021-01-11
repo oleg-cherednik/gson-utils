@@ -17,12 +17,12 @@ import java.util.function.Function;
  */
 public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
 
-    protected final Function<ZoneId, ZoneId> withZone;
-    protected final DateTimeFormatter dateFormatFormatter;
+    protected final Function<ZoneId, ZoneId> zoneModifier;
+    protected final DateTimeFormatter dateTimeFormatter;
 
-    public ZonedDateTimeTypeAdapter(Function<ZoneId, ZoneId> withZone, DateTimeFormatter dateFormatFormatter) {
-        this.withZone = withZone;
-        this.dateFormatFormatter = dateFormatFormatter;
+    public ZonedDateTimeTypeAdapter(Function<ZoneId, ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
+        this.zoneModifier = zoneModifier;
+        this.dateTimeFormatter = dateTimeFormatter;
     }
 
     @Override
@@ -31,8 +31,8 @@ public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
             if (out.getSerializeNulls())
                 out.nullValue();
         } else {
-            ZoneId zone = withZone.apply(value.getZone());
-            out.value(dateFormatFormatter.format(value.withZoneSameInstant(zone)));
+            ZoneId zone = zoneModifier.apply(value.getZone());
+            out.value(dateTimeFormatter.format(value.withZoneSameInstant(zone)));
         }
     }
 
@@ -43,6 +43,6 @@ public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
             return null;
         }
 
-        return ZonedDateTime.parse(in.nextString(), dateFormatFormatter);
+        return ZonedDateTime.parse(in.nextString(), dateTimeFormatter);
     }
 }

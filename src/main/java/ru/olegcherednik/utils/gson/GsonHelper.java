@@ -10,9 +10,9 @@ import java.util.Optional;
  */
 public final class GsonHelper {
 
-    public static final GsonBuilderDecorator DEFAULT_GSON_BUILDER_DECORATOR = new GsonBuilderDecorator();
+    public static final GsonBuilderDecorator DEFAULT_BUILDER_DECORATOR = new GsonBuilderDecorator();
 
-    private static GsonBuilderDecorator gsonBuilderDecorator = DEFAULT_GSON_BUILDER_DECORATOR;
+    private static GsonBuilderDecorator gsonBuilderDecorator = DEFAULT_BUILDER_DECORATOR;
     private static Gson gson = createGson();
     private static Gson prettyPrintGson = createPrettyPrintGson();
 
@@ -22,7 +22,7 @@ public final class GsonHelper {
     }
 
     @SuppressWarnings("PMD.DefaultPackage")
-    static synchronized Gson prettyPrintMapper() {
+    static synchronized Gson prettyPrintGson() {
         return prettyPrintGson;
     }
 
@@ -52,13 +52,14 @@ public final class GsonHelper {
 
     @SuppressWarnings("PMD.AvoidReassigningParameters")
     public static synchronized void setGsonBuilderDecorator(GsonBuilderDecorator gsonBuilderDecorator) {
-        gsonBuilderDecorator = Optional.ofNullable(gsonBuilderDecorator).orElse(DEFAULT_GSON_BUILDER_DECORATOR);
+        gsonBuilderDecorator = Optional.ofNullable(gsonBuilderDecorator).orElse(DEFAULT_BUILDER_DECORATOR);
 
-        if (gsonBuilderDecorator != GsonHelper.gsonBuilderDecorator) {
-            GsonHelper.gsonBuilderDecorator = gsonBuilderDecorator;
-            gson = createGson();
-            prettyPrintGson = createPrettyPrintGson();
-        }
+        if (gsonBuilderDecorator == GsonHelper.gsonBuilderDecorator)
+            return;
+
+        GsonHelper.gsonBuilderDecorator = gsonBuilderDecorator;
+        gson = createGson();
+        prettyPrintGson = createPrettyPrintGson();
     }
 
     private GsonHelper() {

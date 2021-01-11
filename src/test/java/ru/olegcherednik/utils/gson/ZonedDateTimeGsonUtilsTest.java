@@ -30,7 +30,7 @@ public class ZonedDateTimeGsonUtilsTest {
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteZonedDateTimeSingaporeZone() throws IOException {
         GsonDecorator gsonUtils = GsonHelper.createGsonDecorator(
-                new GsonBuilderDecorator().withZone(zone -> ZoneId.of("Asia/Singapore")));
+                new GsonBuilderDecorator().withZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
 
         Map<String, ZonedDateTime> map = createData();
         String actual = gsonUtils.writeValue(map);
@@ -42,7 +42,7 @@ public class ZonedDateTimeGsonUtilsTest {
 
     public void shouldRetrieveJsonWithNoZoneChangeWhenWriteZonedDateTimeWithSameZone() throws IOException {
         GsonDecorator gsonUtils = GsonHelper.createGsonDecorator(
-                new GsonBuilderDecorator().withZone(GsonBuilderDecorator.WITH_NO_CHANGE_ZONE));
+                new GsonBuilderDecorator().withZoneModifier(GsonBuilderDecorator.ZONE_MODIFIER_USE_ORIGINAL));
 
         Map<String, ZonedDateTime> map = createData();
         String actual = gsonUtils.writeValue(map);

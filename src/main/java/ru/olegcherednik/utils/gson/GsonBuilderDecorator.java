@@ -35,15 +35,15 @@ import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
  */
 public class GsonBuilderDecorator {
 
-    public static final Function<ZoneId, ZoneId> WITH_NO_CHANGE_ZONE = zoneId -> zoneId;
-    public static final Function<ZoneId, ZoneId> WITH_UTC_ZONE = zoneId -> ZoneOffset.UTC;
+    public static final Function<ZoneId, ZoneId> ZONE_MODIFIER_USE_ORIGINAL = zoneId -> zoneId;
+    public static final Function<ZoneId, ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
 
     private static final String GSON_FIELD_FACTORIES = "factories";
 
     protected final List<Consumer<GsonBuilder>> consumers = new ArrayList<>();
 
-    protected DateTimeFormatter dateFormatFormatter = ISO_ZONED_DATE_TIME;
-    protected Function<ZoneId, ZoneId> withZone = WITH_UTC_ZONE;
+    protected DateTimeFormatter dateTimeFormatter = ISO_ZONED_DATE_TIME;
+    protected Function<ZoneId, ZoneId> zoneModifier = ZONE_MODIFIER_TO_UTC;
 
     public Gson gson() {
         return postCreate(gsonBuilder().create());
@@ -76,7 +76,7 @@ public class GsonBuilderDecorator {
         consumers.forEach(consumer -> consumer.accept(builder));
 
         builder.enableComplexMapKeySerialization();
-        builder.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(withZone, dateFormatFormatter));
+        builder.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(zoneModifier, dateTimeFormatter));
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         builder.registerTypeAdapterFactory(IteratorTypeAdapter.FACTORY);
 
@@ -85,13 +85,13 @@ public class GsonBuilderDecorator {
 
     // ---------- extended ----------
 
-    public GsonBuilderDecorator withZone(Function<ZoneId, ZoneId> withZone) {
-        this.withZone = Optional.ofNullable(withZone).orElse(this.withZone);
+    public GsonBuilderDecorator withZoneModifier(Function<ZoneId, ZoneId> zoneModifier) {
+        this.zoneModifier = Optional.ofNullable(zoneModifier).orElse(this.zoneModifier);
         return this;
     }
 
-    public GsonBuilderDecorator withDateTimeFormatter(DateTimeFormatter dateFormatFormatter) {
-        this.dateFormatFormatter = Optional.ofNullable(dateFormatFormatter).orElse(this.dateFormatFormatter);
+    public GsonBuilderDecorator withDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
+        this.dateTimeFormatter = Optional.ofNullable(dateTimeFormatter).orElse(this.dateTimeFormatter);
         return this;
     }
 

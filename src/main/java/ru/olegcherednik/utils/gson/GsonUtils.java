@@ -13,7 +13,7 @@ import java.util.Map;
 public final class GsonUtils {
 
     private static final GsonDecorator DELEGATE = new GsonDecorator(GsonHelper::gson);
-    private static final GsonDecorator PRETTY_PRINT_DELEGATE = new GsonDecorator(GsonHelper::prettyPrintMapper);
+    private static final GsonDecorator PRETTY_PRINT_DELEGATE = new GsonDecorator(GsonHelper::prettyPrintGson);
 
     // ---------- read String ----------
 
