@@ -11,13 +11,14 @@
 > a java tool to make working with [Gson](https://github.com/google/gson) more comfortable
 
 ## Features
-*   Encapsulate all checked exceptions from Jackson with custom runtime exception;
-*   A centralized configuration of `ObjectMapper`;
-*   A central place of settings and all `ObjectMapper` instances;
+*   Encapsulate all checked exceptions from Gson with custom runtime exception;
+*   A central place for configuration;
+*   A central place for holding `Gson` instances;
 *   Utility class to make most common operations much more comfortable to use;
 *   Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
 *   `InputStream` support for objects, lists and maps;
-*   Lazy read support for list from `InputStream`. 
+*   Lazy read support for list from `InputStream`;
+*   Read `Integer` value as `Integer` but not `Double`. 
 
 ## Gradle
 
@@ -40,10 +41,10 @@ The last section is the `gson-utils` version. This number is unique.
 
 ## Usage 
 
-To simplify usage of _jackson-utils_, there're following classes:
-*   [JacksonUtils](#jacksonutils-class) - utility class with set of method to use json transformation;
+To simplify usage of _GsonUtils_, there're following classes:
+*   [GsonUtils](#gsonutils-class) - utility class with set of method to use json transformation;
 
-### JacksonUtils class
+### GsonUtils class
 
 #### Read json from `String`
 
@@ -62,7 +63,7 @@ String json = """
                   "strVal" : "omen"
               }
               """;
-Data data = JacksonUtils.readValue(json, Data.class);
+Data data = GsonUtils.readValue(json, Data.class);
 ```
 
 ##### `String` to a list of custom object type
@@ -86,7 +87,7 @@ String json = """
                   }
               ]
               """;
-List<Data> res = JacksonUtils.readList(json, Data.class);
+List<Data> res = GsonUtils.readList(json, Data.class);
 ```
 
 ##### `String` to a map of custom object type
@@ -106,7 +107,7 @@ String json = """
                   }
               }
               """;
-Map<String, ?> map = JacksonUtils.readMap(json);
+Map<String, ?> map = GsonUtils.readMap(json);
 ```
 **Note:** `map` values have either primitive type or `Map` or `List`.
 
@@ -131,7 +132,7 @@ String json = """
                   }
               }
               """;
-Map<String, Data> map = JacksonUtils.readMap(json, Data.class);
+Map<String, Data> map = GsonUtils.readMap(json, Data.class);
 ```
 
 ###### `String` to a map with `Integer` keys and given type as value
@@ -155,7 +156,7 @@ String json = """
                   }
               }
               """;
-Map<Integer, Data> map = JacksonUtils.readMap(json, Integer.class, Data.class);
+Map<Integer, Data> map = GsonUtils.readMap(json, Integer.class, Data.class);
 ```
 
 #### Read json from `InputStream`
@@ -176,7 +177,7 @@ class Data {
 ```
 ```java         
 try (InputStream in = ...) {
-    Data data = JacksonUtils.readValue(in, Data.class);
+    Data data = GsonUtils.readValue(in, Data.class);
 }
 ```
 
@@ -203,7 +204,7 @@ class Data {
 ```
 ```java
 try (InputStream in = ...) {
-    List<Data> res = JacksonUtils.readList(in, Data.class);
+    List<Data> res = GsonUtils.readList(in, Data.class);
 }
 ```
 
@@ -229,7 +230,7 @@ class Data {
 ```
 ```java
 try (InputStream in = ...) {
-    Iterator<Data> it = JacksonUtils.readListLazy(in, Data.class);
+    Iterator<Data> it = GsonUtils.readListLazy(in, Data.class);
     
     while (it.hasNext()) {
         Data data = it.next();
@@ -254,7 +255,7 @@ try (InputStream in = ...) {
 ```
 ```java
 try (InputStream in = ...) {
-    Map<String, ?> map = JacksonUtils.readMap(in);
+    Map<String, ?> map = GsonUtils.readMap(in);
 }
 ```
 **Note:** `map` values have either primitive type or `Map` or `List`.
@@ -281,7 +282,7 @@ class Data {
 ```
 ```java
 try (InputStream in = ...) {
-    Map<String, ?> map = JacksonUtils.readMap(in, Data.class);
+    Map<String, ?> map = GsonUtils.readMap(in, Data.class);
 }
 ```
 
@@ -307,14 +308,31 @@ class Data {
 ```
 ```java
 try (InputStream in = ...) {
-    Map<Integer, Data> map = JacksonUtils.readMap(in, Integer.class, Data.class);
+    Map<Integer, Data> map = GsonUtils.readMap(in, Integer.class, Data.class);
 }
 ```
 
+#### Write any object to json
+
+##### Write Any object to json `String` (but not pretty print)
+```java
+class Data {
+    int intVal;
+    String strVal;
+}
+
+Data data = new Data(555, "victory");
+String json = GsonUtils.writeValue(data);
+// """{"intVal":555,"strVal":"victory"}"""
+```
+
+```
+
+
 ##### Links
 
-*   Home page: https://github.com/oleg-cherednik/jackson-utils
+*   Home page: https://github.com/oleg-cherednik/gson-utils
 
 *   Maven:
-    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.utils/jackson-utils
-    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/utils/jackson-utils/
+    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.utils/gson-utils
+    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/utils/gson-utils/

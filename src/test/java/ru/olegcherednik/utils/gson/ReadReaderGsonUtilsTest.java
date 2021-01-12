@@ -12,8 +12,10 @@ import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Oleg Cherednik
@@ -145,6 +147,7 @@ public class ReadReaderGsonUtilsTest {
             assertThat(actual2).isNotNull();
             assertThat(actual2).isEqualTo(expected2);
             assertThat(it.hasNext()).isFalse();
+            assertThatThrownBy(it::next).isExactlyInstanceOf(NoSuchElementException.class);
         }
     }
 }

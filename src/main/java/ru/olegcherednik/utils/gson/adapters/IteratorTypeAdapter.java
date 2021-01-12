@@ -15,7 +15,6 @@ import ru.olegcherednik.utils.reflection.MethodUtils;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.WildcardType;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -48,13 +47,7 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
         private Type getIteratorElementType(Type context, Class<?> contextRawType) throws Exception {
             Type type = MethodUtils.invokeStaticMethod($Gson$Types.class, "getSupertype",
                     new Class[] { Type.class, Class.class, Class.class }, new Object[] { context, contextRawType, Iterator.class });
-
-            if (type instanceof WildcardType)
-                type = ((WildcardType)type).getUpperBounds()[0];
-            if (type instanceof ParameterizedType)
-                return ((ParameterizedType)type).getActualTypeArguments()[0];
-
-            return Object.class;
+            return ((ParameterizedType)type).getActualTypeArguments()[0];
         }
     };
 
