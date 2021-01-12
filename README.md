@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/oleg-cherednik/GsonUtils/branch/dev/graph/badge.svg?token=UnqBOd1gbA)](https://codecov.io/gh/oleg-cherednik/GsonUtils)
 [![Known Vulnerabilities](https://snyk.io/test/github/oleg-cherednik/GsonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/oleg-cherednik/GsonUtils?targetFile=build.gradle)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e)](https://www.codacy.com/gh/oleg-cherednik/GsonUtils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/GsonUtils&amp;utm_campaign=Badge_Grade)     
-# JacksonUtils
+# GsonUtils
 > a java tool to make working with [Gson](https://github.com/google/gson) more comfortable
 
 ## Features
@@ -41,7 +41,6 @@ The last section is the `gson-utils` version. This number is unique.
 
 ## Usage 
 
-To simplify usage of _GsonUtils_, there're following classes:
 *   [GsonUtils](#gsonutils-class) - utility class with set of method to use json transformation;
 
 ### GsonUtils class
@@ -314,20 +313,60 @@ try (InputStream in = ...) {
 
 #### Write any object to json
 
-##### Write Any object to json `String` (but not pretty print)
+##### Write a custom object to json `String` (but not pretty print)
+
 ```java
 class Data {
     int intVal;
     String strVal;
 }
-
+```
+```java
 Data data = new Data(555, "victory");
 String json = GsonUtils.writeValue(data);
-// """{"intVal":555,"strVal":"victory"}"""
+```
+```json
+{"intVal":555,"strVal":"victory"}
 ```
 
+##### Write a `List` to json `String` (but not pretty print)
+
+```java
+class Data {
+    int intVal;
+    String strVal;
+}
+```
+```java
+List<Data> data = ListUtils.of(new Data(555, "victory"), new Data(666, "omen"));
+String json = GsonUtils.writeValue(data);
+```
+```json
+[{"intVal":555,"strVal":"victory"},{"intVal":666,"strVal":"omen"}]
 ```
 
+##### Write a `Map` to json `String` (but not pretty print)
+
+```java
+public class Snippet {
+
+    public String mapToJsonString() {
+        Map<String, Data> map = MapUtils.of(
+                "victory", new Data(555, "victory"),
+                "omen", new Data(666, "omen"));
+        return GsonUtils.writeValue(map);
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+```json
+{"victory":{"intVal":555,"strVal":"victory"},"omen":{"intVal":666,"strVal":"omen"}}
+```
 
 ##### Links
 
