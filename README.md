@@ -99,7 +99,7 @@ public class Snippet {
 }
 ```
 
-##### `String` to a map of custom object type
+##### Read json `String` to a map of custom object type
 
 ###### Read json `Stirng` to a map with `String` keys and `Map` or primitive types as values
 
@@ -453,3 +453,13 @@ public class Snippet {
 *   Maven:
     *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.utils/gson-utils
     *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/utils/gson-utils/
+    
+## Quarterly Results {.tabset}
+
+### By Product
+
+(tab content)
+
+### By Region
+
+(tab content)    
