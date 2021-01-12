@@ -453,13 +453,4 @@ public class Snippet {
 *   Maven:
     *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.utils/gson-utils
     *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/utils/gson-utils/
-    
-## Quarterly Results {.tabset}
-
-### By Product
-
-(tab content)
-
-### By Region
-
-(tab content)    
+   
