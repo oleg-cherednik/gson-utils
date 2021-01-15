@@ -33,14 +33,14 @@ public class ReadReaderGsonUtilsTest {
     }
 
     public void shouldRetrieveMapWhenReadReaderAsMap() throws IOException {
-        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/book.json"))) {
-            Map<String, ?> expected = MapUtils.of(
-                    "title", "Thinking in Java",
-                    "date", "2017-07-23T13:57:14.225Z",
-                    "year", 1998,
-                    "authors", ListUtils.of("Bruce Eckel")
-            );
+        Map<String, ?> expected = MapUtils.of(
+                "title", "Thinking in Java",
+                "date", "2017-07-23T13:57:14.225Z",
+                "year", 1998,
+                "authors", ListUtils.of("Bruce Eckel")
+        );
 
+        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/book.json"))) {
             Map<String, ?> actual = GsonUtils.readMap(in);
             assertThat(actual).isNotNull();
             assertThat(actual).isEqualTo(expected);
@@ -48,12 +48,13 @@ public class ReadReaderGsonUtilsTest {
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadReaderAsCustomType() throws IOException {
+        Book expected = new Book(
+                "Thinking in Java",
+                ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                1998,
+                ListUtils.of("Bruce Eckel"));
+
         try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/book.json"))) {
-            Book expected = new Book(
-                    "Thinking in Java",
-                    ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                    1998,
-                    ListUtils.of("Bruce Eckel"));
             Book actual = GsonUtils.readValue(in, Book.class);
             assertThat(actual).isNotNull();
             assertThat(actual).isEqualTo(expected);
@@ -61,19 +62,20 @@ public class ReadReaderGsonUtilsTest {
     }
 
     public void shouldRetrieveDeserializedListOfObjectsWhenReadReaderAsListWithCustomType() throws IOException {
+        List<Book> expected = ListUtils.of(
+                new Book(
+                        "Thinking in Java",
+                        ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                        1998,
+                        ListUtils.of("Bruce Eckel")),
+                new Book(
+                        "Ready for a victory",
+                        ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
+                        2020,
+                        ListUtils.of("Oleg Cherednik"))
+        );
+
         try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books.json"))) {
-            List<Book> expected = ListUtils.of(
-                    new Book(
-                            "Thinking in Java",
-                            ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                            1998,
-                            ListUtils.of("Bruce Eckel")),
-                    new Book(
-                            "Ready for a victory",
-                            ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                            2020,
-                            ListUtils.of("Oleg Cherednik"))
-            );
             List<Book> actual = GsonUtils.readList(in, Book.class);
             assertThat(actual).isNotNull();
             assertThat(actual).isEqualTo(expected);
@@ -81,20 +83,20 @@ public class ReadReaderGsonUtilsTest {
     }
 
     public void shouldRetrieveDeserializedMapWhenReadReaderAsMapListWithStringKeyAndCustomType() throws IOException {
-        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books_dict_string_key.json"))) {
-            Map<String, Book> expected = MapUtils.of(
-                    "one", new Book(
-                            "Thinking in Java",
-                            ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                            1998,
-                            ListUtils.of("Bruce Eckel")),
-                    "two", new Book(
-                            "Ready for a victory",
-                            ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                            2020,
-                            ListUtils.of("Oleg Cherednik"))
-            );
+        Map<String, Book> expected = MapUtils.of(
+                "one", new Book(
+                        "Thinking in Java",
+                        ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                        1998,
+                        ListUtils.of("Bruce Eckel")),
+                "two", new Book(
+                        "Ready for a victory",
+                        ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
+                        2020,
+                        ListUtils.of("Oleg Cherednik"))
+        );
 
+        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books_dict_string_key.json"))) {
             Map<String, Book> actual = GsonUtils.readMap(in, Book.class);
             assertThat(actual).isNotNull();
             assertThat(actual).isEqualTo(expected);
@@ -102,20 +104,20 @@ public class ReadReaderGsonUtilsTest {
     }
 
     public void shouldRetrieveDeserializedMapWhenReadReaderAsMapListWithIntegerKeyAndCustomType() throws IOException {
-        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books_dict_int_key.json"))) {
-            Map<Integer, Book> expected = MapUtils.of(
-                    1, new Book(
-                            "Thinking in Java",
-                            ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                            1998,
-                            ListUtils.of("Bruce Eckel")),
-                    2, new Book(
-                            "Ready for a victory",
-                            ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                            2020,
-                            ListUtils.of("Oleg Cherednik"))
-            );
+        Map<Integer, Book> expected = MapUtils.of(
+                1, new Book(
+                        "Thinking in Java",
+                        ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                        1998,
+                        ListUtils.of("Bruce Eckel")),
+                2, new Book(
+                        "Ready for a victory",
+                        ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
+                        2020,
+                        ListUtils.of("Oleg Cherednik"))
+        );
 
+        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books_dict_int_key.json"))) {
             Map<Integer, Book> actual = GsonUtils.readMap(in, Integer.class, Book.class);
             assertThat(actual).isNotNull();
             assertThat(actual).isEqualTo(expected);
@@ -123,18 +125,18 @@ public class ReadReaderGsonUtilsTest {
     }
 
     public void shouldRetrieveIteratorOfDeserializedObjectsWhenReadReaderAsLazyList() throws IOException {
-        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books.json"))) {
-            Book expected1 = new Book(
-                    "Thinking in Java",
-                    ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                    1998,
-                    ListUtils.of("Bruce Eckel"));
-            Book expected2 = new Book(
-                    "Ready for a victory",
-                    ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                    2020,
-                    ListUtils.of("Oleg Cherednik"));
+        Book expected1 = new Book(
+                "Thinking in Java",
+                ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                1998,
+                ListUtils.of("Bruce Eckel"));
+        Book expected2 = new Book(
+                "Ready for a victory",
+                ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
+                2020,
+                ListUtils.of("Oleg Cherednik"));
 
+        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books.json"))) {
             Iterator<Book> it = GsonUtils.readListLazy(in, Book.class);
             assertThat(it.hasNext()).isTrue();
 

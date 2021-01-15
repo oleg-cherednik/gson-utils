@@ -41,7 +41,7 @@ The last section is the `gson-utils` version. This number is unique.
 
 ## Usage 
 
-*   [GsonUtils](#gsonutils-class) - utility class with set of method to use json transformation;
+*   [GsonUtils](#gsonutils-class) - utility class with set of methods to use json transformation;
 
 ### GsonUtils class
 
@@ -129,7 +129,7 @@ public class Snippet {
    
 }
 ```
-**Note:** `map` values have either primitive type or `Map` or `List`.
+**Note:** `Map` values have either primitive type or `Map` or `List`.
 
 ###### Read json `String` to a map with `String` keys and given type as value
 
@@ -189,37 +189,36 @@ public class Snippet {
 }
 ```
 
-#### Read json from `InputStream`
+#### Read json from `Reader`
 
-##### `InputStream` to a custom object type (but not a collection)
+##### Read json from `Reader` to a custom object type (but not a collection)
 
-```java
-class Data {
-    int intVal;
-    String strVal;
-}
-```
 ```json                        
 {
     "intVal" : 666,
     "strVal" : "omen"
 }
 ```
-```java         
-try (InputStream in = ...) {
-    Data data = GsonUtils.readValue(in, Data.class);
-}
-```
-
-##### `InputStream` to a list of custom object type
-
-##### Read eager
 ```java
-class Data {
-    int intVal;
-    String strVal;
+public class Snippet {
+
+    public static Data readJsonFromFileToObj(File file) {
+        try (Reader in = new FileReader(file)) {
+            return GsonUtils.readValue(in, Data.class);
+        }
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
 }
 ```
+
+##### Read json from `Reader` to a list of custom object type
+
+##### Read json from `Reader` eager to a list of custom object type
 ```json                        
 [
     {
@@ -233,19 +232,24 @@ class Data {
 ]
 ```
 ```java
-try (InputStream in = ...) {
-    List<Data> res = GsonUtils.readList(in, Data.class);
+public class Snippet {
+
+    public static List<Data> readJsonEdgerFromFileToList(File file) {
+        try (Reader in = new FileReader(file)) {
+            return GsonUtils.readList(in, Data.class);
+        }
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
 }
 ```
 
-##### Read lazy
+##### Read json from `Reader` lazy to a list of custom object type
 
-```java
-class Data {
-    int intVal;
-    String strVal;
-}
-```
 ```json                        
 [
     {
@@ -259,17 +263,30 @@ class Data {
 ]
 ```
 ```java
-try (InputStream in = ...) {
-    Iterator<Data> it = GsonUtils.readListLazy(in, Data.class);
-    
-    while (it.hasNext()) {
-        Data data = it.next();
+public class Snippet {
+
+    public static List<Data> readJsonLazyFromFileToList(File file) {
+        try (Reader in = new FileReader(file)) {
+            List<Data> res = new ArrayList<>();
+            Iterator<Data> it = GsonUtils.readListLazy(in, Data.class);
+            
+            while (it.hasNext())
+                res.add(it.next());
+            
+            return res;
+        }
     }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
 }
 ```
-##### `InputStream` to a map of custom object type
+##### Read json from `Reader` to a map of custom object type
 
-###### `InputStream` to a map with `String` keys and `Map` or primitive types as values
+###### Read json from `Reader` to a map with `String` keys and `Map` or primitive types as a values
 
 ```json                        
 {
@@ -284,20 +301,20 @@ try (InputStream in = ...) {
 }
 ```
 ```java
-try (InputStream in = ...) {
-    Map<String, ?> map = GsonUtils.readMap(in);
+public class Snippet {
+
+    public static Map<String, ?> readJsonFromFileToMap(File file) {
+        try (Reader in = new FileReader(file)) {
+            return GsonUtils.readMap(in);
+        }
+    }
+   
 }
 ```
 **Note:** `map` values have either primitive type or `Map` or `List`.
 
-###### `InputStream` to a map with `String` keys and given type as value
+###### Read json from `Reader` to a map with `String` keys and given type as a value
 
-```java
-class Data {
-    int intVal;
-    String strVal;
-}
-```
 ```json                        
 {
     "victory" : {
@@ -311,19 +328,24 @@ class Data {
 }
 ```
 ```java
-try (InputStream in = ...) {
-    Map<String, ?> map = GsonUtils.readMap(in, Data.class);
+public class Snippet {
+
+    public static Map<String, Data> readJsonFromFileToMap(File file) {
+        try (Reader in = new FileReader(file)) {
+            return GsonUtils.readMap(in, Data.class);
+        }
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
 }
 ```
 
-###### Map with `Integer` keys and given type as value
+###### Read json from `Reader` to a map with `Integer` keys and given type as a value
 
-```java
-class Data {
-    int intVal;
-    String strVal;
-}
-```
 ```json                        
 {
     "1" : {
@@ -337,8 +359,19 @@ class Data {
 }
 ```
 ```java
-try (InputStream in = ...) {
-    Map<Integer, Data> map = GsonUtils.readMap(in, Integer.class, Data.class);
+public class Snippet {
+
+    public static Map<Integer, Data> readJsonFromFileToMap(File file) {
+        try (Reader in = new FileReader(file)) {
+            return GsonUtils.readMap(in, Integer.class, Data.class);
+        }
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
 }
 ```
 
