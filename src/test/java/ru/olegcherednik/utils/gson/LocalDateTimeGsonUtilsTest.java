@@ -72,8 +72,8 @@ public class LocalDateTimeGsonUtilsTest {
     @SuppressWarnings("unused")
     private static class Data {
 
-        final LocalDateTime notNullValue = LocalDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME);
-        final LocalDateTime nullValue = null;
+        private final LocalDateTime notNullValue = LocalDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME);
+        private final LocalDateTime nullValue = null;
     }
 
 }

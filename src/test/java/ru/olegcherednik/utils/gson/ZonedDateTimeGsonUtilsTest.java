@@ -105,8 +105,8 @@ public class ZonedDateTimeGsonUtilsTest {
     @SuppressWarnings("unused")
     private static class Data {
 
-        final ZonedDateTime notNullValue = ZonedDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME.withZone(ZoneOffset.UTC));
-        final ZonedDateTime nullValue = null;
+        private final ZonedDateTime notNullValue = ZonedDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME.withZone(ZoneOffset.UTC));
+        private final ZonedDateTime nullValue = null;
     }
 
 }
