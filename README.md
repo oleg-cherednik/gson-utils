@@ -23,14 +23,14 @@
 ## Gradle
 
 ```groovy
-compile 'ru.oleg-cherednik.utils:gson-utils:2.8.6.1'
+compile 'ru.oleg-cherednik.gson-utils:gson-utils:2.8.6.1'
 ```
 
 ## Maven
 
 ```xml
 <dependency>
-    <groupId>ru.oleg-cherednik.utils</groupId>
+    <groupId>ru.oleg-cherednik.gson-utils</groupId>
     <artifactId>gson-utils</artifactId>
     <version>2.8.6.1</version>
 </dependency>
