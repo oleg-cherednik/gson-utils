@@ -51,7 +51,7 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
         }
     };
 
-    public IteratorTypeAdapter(TypeAdapter<V> elementTypeAdapter) throws Exception {
+    public IteratorTypeAdapter(TypeAdapter<V> elementTypeAdapter) {
         this.elementTypeAdapter = elementTypeAdapter;
     }
 

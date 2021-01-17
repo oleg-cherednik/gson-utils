@@ -37,8 +37,7 @@ public class ReadReaderGsonUtilsTest {
                 "title", "Thinking in Java",
                 "date", "2017-07-23T13:57:14.225Z",
                 "year", 1998,
-                "authors", ListUtils.of("Bruce Eckel")
-        );
+                "authors", ListUtils.of("Bruce Eckel"));
 
         try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/book.json"))) {
             Map<String, ?> actual = GsonUtils.readMap(in);
@@ -72,8 +71,7 @@ public class ReadReaderGsonUtilsTest {
                         "Ready for a victory",
                         ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
                         2020,
-                        ListUtils.of("Oleg Cherednik"))
-        );
+                        ListUtils.of("Oleg Cherednik")));
 
         try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books.json"))) {
             List<Book> actual = GsonUtils.readList(in, Book.class);
@@ -93,8 +91,7 @@ public class ReadReaderGsonUtilsTest {
                         "Ready for a victory",
                         ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
                         2020,
-                        ListUtils.of("Oleg Cherednik"))
-        );
+                        ListUtils.of("Oleg Cherednik")));
 
         try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books_dict_string_key.json"))) {
             Map<String, Book> actual = GsonUtils.readMap(in, Book.class);
@@ -114,8 +111,7 @@ public class ReadReaderGsonUtilsTest {
                         "Ready for a victory",
                         ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
                         2020,
-                        ListUtils.of("Oleg Cherednik"))
-        );
+                        ListUtils.of("Oleg Cherednik")));
 
         try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books_dict_int_key.json"))) {
             Map<Integer, Book> actual = GsonUtils.readMap(in, Integer.class, Book.class);
@@ -152,4 +148,5 @@ public class ReadReaderGsonUtilsTest {
             assertThatThrownBy(it::next).isExactlyInstanceOf(NoSuchElementException.class);
         }
     }
+
 }

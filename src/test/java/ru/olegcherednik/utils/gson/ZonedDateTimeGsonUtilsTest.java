@@ -7,11 +7,13 @@ import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.olegcherednik.utils.gson.GsonBuilderDecorator.ZONE_MODIFIER_USE_ORIGINAL;
 
 /**
  * @author Oleg Cherednik
@@ -43,7 +45,7 @@ public class ZonedDateTimeGsonUtilsTest {
 
     public void shouldRetrieveJsonWithNoZoneChangeWhenWriteZonedDateTimeWithSameZone() throws IOException {
         GsonDecorator gson = GsonHelper.createGsonDecorator(
-                new GsonBuilderDecorator().withZoneModifier(GsonBuilderDecorator.ZONE_MODIFIER_USE_ORIGINAL));
+                new GsonBuilderDecorator().withZoneModifier(ZONE_MODIFIER_USE_ORIGINAL));
 
         Map<String, ZonedDateTime> map = createData();
         String actual = gson.writeValue(map);
@@ -91,6 +93,13 @@ public class ZonedDateTimeGsonUtilsTest {
         GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator());
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225Z\"}");
+    }
+
+    public void shouldUseCustomDateTimeFormatterWhenWriteZonedDateTime() {
+        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator()
+                .withDateTimeFormatter(DateTimeFormatter.ofPattern("HH:mm:ss'T'dd.MM.yyyy")));
+        String json = gson.writeValue(new Data());
+        assertThat(json).isEqualTo("{\"notNullValue\":\"13:57:14T23.07.2017\"}");
     }
 
     @SuppressWarnings("unused")

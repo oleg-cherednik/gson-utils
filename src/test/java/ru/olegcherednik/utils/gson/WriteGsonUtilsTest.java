@@ -62,10 +62,12 @@ public class WriteGsonUtilsTest {
         }
     }
 
-    public void shouldWriteNullJsonWhenWriteNullToStream() throws IOException {
+    public void shouldWriteJsonIncludingNullWhenWriteObjectToStreamWithNullValue() throws IOException {
         try (Writer out = new StringWriter()) {
-            GsonUtils.writeValue(null, out);
-            assertThat(out.toString()).isEqualTo("null");
+            List<String> data = ListUtils.of("one", null, "three");
+            GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator().serializeNulls());
+            gson.writeValue(data, out);
+            assertThat(out.toString()).isEqualTo("[\"one\",null,\"three\"]");
         }
     }
 
