@@ -69,14 +69,14 @@ test {
 modifyPom {
     project {
         name 'gson-utils'
-        description 'Some utils for Jackson Project'
-        url 'https://github.com/oleg-cherednik/gson-utils'
+        description 'Some utils for Gson'
+        url 'https://github.com/oleg-cherednik/GsonUtils'
         inceptionYear '2021'
 
         scm {
-            url 'https://github.com/oleg-cherednik/gson-utils'
-            connection 'scm:https://github.com/oleg-cherednik/gson-utils.git'
-            developerConnection 'scm:git@github.com:oleg-cherednik/gson-utils.git'
+            url 'https://github.com/oleg-cherednik/GsonUtils'
+            connection 'scm:https://github.com/oleg-cherednik/GsonUtils.git'
+            developerConnection 'scm:git@github.com:oleg-cherednik/GsonUtils.git'
         }
 
         licenses {
