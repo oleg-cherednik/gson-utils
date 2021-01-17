@@ -149,4 +149,25 @@ public class ReadReaderGsonUtilsTest {
         }
     }
 
+    public void shouldReadListWithObjectsWhenReadListNoSpecifyValueClass() throws IOException {
+        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books.json"))) {
+            List<?> actual = GsonUtils.readList(in);
+            assertThat(actual).hasSize(2);
+            assertThat(actual.get(0)).isInstanceOf(Map.class);
+            assertThat(actual.get(1)).isInstanceOf(Map.class);
+        }
+    }
+
+    public void shouldReadListWithObjectsWhenReadListLazyNoSpecifyValueClass() throws IOException {
+        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books.json"))) {
+            Iterator<?> it = GsonUtils.readListLazy(in);
+            assertThat(it.hasNext()).isTrue();
+            assertThat(it.next()).isInstanceOf(Map.class);
+            assertThat(it.hasNext()).isTrue();
+            assertThat(it.next()).isInstanceOf(Map.class);
+            assertThat(it.hasNext()).isFalse();
+            assertThatThrownBy(it::next).isExactlyInstanceOf(NoSuchElementException.class);
+        }
+    }
+
 }

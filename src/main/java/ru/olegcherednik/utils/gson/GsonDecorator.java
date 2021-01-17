@@ -96,6 +96,10 @@ public class GsonDecorator {
         return withRuntimeException(() -> supplier.get().fromJson(in, valueClass));
     }
 
+    public List<?> readList(Reader in) {
+        return readList(in, Object.class);
+    }
+
     public <V> List<V> readList(Reader in, Class<V> valueClass) {
         Objects.requireNonNull(valueClass, "'valueClass' should not be null");
 
@@ -106,6 +110,10 @@ public class GsonDecorator {
             Class<V[]> arrayCls = (Class<V[]>)Array.newInstance(valueClass, 0).getClass();
             return Arrays.asList(supplier.get().fromJson(in, arrayCls));
         });
+    }
+
+    public Iterator<?> readListLazy(Reader in) {
+        return readListLazy(in, Object.class);
     }
 
     public <V> Iterator<V> readListLazy(Reader in, Class<V> valueClass) {

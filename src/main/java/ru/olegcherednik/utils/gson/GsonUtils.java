@@ -47,8 +47,16 @@ public final class GsonUtils {
         return print().readValue(in, valueClass);
     }
 
+    public static List<?> readList(Reader in) {
+        return print().readList(in);
+    }
+
     public static <V> List<V> readList(Reader in, Class<V> valueClass) {
         return print().readList(in, valueClass);
+    }
+
+    public static Iterator<?> readListLazy(Reader in) {
+        return print().readListLazy(in);
     }
 
     public static <V> Iterator<V> readListLazy(Reader in, Class<V> valueClass) {
