@@ -110,8 +110,8 @@ public class IteratorTypeAdapterTest {
     @SuppressWarnings({ "unused", "FieldMayBeStatic" })
     private static class Data {
 
-        final String notNullValue = "oleg.cherednik";
-        final ZonedDateTime nullValue = null;
+        private final String notNullValue = "oleg.cherednik";
+        private final ZonedDateTime nullValue = null;
     }
 
 }
