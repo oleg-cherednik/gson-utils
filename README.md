@@ -43,7 +43,6 @@ The last section is the `gson-utils` version. This number is unique.
 
 *   [GsonUtils](#gsonutils-class) - utility class with set of methods to use json transformation;
 
-
 ### GsonUtils class
 
 #### Read json from `String`
