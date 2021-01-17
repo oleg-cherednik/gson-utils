@@ -5,6 +5,7 @@ import ru.olegcherednik.utils.gson.utils.MapUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -42,10 +43,37 @@ public class LocalDateTimeGsonUtilsTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    public void shouldReadNullableValueWhenListContainsNull() {
+        String json = "[null,\"2017-07-23T13:57:14.225\"]";
+        List<LocalDateTime> actual = GsonUtils.readList(json, LocalDateTime.class);
+
+        assertThat(actual).hasSize(2);
+        assertThat(actual.get(0)).isNull();
+        assertThat(actual.get(1)).isEqualTo(LocalDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME));
+    }
+
+    public void shouldWriteNullWhenSerializeWithNullValue() {
+        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator().serializeNulls());
+        String json = gson.writeValue(new Data());
+        assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225\",\"nullValue\":null}");
+    }
+
+    public void shouldIgnoreNullValueWhenSerializeWithIgnoreNullValue() {
+        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator());
+        String json = gson.writeValue(new Data());
+        assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225\"}");
+    }
+
     private static Map<String, LocalDateTime> createData() {
         String str = "2017-07-23T13:57:14.225";
-
         return MapUtils.of("local", LocalDateTime.parse(str, ISO_LOCAL_DATE_TIME));
+    }
+
+    @SuppressWarnings("unused")
+    private static class Data {
+
+        final LocalDateTime notNullValue = LocalDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME);
+        final LocalDateTime nullValue = null;
     }
 
 }

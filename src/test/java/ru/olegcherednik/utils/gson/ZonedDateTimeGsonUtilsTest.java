@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -29,11 +30,11 @@ public class ZonedDateTimeGsonUtilsTest {
     }
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteZonedDateTimeSingaporeZone() throws IOException {
-        GsonDecorator gsonUtils = GsonHelper.createGsonDecorator(
+        GsonDecorator gson = GsonHelper.createGsonDecorator(
                 new GsonBuilderDecorator().withZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
 
         Map<String, ZonedDateTime> map = createData();
-        String actual = gsonUtils.writeValue(map);
+        String actual = gson.writeValue(map);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"," +
                 "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\"," +
@@ -41,11 +42,11 @@ public class ZonedDateTimeGsonUtilsTest {
     }
 
     public void shouldRetrieveJsonWithNoZoneChangeWhenWriteZonedDateTimeWithSameZone() throws IOException {
-        GsonDecorator gsonUtils = GsonHelper.createGsonDecorator(
+        GsonDecorator gson = GsonHelper.createGsonDecorator(
                 new GsonBuilderDecorator().withZoneModifier(GsonBuilderDecorator.ZONE_MODIFIER_USE_ORIGINAL));
 
         Map<String, ZonedDateTime> map = createData();
-        String actual = gsonUtils.writeValue(map);
+        String actual = gson.writeValue(map);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\"," +
                 "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\"," +
@@ -62,13 +63,41 @@ public class ZonedDateTimeGsonUtilsTest {
         assertThat(actual).isEqualTo(expected);
     }
 
-    static Map<String, ZonedDateTime> createData() {
+    public static Map<String, ZonedDateTime> createData() {
         String str = "2017-07-23T13:57:14.225";
 
         return MapUtils.of(
                 "UTC", ZonedDateTime.parse(str, ISO_LOCAL_DATE_TIME.withZone(ZoneOffset.UTC)),
                 "Asia/Singapore", ZonedDateTime.parse(str, ISO_LOCAL_DATE_TIME.withZone(ZoneId.of("Asia/Singapore"))),
                 "Australia/Sydney", ZonedDateTime.parse(str, ISO_LOCAL_DATE_TIME.withZone(ZoneId.of("Australia/Sydney"))));
+    }
+
+    public void shouldReadNullableValueWhenListContainsNull() {
+        String json = "[null,\"2017-07-23T13:57:14.225Z\"]";
+        List<ZonedDateTime> actual = GsonUtils.readList(json, ZonedDateTime.class);
+
+        assertThat(actual).hasSize(2);
+        assertThat(actual.get(0)).isNull();
+        assertThat(actual.get(1)).isEqualTo(ZonedDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME.withZone(ZoneOffset.UTC)));
+    }
+
+    public void shouldWriteNullWhenSerializeWithNullValue() {
+        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator().serializeNulls());
+        String json = gson.writeValue(new Data());
+        assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225Z\",\"nullValue\":null}");
+    }
+
+    public void shouldIgnoreNullValueWhenSerializeWithIgnoreNullValue() {
+        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator());
+        String json = gson.writeValue(new Data());
+        assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225Z\"}");
+    }
+
+    @SuppressWarnings("unused")
+    private static class Data {
+
+        final ZonedDateTime notNullValue = ZonedDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME.withZone(ZoneOffset.UTC));
+        final ZonedDateTime nullValue = null;
     }
 
 }

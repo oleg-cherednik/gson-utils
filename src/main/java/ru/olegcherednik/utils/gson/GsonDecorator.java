@@ -45,6 +45,10 @@ public class GsonDecorator {
         return withRuntimeException(() -> supplier.get().fromJson(json, valueClass));
     }
 
+    public List<?> readList(String json) {
+        return readList(json, Object.class);
+    }
+
     public <V> List<V> readList(String json, Class<V> valueClass) {
         Objects.requireNonNull(valueClass, "'valueClass' should not be null");
 

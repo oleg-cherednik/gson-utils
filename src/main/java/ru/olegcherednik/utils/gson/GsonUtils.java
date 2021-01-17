@@ -21,6 +21,10 @@ public final class GsonUtils {
         return print().readValue(json, valueClass);
     }
 
+    public static List<?> readList(String json) {
+        return print().readList(json);
+    }
+
     public static <V> List<V> readList(String json, Class<V> valueClass) {
         return print().readList(json, valueClass);
     }

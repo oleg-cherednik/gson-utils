@@ -5,6 +5,7 @@ import ru.olegcherednik.utils.gson.data.Data;
 import ru.olegcherednik.utils.gson.utils.ListUtils;
 import ru.olegcherednik.utils.gson.utils.MapUtils;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -106,6 +107,18 @@ public class ReadStringGsonUtilsTest {
         assertThatThrownBy(() -> GsonUtils.readList("incorrect", Data.class)).isExactlyInstanceOf(GsonUtilsException.class);
         assertThatThrownBy(() -> GsonUtils.readMap("incorrect")).isExactlyInstanceOf(GsonUtilsException.class);
         assertThatThrownBy(() -> GsonUtils.readMap("incorrect", String.class, Data.class)).isExactlyInstanceOf(GsonUtilsException.class);
+    }
+
+    public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumeric() {
+        String json = "[1,2.0,3.1,12345678912,123456789123456789123456789123456789]";
+        List<?> actual = GsonUtils.readList(json);
+
+        assertThat(actual).hasSize(5);
+        assertThat(actual.get(0)).isEqualTo(1);
+        assertThat(actual.get(1)).isEqualTo(2);
+        assertThat(actual.get(2)).isEqualTo(3.1);
+        assertThat(actual.get(3)).isEqualTo(12345678912L);
+        assertThat(actual.get(4)).isEqualTo(new BigInteger("123456789123456789123456789123456789"));
     }
 
 }

@@ -15,28 +15,29 @@ import java.time.format.DateTimeFormatter;
  */
 public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
 
-    protected final DateTimeFormatter dateFormatFormatter;
+    protected final DateTimeFormatter df;
 
-    public LocalDateTimeTypeAdapter(DateTimeFormatter dateFormatFormatter) {
-        this.dateFormatFormatter = dateFormatFormatter;
+    public LocalDateTimeTypeAdapter(DateTimeFormatter df) {
+        this.df = df;
     }
 
     @Override
     public void write(JsonWriter out, LocalDateTime value) throws IOException {
-        if (value == null) {
-            if (out.getSerializeNulls())
-                out.nullValue();
-        } else
-            out.value(dateFormatFormatter.format(value));
+        if (value == null)
+            out.nullValue();
+        else
+            out.value(df.format(value));
     }
 
     @Override
     public LocalDateTime read(JsonReader in) throws IOException {
-        if (in.peek() == JsonToken.NULL) {
-            in.nextNull();
-            return null;
-        }
+        LocalDateTime res = null;
 
-        return LocalDateTime.parse(in.nextString(), dateFormatFormatter);
+        if (in.peek() == JsonToken.NULL)
+            in.nextNull();
+        else
+            res = LocalDateTime.parse(in.nextString(), df);
+
+        return res;
     }
 }

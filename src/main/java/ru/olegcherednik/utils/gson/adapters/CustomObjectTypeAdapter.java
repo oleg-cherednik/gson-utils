@@ -10,6 +10,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 import static com.google.gson.stream.JsonToken.NUMBER;
 
@@ -48,18 +49,19 @@ public class CustomObjectTypeAdapter extends TypeAdapter<Object> {
             return delegate.read(in);
 
         String str = in.nextString();
+        double val = Double.parseDouble(str);
+
+        if (Double.compare((int)val, val) == 0)
+            return (int)val;
+        if (Double.compare((long)val, val) == 0)
+            return (long)val;
 
         try {
-            return Integer.parseInt(str);
-        } catch(NumberFormatException ignored) {
+            return new BigInteger(str);
+        } catch(NumberFormatException ignore) {
         }
 
-        try {
-            return Long.parseLong(str);
-        } catch(NumberFormatException ignored) {
-        }
-
-        return Double.parseDouble(str);
+        return val;
     }
 
 }
