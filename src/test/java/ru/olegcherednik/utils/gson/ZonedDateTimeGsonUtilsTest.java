@@ -97,7 +97,7 @@ public class ZonedDateTimeGsonUtilsTest {
 
     public void shouldUseCustomDateTimeFormatterWhenWriteZonedDateTime() {
         GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator()
-                .withDateTimeFormatter(DateTimeFormatter.ofPattern("HH:mm:ss'T'dd.MM.yyyy")));
+                .withZonedDateTimeFormatter(DateTimeFormatter.ofPattern("HH:mm:ss'T'dd.MM.yyyy")));
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"13:57:14T23.07.2017\"}");
     }
