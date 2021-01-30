@@ -30,10 +30,6 @@ public final class GsonHelper {
         return createGson(gsonBuilderDecorator);
     }
 
-    public static GsonDecorator createGsonDecorator() {
-        return new GsonDecorator(createGson());
-    }
-
     public static Gson createPrettyPrintGson() {
         return createPrettyPrintGson(gsonBuilderDecorator);
     }
