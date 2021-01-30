@@ -8,6 +8,7 @@ import ru.olegcherednik.utils.gson.types.MapParameterizedType;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -96,6 +97,13 @@ public class GsonDecorator {
         return withRuntimeException(() -> supplier.get().fromJson(in, valueClass));
     }
 
+    public <V> V readValue(Reader in, Type type) {
+        if (in == null)
+            return null;
+
+        return withRuntimeException(() -> supplier.get().fromJson(in, type));
+    }
+
     public List<?> readList(Reader in) {
         return readList(in, Object.class);
     }
@@ -144,10 +152,7 @@ public class GsonDecorator {
     }
 
     public <K, V> Map<K, V> readMap(Reader in, Class<K> keyClass, Class<V> valueClass) {
-        if (in == null)
-            return null;
-
-        return withRuntimeException(() -> supplier.get().fromJson(in, new MapParameterizedType<>(keyClass, valueClass)));
+        return readValue(in, new MapParameterizedType<>(keyClass, valueClass));
     }
 
     // ---------- write ----------
