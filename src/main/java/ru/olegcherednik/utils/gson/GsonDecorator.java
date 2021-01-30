@@ -88,20 +88,17 @@ public class GsonDecorator {
 
     // ---------- read Reader ----------
 
-    public <V> V readValue(Reader in, Class<V> valueClass) {
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
-
-        if (in == null)
-            return null;
-
-        return withRuntimeException(() -> supplier.get().fromJson(in, valueClass));
-    }
-
     public <V> V readValue(Reader in, Type type) {
         if (in == null)
             return null;
 
+        Objects.requireNonNull(type, "'type' should not be null");
+
         return withRuntimeException(() -> supplier.get().fromJson(in, type));
+    }
+
+    public <V> V readValue(Reader in, Class<V> valueClass) {
+        return readValue(in, (Type)valueClass);
     }
 
     public List<?> readList(Reader in) {
@@ -138,13 +135,7 @@ public class GsonDecorator {
     }
 
     public Map<String, ?> readMap(Reader in) {
-        if (in == null)
-            return null;
-
-        return withRuntimeException(() -> {
-            Gson gson = supplier.get();
-            return (Map<String, ?>)gson.fromJson(in, LinkedHashMap.class);
-        });
+        return (Map<String, ?>)readValue(in, LinkedHashMap.class);
     }
 
     public <V> Map<String, V> readMap(Reader in, Class<V> valueClass) {
