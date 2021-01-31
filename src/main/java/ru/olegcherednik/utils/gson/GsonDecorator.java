@@ -88,7 +88,7 @@ public class GsonDecorator {
 
     // ---------- read Reader ----------
 
-    public <V> V readValue(Reader in, Type type) {
+    public <V> V read(Reader in, Type type) {
         if (in == null)
             return null;
 
@@ -98,7 +98,7 @@ public class GsonDecorator {
     }
 
     public <V> V readValue(Reader in, Class<V> valueClass) {
-        return readValue(in, (Type)valueClass);
+        return read(in, (Type)valueClass);
     }
 
     public List<?> readList(Reader in) {
@@ -143,7 +143,7 @@ public class GsonDecorator {
     }
 
     public <K, V> Map<K, V> readMap(Reader in, Class<K> keyClass, Class<V> valueClass) {
-        return readValue(in, new MapParameterizedType<>(keyClass, valueClass));
+        return read(in, new MapParameterizedType<>(keyClass, valueClass));
     }
 
     // ---------- write ----------

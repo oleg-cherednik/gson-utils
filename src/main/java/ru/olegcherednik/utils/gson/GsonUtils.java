@@ -2,6 +2,7 @@ package ru.olegcherednik.utils.gson;
 
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,10 @@ public final class GsonUtils {
     }
 
     // ---------- read Reader ----------
+
+    public static <V> V read(Reader in, Type type) {
+        return print().read(in, type);
+    }
 
     public static <V> V readValue(Reader in, Class<V> valueClass) {
         return print().readValue(in, valueClass);
