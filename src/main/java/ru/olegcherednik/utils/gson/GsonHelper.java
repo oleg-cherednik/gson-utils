@@ -26,11 +26,11 @@ public final class GsonHelper {
         return prettyPrintGson;
     }
 
-    public static Gson createGson() {
+    public static synchronized Gson createGson() {
         return createGson(gsonBuilderDecorator);
     }
 
-    public static Gson createPrettyPrintGson() {
+    public static synchronized Gson createPrettyPrintGson() {
         return createPrettyPrintGson(gsonBuilderDecorator);
     }
 
