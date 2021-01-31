@@ -38,10 +38,10 @@ public class GsonDecorator {
     // ---------- read String ----------
 
     public <V> V readValue(String json, Class<V> valueClass) {
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
-
         if (json == null)
             return null;
+
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
 
         return withRuntimeException(() -> supplier.get().fromJson(json, valueClass));
     }
@@ -51,12 +51,12 @@ public class GsonDecorator {
     }
 
     public <V> List<V> readList(String json, Class<V> valueClass) {
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
-
         if (json == null)
             return null;
         if (isEmpty(json))
             return Collections.emptyList();
+
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
 
         return withRuntimeException(() -> {
             Class<V[]> arrayCls = (Class<V[]>)Array.newInstance(valueClass, 0).getClass();
@@ -83,6 +83,9 @@ public class GsonDecorator {
         if (isEmpty(json))
             return Collections.emptyMap();
 
+        Objects.requireNonNull(keyClass, "'keyClass' should not be null");
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+
         return withRuntimeException(() -> supplier.get().fromJson(json, new MapParameterizedType<>(keyClass, valueClass)));
     }
 
@@ -98,7 +101,7 @@ public class GsonDecorator {
     }
 
     public <V> V readValue(Reader in, Class<V> valueClass) {
-        return read(in, (Type)valueClass);
+        return read(in, valueClass);
     }
 
     public List<?> readList(Reader in) {
@@ -106,10 +109,10 @@ public class GsonDecorator {
     }
 
     public <V> List<V> readList(Reader in, Class<V> valueClass) {
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
-
         if (in == null)
             return null;
+
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
 
         return withRuntimeException(() -> {
             Class<V[]> arrayCls = (Class<V[]>)Array.newInstance(valueClass, 0).getClass();
@@ -122,10 +125,10 @@ public class GsonDecorator {
     }
 
     public <V> Iterator<V> readListLazy(Reader in, Class<V> valueClass) {
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
-
         if (in == null)
             return null;
+
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
 
         return withRuntimeException(() -> {
             Gson gson = supplier.get();
@@ -135,7 +138,7 @@ public class GsonDecorator {
     }
 
     public Map<String, ?> readMap(Reader in) {
-        return (Map<String, ?>)readValue(in, LinkedHashMap.class);
+        return (Map<String, ?>)read(in, LinkedHashMap.class);
     }
 
     public <V> Map<String, V> readMap(Reader in, Class<V> valueClass) {
@@ -143,6 +146,12 @@ public class GsonDecorator {
     }
 
     public <K, V> Map<K, V> readMap(Reader in, Class<K> keyClass, Class<V> valueClass) {
+        if (in == null)
+            return null;
+
+        Objects.requireNonNull(keyClass, "'keyClass' should not be null");
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+
         return read(in, new MapParameterizedType<>(keyClass, valueClass));
     }
 
