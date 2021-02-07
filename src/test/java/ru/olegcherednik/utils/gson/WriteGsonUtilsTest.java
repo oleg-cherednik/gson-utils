@@ -65,7 +65,7 @@ public class WriteGsonUtilsTest {
     public void shouldWriteJsonIncludingNullWhenWriteObjectToStreamWithNullValue() throws IOException {
         try (Writer out = new StringWriter()) {
             List<String> data = ListUtils.of("one", null, "three");
-            GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator().serializeNulls());
+            GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().serializeNulls());
             gson.writeValue(data, out);
             assertThat(out.toString()).isEqualTo("[\"one\",null,\"three\"]");
         }

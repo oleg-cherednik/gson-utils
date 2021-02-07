@@ -34,12 +34,12 @@ import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
  * @author Oleg Cherednik
  * @since 07.01.2021
  */
-public class GsonBuilderDecorator {
+public class GsonUtilsBuilder {
 
     public static final Function<ZoneId, ZoneId> ZONE_MODIFIER_USE_ORIGINAL = zoneId -> zoneId;
     public static final Function<ZoneId, ZoneId> ZONE_MODIFIER_TO_UTC = zoneId -> ZoneOffset.UTC;
 
-    protected final List<Consumer<GsonBuilder>> consumers = new ArrayList<>();
+    protected final List<Consumer<GsonBuilder>> customizers = new ArrayList<>();
 
     protected DateTimeFormatter zonedDateTimeFormatter = ISO_ZONED_DATE_TIME;
     protected DateTimeFormatter localDateTimeFormatter = ISO_LOCAL_DATE_TIME;
@@ -74,7 +74,7 @@ public class GsonBuilderDecorator {
     protected GsonBuilder gsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
 
-        consumers.forEach(consumer -> consumer.accept(builder));
+        customizers.forEach(consumer -> consumer.accept(builder));
 
         builder.enableComplexMapKeySerialization();
         builder.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(zoneModifier, zonedDateTimeFormatter));
@@ -86,110 +86,110 @@ public class GsonBuilderDecorator {
 
     // ---------- extended ----------
 
-    public GsonBuilderDecorator withZoneModifier(Function<ZoneId, ZoneId> zoneModifier) {
+    public GsonUtilsBuilder withZoneModifier(Function<ZoneId, ZoneId> zoneModifier) {
         this.zoneModifier = Optional.ofNullable(zoneModifier).orElse(this.zoneModifier);
         return this;
     }
 
-    public GsonBuilderDecorator withZonedDateTimeFormatter(DateTimeFormatter zonedDateTimeFormatter) {
+    public GsonUtilsBuilder withZonedDateTimeFormatter(DateTimeFormatter zonedDateTimeFormatter) {
         this.zonedDateTimeFormatter = Optional.ofNullable(zonedDateTimeFormatter).orElse(this.zonedDateTimeFormatter);
         return this;
     }
 
-    public GsonBuilderDecorator withLocalDateTimeFormatter(DateTimeFormatter localDateTimeFormatter) {
+    public GsonUtilsBuilder withLocalDateTimeFormatter(DateTimeFormatter localDateTimeFormatter) {
         this.localDateTimeFormatter = Optional.ofNullable(localDateTimeFormatter).orElse(this.localDateTimeFormatter);
         return this;
     }
 
     // ---------- GsonBuilder ----------
 
-    public GsonBuilderDecorator setVersion(double ignoreVersionsAfter) {
-        consumers.add(delegate -> delegate.setVersion(ignoreVersionsAfter));
+    public GsonUtilsBuilder setVersion(double ignoreVersionsAfter) {
+        customizers.add(delegate -> delegate.setVersion(ignoreVersionsAfter));
         return this;
     }
 
-    public GsonBuilderDecorator excludeFieldsWithModifiers(int... modifiers) {
-        consumers.add(delegate -> delegate.excludeFieldsWithModifiers(modifiers));
+    public GsonUtilsBuilder excludeFieldsWithModifiers(int... modifiers) {
+        customizers.add(delegate -> delegate.excludeFieldsWithModifiers(modifiers));
         return this;
     }
 
-    public GsonBuilderDecorator generateNonExecutableJson() {
-        consumers.add(GsonBuilder::generateNonExecutableJson);
+    public GsonUtilsBuilder generateNonExecutableJson() {
+        customizers.add(GsonBuilder::generateNonExecutableJson);
         return this;
     }
 
-    public GsonBuilderDecorator excludeFieldsWithoutExposeAnnotation() {
-        consumers.add(GsonBuilder::excludeFieldsWithoutExposeAnnotation);
+    public GsonUtilsBuilder excludeFieldsWithoutExposeAnnotation() {
+        customizers.add(GsonBuilder::excludeFieldsWithoutExposeAnnotation);
         return this;
     }
 
-    public GsonBuilderDecorator serializeNulls() {
-        consumers.add(GsonBuilder::serializeNulls);
+    public GsonUtilsBuilder serializeNulls() {
+        customizers.add(GsonBuilder::serializeNulls);
         return this;
     }
 
-    public GsonBuilderDecorator disableInnerClassSerialization() {
-        consumers.add(GsonBuilder::disableInnerClassSerialization);
+    public GsonUtilsBuilder disableInnerClassSerialization() {
+        customizers.add(GsonBuilder::disableInnerClassSerialization);
         return this;
     }
 
-    public GsonBuilderDecorator setLongSerializationPolicy(LongSerializationPolicy serializationPolicy) {
-        consumers.add(delegate -> delegate.setLongSerializationPolicy(serializationPolicy));
+    public GsonUtilsBuilder setLongSerializationPolicy(LongSerializationPolicy serializationPolicy) {
+        customizers.add(delegate -> delegate.setLongSerializationPolicy(serializationPolicy));
         return this;
     }
 
-    public GsonBuilderDecorator setFieldNamingPolicy(FieldNamingPolicy namingConvention) {
-        consumers.add(delegate -> delegate.setFieldNamingPolicy(namingConvention));
+    public GsonUtilsBuilder setFieldNamingPolicy(FieldNamingPolicy namingConvention) {
+        customizers.add(delegate -> delegate.setFieldNamingPolicy(namingConvention));
         return this;
     }
 
-    public GsonBuilderDecorator setFieldNamingStrategy(FieldNamingStrategy fieldNamingStrategy) {
-        consumers.add(delegate -> delegate.setFieldNamingStrategy(fieldNamingStrategy));
+    public GsonUtilsBuilder setFieldNamingStrategy(FieldNamingStrategy fieldNamingStrategy) {
+        customizers.add(delegate -> delegate.setFieldNamingStrategy(fieldNamingStrategy));
         return this;
     }
 
-    public GsonBuilderDecorator setExclusionStrategies(ExclusionStrategy... strategies) {
-        consumers.add(delegate -> delegate.setExclusionStrategies(strategies));
+    public GsonUtilsBuilder setExclusionStrategies(ExclusionStrategy... strategies) {
+        customizers.add(delegate -> delegate.setExclusionStrategies(strategies));
         return this;
     }
 
-    public GsonBuilderDecorator addSerializationExclusionStrategy(ExclusionStrategy strategy) {
-        consumers.add(delegate -> delegate.addSerializationExclusionStrategy(strategy));
+    public GsonUtilsBuilder addSerializationExclusionStrategy(ExclusionStrategy strategy) {
+        customizers.add(delegate -> delegate.addSerializationExclusionStrategy(strategy));
         return this;
     }
 
-    public GsonBuilderDecorator addDeserializationExclusionStrategy(ExclusionStrategy strategy) {
-        consumers.add(delegate -> delegate.addDeserializationExclusionStrategy(strategy));
+    public GsonUtilsBuilder addDeserializationExclusionStrategy(ExclusionStrategy strategy) {
+        customizers.add(delegate -> delegate.addDeserializationExclusionStrategy(strategy));
         return this;
     }
 
-    public GsonBuilderDecorator setLenient() {
-        consumers.add(GsonBuilder::setLenient);
+    public GsonUtilsBuilder setLenient() {
+        customizers.add(GsonBuilder::setLenient);
         return this;
     }
 
-    public GsonBuilderDecorator disableHtmlEscaping() {
-        consumers.add(GsonBuilder::disableHtmlEscaping);
+    public GsonUtilsBuilder disableHtmlEscaping() {
+        customizers.add(GsonBuilder::disableHtmlEscaping);
         return this;
     }
 
-    public GsonBuilderDecorator registerTypeAdapter(Type type, Object typeAdapter) {
-        consumers.add(delegate -> delegate.registerTypeAdapter(type, typeAdapter));
+    public GsonUtilsBuilder registerTypeAdapter(Type type, Object typeAdapter) {
+        customizers.add(delegate -> delegate.registerTypeAdapter(type, typeAdapter));
         return this;
     }
 
-    public GsonBuilderDecorator registerTypeAdapterFactory(TypeAdapterFactory factory) {
-        consumers.add(delegate -> delegate.registerTypeAdapterFactory(factory));
+    public GsonUtilsBuilder registerTypeAdapterFactory(TypeAdapterFactory factory) {
+        customizers.add(delegate -> delegate.registerTypeAdapterFactory(factory));
         return this;
     }
 
-    public GsonBuilderDecorator registerTypeHierarchyAdapter(Class<?> baseType, Object typeAdapter) {
-        consumers.add(delegate -> delegate.registerTypeHierarchyAdapter(baseType, typeAdapter));
+    public GsonUtilsBuilder registerTypeHierarchyAdapter(Class<?> baseType, Object typeAdapter) {
+        customizers.add(delegate -> delegate.registerTypeHierarchyAdapter(baseType, typeAdapter));
         return this;
     }
 
-    public GsonBuilderDecorator serializeSpecialFloatingPointValues() {
-        consumers.add(GsonBuilder::serializeSpecialFloatingPointValues);
+    public GsonUtilsBuilder serializeSpecialFloatingPointValues() {
+        customizers.add(GsonBuilder::serializeSpecialFloatingPointValues);
         return this;
     }
 

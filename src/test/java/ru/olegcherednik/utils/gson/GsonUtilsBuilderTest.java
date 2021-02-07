@@ -25,10 +25,10 @@ import static org.mockito.Mockito.mock;
  */
 @Test
 @SuppressWarnings("LocalVariableNamingConvention")
-public class GsonBuilderDecoratorTest {
+public class GsonUtilsBuilderTest {
 
     public void shouldThrowGsonUtilsExceptionWhenPostCreateThrowsException() {
-        GsonBuilderDecorator builder = new GsonBuilderDecorator();
+        GsonUtilsBuilder builder = new GsonUtilsBuilder();
 
         assertThatThrownBy(() -> builder.postCreate(null))
                 .isExactlyInstanceOf(GsonUtilsException.class)
@@ -43,7 +43,7 @@ public class GsonBuilderDecoratorTest {
         TypeAdapter<Data> typeAdapter = (TypeAdapter<Data>)mock(TypeAdapter.class);
         FieldNamingStrategy fieldNamingStrategy = mock(FieldNamingStrategy.class);
 
-        GsonBuilderDecorator builder = new GsonBuilderDecorator()
+        GsonUtilsBuilder builder = new GsonUtilsBuilder()
                 .setVersion(666.66)
                 .excludeFieldsWithModifiers(Modifier.PUBLIC | Modifier.PROTECTED)
                 .generateNonExecutableJson()

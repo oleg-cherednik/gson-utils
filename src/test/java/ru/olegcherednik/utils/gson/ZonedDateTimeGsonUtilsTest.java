@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static ru.olegcherednik.utils.gson.GsonBuilderDecorator.ZONE_MODIFIER_USE_ORIGINAL;
+import static ru.olegcherednik.utils.gson.GsonUtilsBuilder.ZONE_MODIFIER_USE_ORIGINAL;
 
 /**
  * @author Oleg Cherednik
@@ -32,8 +32,8 @@ public class ZonedDateTimeGsonUtilsTest {
     }
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteZonedDateTimeSingaporeZone() throws IOException {
-        GsonDecorator gson = GsonHelper.createGsonDecorator(
-                new GsonBuilderDecorator().withZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
+                new GsonUtilsBuilder().withZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
 
         Map<String, ZonedDateTime> map = createData();
         String actual = gson.writeValue(map);
@@ -44,8 +44,8 @@ public class ZonedDateTimeGsonUtilsTest {
     }
 
     public void shouldRetrieveJsonWithNoZoneChangeWhenWriteZonedDateTimeWithSameZone() throws IOException {
-        GsonDecorator gson = GsonHelper.createGsonDecorator(
-                new GsonBuilderDecorator().withZoneModifier(ZONE_MODIFIER_USE_ORIGINAL));
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
+                new GsonUtilsBuilder().withZoneModifier(ZONE_MODIFIER_USE_ORIGINAL));
 
         Map<String, ZonedDateTime> map = createData();
         String actual = gson.writeValue(map);
@@ -84,19 +84,19 @@ public class ZonedDateTimeGsonUtilsTest {
     }
 
     public void shouldWriteNullWhenSerializeWithNullValue() {
-        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator().serializeNulls());
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().serializeNulls());
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225Z\",\"nullValue\":null}");
     }
 
     public void shouldIgnoreNullValueWhenSerializeWithIgnoreNullValue() {
-        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator());
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder());
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225Z\"}");
     }
 
     public void shouldUseCustomDateTimeFormatterWhenWriteZonedDateTime() {
-        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator()
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder()
                 .withZonedDateTimeFormatter(DateTimeFormatter.ofPattern("HH:mm:ss'T'dd.MM.yyyy")));
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"13:57:14T23.07.2017\"}");

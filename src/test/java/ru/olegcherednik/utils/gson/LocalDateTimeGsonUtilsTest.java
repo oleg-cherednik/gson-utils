@@ -54,20 +54,20 @@ public class LocalDateTimeGsonUtilsTest {
     }
 
     public void shouldWriteNullWhenSerializeWithNullValue() {
-        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator().serializeNulls());
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().serializeNulls());
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225\",\"nullValue\":null}");
     }
 
     public void shouldIgnoreNullValueWhenSerializeWithIgnoreNullValue() {
-        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator());
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder());
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225\"}");
     }
 
     public void shouldRetrieveJsonWithCustomFormatWriteSerializeWithCustomFormatter() throws IOException {
         DateTimeFormatter localDateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
-        GsonDecorator gson = GsonHelper.createGsonDecorator(new GsonBuilderDecorator().withLocalDateTimeFormatter(localDateTimeFormatter));
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().withLocalDateTimeFormatter(localDateTimeFormatter));
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"13:57:14 2017-07-23\"}");
     }

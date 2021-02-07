@@ -20,11 +20,11 @@ import static ru.olegcherednik.utils.gson.utils.PrettyPrintUtils.withUnixLineSep
  * @since 11.01.2021
  */
 @Test
-public class GsonHelperTest {
+public class GsonUtilsHelperTest {
 
     @AfterMethod
     public void clear() {
-        GsonHelper.setGsonBuilderDecorator(null);
+        GsonUtilsHelper.setGsonBuilder(null);
     }
 
     public void shouldUseNewBuilderWhenSetNotNullBuilderToGsonHelper() {
@@ -34,7 +34,7 @@ public class GsonHelperTest {
                 "  \"UTC\": \"2017-07-23T13:57:14.225Z\"" + UNIX_LINE_SEPARATOR +
                 '}');
 
-        GsonHelper.setGsonBuilderDecorator(new GsonBuilderDecorator().withZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
+        GsonUtilsHelper.setGsonBuilder(new GsonUtilsBuilder().withZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
         assertThat(GsonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"}");
         assertThat(withUnixLineSeparator(GsonUtils.prettyPrint().writeValue(map))).isEqualTo('{' + UNIX_LINE_SEPARATOR +
                 "  \"UTC\": \"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"" + UNIX_LINE_SEPARATOR +
@@ -42,12 +42,12 @@ public class GsonHelperTest {
     }
 
     public void shouldNotRebuildMapperWhenSetSameBuilder() {
-        Gson expectedGson = GsonHelper.gson();
-        Gson expectedPrettyPrintGson = GsonHelper.prettyPrintGson();
+        Gson expectedGson = GsonUtilsHelper.gson();
+        Gson expectedPrettyPrintGson = GsonUtilsHelper.prettyPrintGson();
 
-        GsonHelper.setGsonBuilderDecorator(GsonHelper.DEFAULT_BUILDER_DECORATOR);
-        assertThat(GsonHelper.gson()).isSameAs(expectedGson);
-        assertThat(GsonHelper.prettyPrintGson()).isSameAs(expectedPrettyPrintGson);
+        GsonUtilsHelper.setGsonBuilder(GsonUtilsHelper.DEFAULT_BUILDER);
+        assertThat(GsonUtilsHelper.gson()).isSameAs(expectedGson);
+        assertThat(GsonUtilsHelper.prettyPrintGson()).isSameAs(expectedPrettyPrintGson);
     }
 
     private static Map<String, ZonedDateTime> createData() {
