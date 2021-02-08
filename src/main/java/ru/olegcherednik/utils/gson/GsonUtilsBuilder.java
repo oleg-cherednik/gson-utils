@@ -86,17 +86,17 @@ public class GsonUtilsBuilder {
 
     // ---------- extended ----------
 
-    public GsonUtilsBuilder withZoneModifier(Function<ZoneId, ZoneId> zoneModifier) {
+    public GsonUtilsBuilder setZoneModifier(Function<ZoneId, ZoneId> zoneModifier) {
         this.zoneModifier = Optional.ofNullable(zoneModifier).orElse(this.zoneModifier);
         return this;
     }
 
-    public GsonUtilsBuilder withZonedDateTimeFormatter(DateTimeFormatter zonedDateTimeFormatter) {
+    public GsonUtilsBuilder setZonedDateTimeFormatter(DateTimeFormatter zonedDateTimeFormatter) {
         this.zonedDateTimeFormatter = Optional.ofNullable(zonedDateTimeFormatter).orElse(this.zonedDateTimeFormatter);
         return this;
     }
 
-    public GsonUtilsBuilder withLocalDateTimeFormatter(DateTimeFormatter localDateTimeFormatter) {
+    public GsonUtilsBuilder setLocalDateTimeFormatter(DateTimeFormatter localDateTimeFormatter) {
         this.localDateTimeFormatter = Optional.ofNullable(localDateTimeFormatter).orElse(this.localDateTimeFormatter);
         return this;
     }

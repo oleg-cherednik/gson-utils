@@ -30,7 +30,7 @@ public class ZonedDateTimePrettyPrintGsonUtilsTest {
 
     public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
         GsonDecorator gsonUtils = GsonUtilsHelper.createPrettyPrintGsonDecorator(
-                new GsonUtilsBuilder().withZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
+                new GsonUtilsBuilder().setZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
 
         Map<String, ZonedDateTime> map = ZonedDateTimeGsonUtilsTest.createData();
         String actual = gsonUtils.writeValue(map);

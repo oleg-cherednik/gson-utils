@@ -34,7 +34,7 @@ public class GsonUtilsHelperTest {
                 "  \"UTC\": \"2017-07-23T13:57:14.225Z\"" + UNIX_LINE_SEPARATOR +
                 '}');
 
-        GsonUtilsHelper.setGsonBuilder(new GsonUtilsBuilder().withZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
+        GsonUtilsHelper.setGsonBuilder(new GsonUtilsBuilder().setZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
         assertThat(GsonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"}");
         assertThat(withUnixLineSeparator(GsonUtils.prettyPrint().writeValue(map))).isEqualTo('{' + UNIX_LINE_SEPARATOR +
                 "  \"UTC\": \"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"" + UNIX_LINE_SEPARATOR +
