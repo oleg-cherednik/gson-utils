@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
+import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.olegcherednik.utils.gson.utils.PrettyPrintUtils.UNIX_LINE_SEPARATOR;
 import static ru.olegcherednik.utils.gson.utils.PrettyPrintUtils.withUnixLineSeparator;
@@ -30,7 +31,7 @@ public class ZonedDateTimePrettyPrintGsonUtilsTest {
 
     public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
         GsonDecorator gsonUtils = GsonUtilsHelper.createPrettyPrintGsonDecorator(
-                new GsonUtilsBuilder().setZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
+                new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneId.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
 
         Map<String, ZonedDateTime> map = ZonedDateTimeGsonUtilsTest.createData();
         String actual = gsonUtils.writeValue(map);

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.olegcherednik.utils.gson.GsonUtilsBuilder.ZONE_MODIFIER_USE_ORIGINAL;
 
@@ -33,7 +34,7 @@ public class ZonedDateTimeGsonUtilsTest {
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteZonedDateTimeSingaporeZone() throws IOException {
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
-                new GsonUtilsBuilder().setZoneModifier(zone -> ZoneId.of("Asia/Singapore")));
+                new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneId.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
 
         Map<String, ZonedDateTime> map = createData();
         String actual = gson.writeValue(map);
@@ -45,7 +46,7 @@ public class ZonedDateTimeGsonUtilsTest {
 
     public void shouldRetrieveJsonWithNoZoneChangeWhenWriteZonedDateTimeWithSameZone() throws IOException {
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
-                new GsonUtilsBuilder().setZoneModifier(ZONE_MODIFIER_USE_ORIGINAL));
+                new GsonUtilsBuilder().zonedDateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, ISO_ZONED_DATE_TIME));
 
         Map<String, ZonedDateTime> map = createData();
         String actual = gson.writeValue(map);
@@ -97,7 +98,7 @@ public class ZonedDateTimeGsonUtilsTest {
 
     public void shouldUseCustomDateTimeFormatterWhenWriteZonedDateTime() {
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder()
-                .setZonedDateTimeFormatter(DateTimeFormatter.ofPattern("HH:mm:ss'T'dd.MM.yyyy")));
+                .zonedDateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, DateTimeFormatter.ofPattern("HH:mm:ss'T'dd.MM.yyyy")));
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"13:57:14T23.07.2017\"}");
     }

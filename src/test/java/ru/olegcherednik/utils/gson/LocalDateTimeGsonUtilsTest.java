@@ -67,7 +67,7 @@ public class LocalDateTimeGsonUtilsTest {
 
     public void shouldRetrieveJsonWithCustomFormatWriteSerializeWithCustomFormatter() throws IOException {
         DateTimeFormatter localDateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
-        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().setLocalDateTimeFormatter(localDateTimeFormatter));
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().localDateTimeFormatter(localDateTimeFormatter));
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"13:57:14 2017-07-23\"}");
     }
