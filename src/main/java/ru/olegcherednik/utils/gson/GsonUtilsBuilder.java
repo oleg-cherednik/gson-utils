@@ -84,96 +84,83 @@ public class GsonUtilsBuilder {
         return registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(dateTimeFormatter));
     }
 
+    public GsonUtilsBuilder addCustomizer(Consumer<GsonBuilder> customizer) {
+        this.customizer = this.customizer.andThen(customizer);
+        return this;
+    }
+
     // ---------- GsonBuilder ----------
 
     public GsonUtilsBuilder version(double ignoreVersionsAfter) {
-        customizer = customizer.andThen(builder -> builder.setVersion(ignoreVersionsAfter));
-        return this;
+        return addCustomizer(builder -> builder.setVersion(ignoreVersionsAfter));
     }
 
     public GsonUtilsBuilder excludeFieldsWithModifiers(int... modifiers) {
-        customizer = customizer.andThen(builder -> builder.excludeFieldsWithModifiers(modifiers));
-        return this;
+        return addCustomizer(builder -> builder.excludeFieldsWithModifiers(modifiers));
     }
 
     public GsonUtilsBuilder generateNonExecutableJson() {
-        customizer = customizer.andThen(GsonBuilder::generateNonExecutableJson);
-        return this;
+        return addCustomizer(GsonBuilder::generateNonExecutableJson);
     }
 
     public GsonUtilsBuilder excludeFieldsWithoutExposeAnnotation() {
-        customizer = customizer.andThen(GsonBuilder::excludeFieldsWithoutExposeAnnotation);
-        return this;
+        return addCustomizer(GsonBuilder::excludeFieldsWithoutExposeAnnotation);
     }
 
     public GsonUtilsBuilder serializeNulls() {
-        customizer = customizer.andThen(GsonBuilder::serializeNulls);
-        return this;
+        return addCustomizer(GsonBuilder::serializeNulls);
     }
 
     public GsonUtilsBuilder disableInnerClassSerialization() {
-        customizer = customizer.andThen(GsonBuilder::disableInnerClassSerialization);
-        return this;
+        return addCustomizer(GsonBuilder::disableInnerClassSerialization);
     }
 
     public GsonUtilsBuilder longSerializationPolicy(LongSerializationPolicy serializationPolicy) {
-        customizer = customizer.andThen(builder -> builder.setLongSerializationPolicy(serializationPolicy));
-        return this;
+        return addCustomizer(builder -> builder.setLongSerializationPolicy(serializationPolicy));
     }
 
     public GsonUtilsBuilder fieldNamingPolicy(FieldNamingPolicy namingConvention) {
-        customizer = customizer.andThen(builder -> builder.setFieldNamingPolicy(namingConvention));
-        return this;
+        return addCustomizer(builder -> builder.setFieldNamingPolicy(namingConvention));
     }
 
     public GsonUtilsBuilder fieldNamingStrategy(FieldNamingStrategy fieldNamingStrategy) {
-        customizer = customizer.andThen(builder -> builder.setFieldNamingStrategy(fieldNamingStrategy));
-        return this;
+        return addCustomizer(builder -> builder.setFieldNamingStrategy(fieldNamingStrategy));
     }
 
     public GsonUtilsBuilder exclusionStrategies(ExclusionStrategy... strategies) {
-        customizer = customizer.andThen(builder -> builder.setExclusionStrategies(strategies));
-        return this;
+        return addCustomizer(builder -> builder.setExclusionStrategies(strategies));
     }
 
     public GsonUtilsBuilder addSerializationExclusionStrategy(ExclusionStrategy strategy) {
-        customizer = customizer.andThen(builder -> builder.addSerializationExclusionStrategy(strategy));
-        return this;
+        return addCustomizer(builder -> builder.addSerializationExclusionStrategy(strategy));
     }
 
     public GsonUtilsBuilder addDeserializationExclusionStrategy(ExclusionStrategy strategy) {
-        customizer = customizer.andThen(builder -> builder.addDeserializationExclusionStrategy(strategy));
-        return this;
+        return addCustomizer(builder -> builder.addDeserializationExclusionStrategy(strategy));
     }
 
     public GsonUtilsBuilder setLenient() {
-        customizer = customizer.andThen(GsonBuilder::setLenient);
-        return this;
+        return addCustomizer(GsonBuilder::setLenient);
     }
 
     public GsonUtilsBuilder disableHtmlEscaping() {
-        customizer = customizer.andThen(GsonBuilder::disableHtmlEscaping);
-        return this;
+        return addCustomizer(GsonBuilder::disableHtmlEscaping);
     }
 
     public GsonUtilsBuilder registerTypeAdapter(Type type, Object typeAdapter) {
-        customizer = customizer.andThen(builder -> builder.registerTypeAdapter(type, typeAdapter));
-        return this;
+        return addCustomizer(builder -> builder.registerTypeAdapter(type, typeAdapter));
     }
 
     public GsonUtilsBuilder registerTypeAdapterFactory(TypeAdapterFactory factory) {
-        customizer = customizer.andThen(builder -> builder.registerTypeAdapterFactory(factory));
-        return this;
+        return addCustomizer(builder -> builder.registerTypeAdapterFactory(factory));
     }
 
     public GsonUtilsBuilder registerTypeHierarchyAdapter(Class<?> baseType, Object typeAdapter) {
-        customizer = customizer.andThen(builder -> builder.registerTypeHierarchyAdapter(baseType, typeAdapter));
-        return this;
+        return addCustomizer(builder -> builder.registerTypeHierarchyAdapter(baseType, typeAdapter));
     }
 
     public GsonUtilsBuilder serializeSpecialFloatingPointValues() {
-        customizer = customizer.andThen(GsonBuilder::serializeSpecialFloatingPointValues);
-        return this;
+        return addCustomizer(GsonBuilder::serializeSpecialFloatingPointValues);
     }
 
 }
