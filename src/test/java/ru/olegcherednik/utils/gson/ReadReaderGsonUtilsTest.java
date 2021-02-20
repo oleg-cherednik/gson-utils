@@ -46,7 +46,7 @@ public class ReadReaderGsonUtilsTest {
         }
     }
 
-    public void shouldRetrieveDeserializedObjectWhenReadReaderAsCustomType() throws IOException {
+    public void shouldRetrieveDeserializedObjectWhenReadReaderAsCustomClass() throws IOException {
         Book expected = new Book(
                 "Thinking in Java",
                 ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
@@ -55,6 +55,20 @@ public class ReadReaderGsonUtilsTest {
 
         try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/book.json"))) {
             Book actual = GsonUtils.readValue(in, Book.class);
+            assertThat(actual).isNotNull();
+            assertThat(actual).isEqualTo(expected);
+        }
+    }
+
+    public void shouldRetrieveDeserializedObjectWhenReadReaderAsCustomType() throws IOException {
+        Book expected = new Book(
+                "Thinking in Java",
+                ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                1998,
+                ListUtils.of("Bruce Eckel"));
+
+        try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/book.json"))) {
+            Book actual = GsonUtils.read(in, Book.class);
             assertThat(actual).isNotNull();
             assertThat(actual).isEqualTo(expected);
         }
