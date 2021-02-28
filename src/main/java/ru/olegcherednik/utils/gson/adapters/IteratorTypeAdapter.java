@@ -35,7 +35,7 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
 
                 Type elementType = getIteratorElementType(typeToken.getType(), typeToken.getRawType());
                 TypeAdapter<?> elementTypeAdapter = gson.getAdapter(TypeToken.get(elementType));
-                elementTypeAdapter = ConstructorUtils.newInstance("com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper",
+                elementTypeAdapter = ConstructorUtils.invokeConstructor("com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper",
                         Gson.class, gson,
                         TypeAdapter.class, elementTypeAdapter,
                         Type.class, elementType);
