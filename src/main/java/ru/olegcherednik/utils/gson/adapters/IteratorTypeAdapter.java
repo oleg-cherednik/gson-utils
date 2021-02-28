@@ -9,7 +9,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import ru.olegcherednik.utils.gson.GsonUtilsException;
-import ru.olegcherednik.utils.reflection.Invoke;
+import ru.olegcherednik.utils.reflection.ConstructorUtils;
 import ru.olegcherednik.utils.reflection.MethodUtils;
 
 import java.io.IOException;
@@ -35,8 +35,10 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
 
                 Type elementType = getIteratorElementType(typeToken.getType(), typeToken.getRawType());
                 TypeAdapter<?> elementTypeAdapter = gson.getAdapter(TypeToken.get(elementType));
-                elementTypeAdapter = Invoke.invokeConstructor("com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper",
-                        new Class[] { Gson.class, TypeAdapter.class, Type.class }, new Object[] { gson, elementTypeAdapter, elementType });
+                elementTypeAdapter = ConstructorUtils.invokeConstructor("com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper",
+                        Gson.class, gson,
+                        TypeAdapter.class, elementTypeAdapter,
+                        Type.class, elementType);
                 //noinspection unchecked,rawtypes
                 return new IteratorTypeAdapter(elementTypeAdapter);
             } catch(Exception e) {
@@ -46,7 +48,9 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
 
         private Type getIteratorElementType(Type context, Class<?> contextRawType) throws Exception {
             Type type = MethodUtils.invokeStaticMethod($Gson$Types.class, "getSupertype",
-                    new Class[] { Type.class, Class.class, Class.class }, new Object[] { context, contextRawType, Iterator.class });
+                    Type.class, context,
+                    Class.class, contextRawType,
+                    Class.class, Iterator.class);
             return ((ParameterizedType)type).getActualTypeArguments()[0];
         }
     };
