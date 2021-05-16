@@ -10,6 +10,7 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'java-library'
     id 'maven'
     id 'application'
     id 'jacoco'
@@ -42,7 +43,7 @@ configurations {
 dependencies {
     compileOnly "com.google.code.gson:gson:${property('gson.version')}"
 
-    implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
+    api "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
 
     testImplementation('org.testng:testng:7.4.0') {
         exclude group: 'junit', module: 'junit'
