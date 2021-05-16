@@ -10,6 +10,7 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'maven'
     id 'application'
     id 'jacoco'
     id 'io.codearte.nexus-staging' version '0.11.0'
@@ -39,14 +40,15 @@ configurations {
 }
 
 dependencies {
-    implementation "com.google.code.gson:gson:2.8.6"
-    implementation 'ru.oleg-cherednik.utils.reflection:reflection-utils:1.0'
+    compileOnly "com.google.code.gson:gson:${property('gson.version')}"
+    implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
 
     testImplementation('org.testng:testng:7.4.0') {
         exclude group: 'junit', module: 'junit'
         exclude group: 'org.apache.ant', module: 'ant'
     }
 
+    testImplementation "com.google.code.gson:gson:${property('gson.version')}"
     testImplementation 'org.assertj:assertj-core:3.19.0'
     testImplementation 'commons-io:commons-io:2.8.0'
     testImplementation 'org.mockito:mockito-core:3.10.0'
