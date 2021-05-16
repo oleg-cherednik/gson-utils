@@ -1,7 +1,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.utils/gson-utils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.oleg-cherednik.utils/gson-utils)
 [![javadoc](https://javadoc.io/badge2/ru.oleg-cherednik.utils/gson-utils/javadoc.svg)](https://javadoc.io/doc/ru.oleg-cherednik.utils/gson-utils)
 [![java8](https://badgen.net/badge/java/8+/blue)](https://badgen.net/)
-[![travis-ci](https://travis-ci.com/oleg-cherednik/GsonUtils.svg?branch=dev)](https://travis-ci.com/oleg-cherednik/GsonUtils)
+[![travis-ci](https://travis-ci.com/oleg-cherednik/gson-utils.svg?branch=dev)](https://travis-ci.com/oleg-cherednik/gson-utils)
 [![circle-ci](https://circleci.com/gh/oleg-cherednik/GsonUtils/tree/dev.svg?style=shield)](https://app.circleci.com/pipelines/github/oleg-cherednik/GsonUtils)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![codecov](https://codecov.io/gh/oleg-cherednik/GsonUtils/branch/dev/graph/badge.svg?token=UnqBOd1gbA)](https://codecov.io/gh/oleg-cherednik/GsonUtils)
@@ -24,14 +24,14 @@
 ## Gradle
 
 ```groovy
-compile 'ru.oleg-cherednik.gson-utils:gson-utils:2.1'
+compile 'ru.oleg-cherednik.utils.gson:gson-utils:2.1'
 ```
 
 ## Maven
 
 ```xml
 <dependency>
-    <groupId>ru.oleg-cherednik.gson-utils</groupId>
+    <groupId>ru.oleg-cherednik.utils.gson</groupId>
     <artifactId>gson-utils</artifactId>
     <version>2.1</version>
 </dependency>
