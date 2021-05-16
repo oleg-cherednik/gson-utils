@@ -2,7 +2,7 @@
 [![javadoc](https://javadoc.io/badge2/ru.oleg-cherednik.utils/gson-utils/javadoc.svg)](https://javadoc.io/doc/ru.oleg-cherednik.utils/gson-utils)
 [![java8](https://badgen.net/badge/java/8+/blue)](https://badgen.net/)
 [![travis-ci](https://travis-ci.com/oleg-cherednik/gson-utils.svg?branch=dev)](https://travis-ci.com/oleg-cherednik/gson-utils)
-[![circle-ci](https://circleci.com/gh/oleg-cherednik/GsonUtils/tree/dev.svg?style=shield)](https://app.circleci.com/pipelines/github/oleg-cherednik/gson-utils)
+[![circle-ci](https://circleci.com/gh/oleg-cherednik/gson-utils/tree/dev.svg?style=shield)](https://app.circleci.com/pipelines/github/oleg-cherednik/gson-utils)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![codecov](https://codecov.io/gh/oleg-cherednik/GsonUtils/branch/dev/graph/badge.svg?token=UnqBOd1gbA)](https://codecov.io/gh/oleg-cherednik/GsonUtils)
 [![Known Vulnerabilities](https://snyk.io/test/github/oleg-cherednik/GsonUtils/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/oleg-cherednik/GsonUtils?targetFile=build.gradle)
