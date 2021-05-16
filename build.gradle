@@ -41,6 +41,7 @@ configurations {
 
 dependencies {
     compileOnly "com.google.code.gson:gson:${property('gson.version')}"
+
     implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
 
     testImplementation('org.testng:testng:7.4.0') {
