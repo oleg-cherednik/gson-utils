@@ -58,6 +58,9 @@ The second part is the `gson-utils` version. This number is unique.
 
 ### GsonUtils class
 
+<details><summary>details</summary>
+<p>
+
 #### Read json
 
 <details><summary>details</summary>
@@ -70,6 +73,9 @@ The second part is the `gson-utils` version. This number is unique.
 
 <details><summary>details</summary>
 <p>
+
+</p>
+</details>
 
 </p>
 </details>
