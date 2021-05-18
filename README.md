@@ -58,12 +58,17 @@ The second part is the `gson-utils` version. This number is unique.
 
 ### GsonUtils class
 
-#### Read json from string
+#### Read json
 
 <details><summary>details</summary>
 <p>
 
-##### Read json string to a custom object type (but not a collection)
+##### Read json from string
+
+<details><summary>details</summary>
+<p>
+
+###### Read json string to a custom object type (but not a collection)
 
 ```java
 public class Snippet {
@@ -86,7 +91,7 @@ public class Snippet {
 }
 ```
 
-##### Read json string to a list of custom object type
+###### Read json string to a list of custom object type
 
 ```java
 public class Snippet {
@@ -115,9 +120,9 @@ public class Snippet {
 }
 ```
 
-##### Read json string to a map of custom object type
+###### Read json string to a map of custom object type
 
-###### Read json string to a map with string as keys and map or primitive types as values
+####### Read json string to a map with string as keys and map or primitive types as values
 
 ```java
 public class Snippet {
@@ -147,7 +152,7 @@ public class Snippet {
 ```
 **Note:** `Map` values have either primitive type or `Map` or `List`.
 
-###### Read json string to a map with string as keys and given type as value
+####### Read json string to a map with string as keys and given type as value
 
 ```java
 public class Snippet {
@@ -208,12 +213,12 @@ public class Snippet {
 </p>
 </details>
 
-#### Read json from reader
+##### Read json from reader
 
 <details><summary>details</summary>
 <p>
 
-##### Read json from a reader to a custom object type (but not a collection)
+###### Read json from a reader to a custom object type (but not a collection)
 
 ```json                        
 {
@@ -238,9 +243,9 @@ public class Snippet {
 }
 ```
 
-##### Read json from a reader to a list of custom object type
+###### Read json from a reader to a list of custom object type
 
-###### Read json from a reader eager to a list of custom object type
+####### Read json from a reader eager to a list of custom object type
 ```json                        
 [
     {
@@ -270,7 +275,7 @@ public class Snippet {
 }
 ```
 
-###### Read json from a reader lazy to a list of custom object type
+####### Read json from a reader lazy to a list of custom object type
 
 ```json                        
 [
@@ -306,9 +311,9 @@ public class Snippet {
    
 }
 ```
-##### Read json from a reader to a map of custom object type
+###### Read json from a reader to a map of custom object type
 
-###### Read json from a reader to a map with string as keys and map or primitive types as a values
+####### Read json from a reader to a map with string as keys and map or primitive types as a values
 
 ```json                        
 {
@@ -335,7 +340,7 @@ public class Snippet {
 ```
 **Note:** `map` values have either primitive type or `Map` or `List`.
 
-###### Read json from a reader to a map with string as keys and given type as a value
+####### Read json from a reader to a map with string as keys and given type as a value
 
 ```json                        
 {
@@ -366,7 +371,7 @@ public class Snippet {
 }
 ```
 
-###### Read json from a reader to a map with Integer as keys and given type as a value
+####### Read json from a reader to a map with Integer as keys and given type as a value
 
 ```json                        
 {
@@ -400,7 +405,7 @@ public class Snippet {
 </p>
 </details>
 
-#### Write any object to json
+#### Write any object to json string
 
 <details><summary>details</summary>
 <p>
