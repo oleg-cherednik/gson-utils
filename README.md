@@ -71,6 +71,148 @@ The second part is the `gson-utils` version. This number is unique.
 <details><summary>details</summary>
 <p>
 
+###### Read json string to a custom object type (but not a collection)
+
+```java
+public class Snippet {
+
+    public static Data jsonStringToObj() {
+        String json = """
+                      {
+                        "intVal": 666,
+                        "strVal": "omen"
+                      }
+                      """;
+        return GsonUtils.readValue(json, Data.class);
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+
+###### Read json string to a list of custom object type
+
+```java
+public class Snippet {
+
+    public static List<Data> jsonStringToList() {
+        String json = """
+                      [
+                          {
+                              "intVal" : 555,
+                              "strVal" : "victory"
+                          },
+                          {
+                              "intVal" : 666,
+                              "strVal" : "omen"
+                          }
+                      ]
+                      """;
+        return GsonUtils.readList(json, Data.class);
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+
+###### Read json string to a map of custom object type
+
+####### Read json string to a map with string as keys and map or primitive types as values
+
+```java
+public class Snippet {
+
+    public static Map<String, ?> jsonStringToMap() {
+        String json = """
+                      {
+                          "victory" : {
+                              "intVal" : 555,
+                              "strVal" : "victory"
+                          },
+                          "omen" : {
+                              "intVal" : 666,
+                              "strVal" : "omen"
+                          }
+                      }
+                      """;
+        return GsonUtils.readMap(json);
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+**Note:** `Map` values have either primitive type or `Map` or `List`.
+
+####### Read json string to a map with string as keys and given type as value
+
+```java
+public class Snippet {
+
+    public static Map<String, Data> jsonStringToMap() {
+        String json = """
+                      {
+                          "victory" : {
+                              "intVal" : 555,
+                              "strVal" : "victory"
+                          },
+                          "omen" : {
+                              "intVal" : 666,
+                              "strVal" : "omen"
+                          }
+                      }
+                      """;
+        return GsonUtils.readMap(json, Data.class);
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+
+###### Read json string to a map with given type for key and value
+
+```java
+public class Snippet {
+
+    public static Map<String, Data> jsonStringToMap() {
+        String json = """
+                      {
+                          "1" : {
+                              "intVal" : 555,
+                              "strVal" : "victory"
+                          },
+                          "2" : {
+                              "intVal" : 666,
+                              "strVal" : "omen"
+                          }
+                      }
+                      """;
+        return GsonUtils.readMap(json, Integer.class, Data.class);
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+
 </p>
 </details>
 
