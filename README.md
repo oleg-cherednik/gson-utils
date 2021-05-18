@@ -9,7 +9,7 @@
 [![Codacy Quality](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e)](https://www.codacy.com/gh/oleg-cherednik/gson-utils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/gson-utils&amp;utm_campaign=Badge_Grade)     
 
 # gson-utils
-> A java tool to make work with [Gson](https://github.com/google/gson) much easier
+> Set of utilities for JVM to make work with [Gson](https://github.com/google/gson) much easier
 
 ## Features
 *   Encapsulate all checked exceptions from Gson with custom runtime exception;
@@ -47,6 +47,9 @@ The second part is the `gson-utils` version. This number is unique.
 ### GsonUtils class
 
 #### Read json from `String`
+
+<details><summary>details</summary>
+<p>
 
 ##### Read json `String` to a custom object type (but not a collection)
 
@@ -190,7 +193,13 @@ public class Snippet {
 }
 ```
 
+</p>
+</details>
+
 #### Read json from `Reader`
+
+<details><summary>details</summary>
+<p>
 
 ##### Read json from `Reader` to a custom object type (but not a collection)
 
@@ -376,7 +385,13 @@ public class Snippet {
 }
 ```
 
+</p>
+</details>
+
 #### Write any object to json
+
+<details><summary>details</summary>
+<p>
 
 ##### Write a custom object to json `String` (but not pretty print)
 
@@ -479,6 +494,9 @@ public class Snippet {
   }
 }
 ```
+
+</p>
+</details>
 
 ##### Links
 

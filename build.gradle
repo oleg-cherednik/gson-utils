@@ -15,7 +15,6 @@ plugins {
     id 'application'
     id 'jacoco'
     id 'io.codearte.nexus-staging' version '0.11.0'
-//    id "com.github.hierynomus.license" version "0.15.0"
 }
 
 apply plugin: 'com.bmuschko.nexus'
@@ -69,23 +68,17 @@ test {
     useTestNG()
 }
 
-//license {
-//    header = file('license_header.txt')
-//    include "**/*.java"
-//    exclude "**/*Test.java"
-//}
-
 modifyPom {
     project {
         name 'gson-utils'
-        description 'Some utils for Gson'
-        url 'https://github.com/oleg-cherednik/GsonUtils'
+        description 'Set of utilities for JVM to make work with Gson much easier'
+        url 'https://github.com/oleg-cherednik/gson-utils'
         inceptionYear '2021'
 
         scm {
-            url 'https://github.com/oleg-cherednik/GsonUtils'
-            connection 'scm:https://github.com/oleg-cherednik/GsonUtils.git'
-            developerConnection 'scm:git@github.com:oleg-cherednik/GsonUtils.git'
+            url 'https://github.com/oleg-cherednik/gson-utils'
+            connection 'scm:https://github.com/oleg-cherednik/gson-utils.git'
+            developerConnection 'scm:git@github.com:oleg-cherednik/gson-utils.git'
         }
 
         licenses {

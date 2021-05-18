@@ -63,4 +63,5 @@ public class Data {
     public int hashCode() {
         return Objects.hash(intVal, strVal);
     }
+
 }
