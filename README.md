@@ -45,7 +45,7 @@ The second part is the `gson-utils` version. This number is unique.
 
 *   [GsonUtils](#gsonutils-class) - utility class with set of methods to use json transformation;
 
-### GsonUtils class
+### `GsonUtils` class
 
 #### Read json from `String`
 
@@ -495,6 +495,22 @@ public class Snippet {
   }
 }
 ```
+
+</p>
+</details>
+
+### `GsonUtilsBuilder` class
+
+<details><summary>details</summary>
+<p>
+
+</p>
+</details>
+
+### `GsonUtilsHelper` class
+
+<details><summary>details</summary>
+<p>
 
 </p>
 </details>
