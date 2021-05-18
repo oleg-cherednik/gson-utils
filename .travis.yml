@@ -4,8 +4,15 @@ install: true
 dist: trusty
 jdk: openjdk8
 
+env:
+  - CODACY_PROJECT_TOKEN=f7c8ea0d91304e648b70e2256184d5f4
+
+before_script:
+  - bash <(curl -Ls https://coverage.codacy.com/get.sh) download
+
 script:
   - ./gradlew build --stacktrace
   - ./gradlew jacocoTestReport
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r build/reports/jacoco/test/jacocoTestReport.xml
