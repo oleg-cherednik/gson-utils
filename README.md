@@ -66,6 +66,22 @@ The second part is the `gson-utils` version. This number is unique.
 <details><summary>details</summary>
 <p>
 
+##### Read json from string
+
+<details><summary>details</summary>
+<p>
+
+</p>
+</details>
+
+##### Read json from reader
+
+<details><summary>details</summary>
+<p>
+
+</p>
+</details>
+
 </p>
 </details>
 
