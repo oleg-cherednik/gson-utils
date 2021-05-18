@@ -5,6 +5,8 @@
 
 ![travis-ci](https://travis-ci.com/oleg-cherednik/gson-utils.svg?branch=master)
 ![circle-ci](https://circleci.com/gh/oleg-cherednik/gson-utils/tree/master.svg?style=shield)
+[![codacy-quality](https://app.codacy.com/project/badge/Grade/f4fe6d775eed4daa936620bb173052ae?branch=master)](https://app.codacy.com/gh/oleg-cherednik/reflection-utils/dashboard?branch=master)
+[![codacy-quality](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e?branch=master)](https://app.codacy.com/gh/oleg-cherednik/gson-utils/dashboard?branch=master)
 
 <details><summary>develop</summary>
 <p>
@@ -13,7 +15,7 @@
 [![circle-ci](https://circleci.com/gh/oleg-cherednik/gson-utils/tree/dev.svg?style=shield)](https://app.circleci.com/pipelines/github/oleg-cherednik/gson-utils)
 [![codecov](https://codecov.io/gh/oleg-cherednik/gson-utils/branch/dev/graph/badge.svg?token=2wNFKJhR70)](https://codecov.io/gh/oleg-cherednik/gson-utils)
 [![vulnerabilities](https://snyk.io/test/github/oleg-cherednik/gson-utils/badge.svg?targetFile=build.gradle)](https://snyk.io/test/github/oleg-cherednik/gson-utils?targetFile=build.gradle)
-[![codacy-quality](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e)](https://www.codacy.com/gh/oleg-cherednik/gson-utils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/gson-utils&amp;utm_campaign=Badge_Grade)    
+[![codacy-quality](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e?branch=dev)](https://app.codacy.com/gh/oleg-cherednik/gson-utils/dashboard?branch=dev)
 
 </p>
 </details>  
