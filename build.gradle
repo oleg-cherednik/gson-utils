@@ -71,7 +71,9 @@ test {
 modifyPom {
     project {
         name 'gson-utils'
-        description 'Set of utilities for JVM to make work with Gson much easier'
+        description "Gson usability utilities. It's designed to add additional" +
+                " features like easy and centralized configuration, builder or static" +
+                " method set."
         url 'https://github.com/oleg-cherednik/gson-utils'
         inceptionYear '2021'
 

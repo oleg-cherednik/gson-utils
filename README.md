@@ -9,7 +9,8 @@
 [![Codacy Quality](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e)](https://www.codacy.com/gh/oleg-cherednik/gson-utils/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oleg-cherednik/gson-utils&amp;utm_campaign=Badge_Grade)     
 
 # gson-utils
-> Set of utilities for JVM to make work with [Gson](https://github.com/google/gson) much easier
+> [Gson](https://github.com/google/gson) usability utilities. It's designed to
+> add additional features like easy and centralized configuration, builder or static method set. 
 
 ## Features
 *   Encapsulate all checked exceptions from Gson with custom runtime exception;
