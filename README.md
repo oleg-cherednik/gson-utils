@@ -58,9 +58,6 @@ The second part is the `gson-utils` version. This number is unique.
 
 ### GsonUtils class
 
-<details><summary>details</summary>
-<p>
-
 #### Read json
 
 <details><summary>details</summary>
@@ -213,27 +210,307 @@ public class Snippet {
 }
 ```
 
-</p>
-</details>
-
 ##### Read json from reader
 
 <details><summary>details</summary>
 <p>
 
-</p>
-</details>
+###### Read json from a reader to a custom object type (but not a collection)
+
+```json                        
+{
+    "intVal" : 666,
+    "strVal" : "omen"
+}
+```
+```java
+public class Snippet {
+
+    public static Data readJsonFromFileToObj(File file) {
+        try (Reader in = new FileReader(file)) {
+            return GsonUtils.readValue(in, Data.class);
+        }
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+
+###### Read json from a reader to a list of custom object type
+
+####### Read json from a reader eager to a list of custom object type
+```json                        
+[
+    {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+]
+```
+```java
+public class Snippet {
+
+    public static List<Data> readJsonEdgerFromFileToList(File file) {
+        try (Reader in = new FileReader(file)) {
+            return GsonUtils.readList(in, Data.class);
+        }
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+
+####### Read json from a reader lazy to a list of custom object type
+
+```json                        
+[
+    {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+]
+```
+```java
+public class Snippet {
+
+    public static List<Data> readJsonLazyFromFileToList(File file) {
+        try (Reader in = new FileReader(file)) {
+            List<Data> res = new ArrayList<>();
+            Iterator<Data> it = GsonUtils.readListLazy(in, Data.class);
+            
+            while (it.hasNext())
+                res.add(it.next());
+            
+            return res;
+        }
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+###### Read json from a reader to a map of custom object type
+
+####### Read json from a reader to a map with string as keys and map or primitive types as a values
+
+```json                        
+{
+    "victory" : {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    "omen" : {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+}
+```
+```java
+public class Snippet {
+
+    public static Map<String, ?> readJsonFromFileToMap(File file) {
+        try (Reader in = new FileReader(file)) {
+            return GsonUtils.readMap(in);
+        }
+    }
+   
+}
+```
+**Note:** `map` values have either primitive type or `Map` or `List`.
+
+####### Read json from a reader to a map with string as keys and given type as a value
+
+```json                        
+{
+    "victory" : {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    "omen" : {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+}
+```
+```java
+public class Snippet {
+
+    public static Map<String, Data> readJsonFromFileToMap(File file) {
+        try (Reader in = new FileReader(file)) {
+            return GsonUtils.readMap(in, Data.class);
+        }
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+
+####### Read json from a reader to a map with Integer as keys and given type as a value
+
+```json                        
+{
+    "1" : {
+        "intVal" : 555,
+        "strVal" : "victory"
+    },
+    "2" : {
+        "intVal" : 666,
+        "strVal" : "omen"
+    }
+}
+```
+```java
+public class Snippet {
+
+    public static Map<Integer, Data> readJsonFromFileToMap(File file) {
+        try (Reader in = new FileReader(file)) {
+            return GsonUtils.readMap(in, Integer.class, Data.class);
+        }
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
 
 </p>
 </details>
 
-#### Write json
+</p>
+</details>
+
+#### Write any object to json string
 
 <details><summary>details</summary>
 <p>
 
-</p>
-</details>
+##### Write a custom object to json string (but not pretty print)
+
+```java
+public class Snippet {
+
+    public static String objToJsonString() {
+        Data data = new Data(555, "victory");
+        return GsonUtils.writeValue(data);
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+
+class Data {
+    int intVal;
+    String strVal;
+}
+```
+```json
+{"intVal":555,"strVal":"victory"}
+```
+
+##### Write a list to json string (but not pretty print)
+
+```java
+public class Snippet {
+
+    public static String listToJsonString() {
+        List<Data> data = List.of(new Data(555, "victory"), new Data(666, "omen"));
+        return GsonUtils.writeValue(map);
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+```json
+[{"intVal":555,"strVal":"victory"},{"intVal":666,"strVal":"omen"}]
+```
+
+##### Write a map to json string (but not pretty print)
+
+```java
+public class Snippet {
+
+    public static String mapToJsonString() {
+        Map<String, Data> data = Map.of(
+                "victory", new Data(555, "victory"),
+                "omen", new Data(666, "omen"));
+        return GsonUtils.writeValue(data);
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+```json
+{"victory":{"intVal":555,"strVal":"victory"},"omen":{"intVal":666,"strVal":"omen"}}
+```
+
+##### Write any object to pretty print json string
+
+```java
+public class Snippet {
+
+    public static String mapToPrettyPrintJsonString() {
+        Map<String, Data> data = Map.of(
+                "victory", new Data(555, "victory"),
+                "omen", new Data(666, "omen"));
+        return GsonUtils.prettyPrint().writeValue(data);
+    }
+                 
+    private static class Data {
+        int intVal;
+        String strVal;
+    }
+   
+}
+```
+```json
+{
+  "victory": {
+    "intVal": 555,
+    "strVal": "victory"
+  },
+  "omen": {
+    "intVal": 666,
+    "strVal": "omen"
+  }
+}
+```
 
 </p>
 </details>
