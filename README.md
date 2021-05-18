@@ -229,7 +229,7 @@ public class Snippet {
 
 ##### Read json from `Reader` to a list of custom object type
 
-##### Read json from `Reader` eager to a list of custom object type
+###### Read json from `Reader` eager to a list of custom object type
 ```json                        
 [
     {
@@ -259,7 +259,7 @@ public class Snippet {
 }
 ```
 
-##### Read json from `Reader` lazy to a list of custom object type
+###### Read json from `Reader` lazy to a list of custom object type
 
 ```json                        
 [
@@ -499,7 +499,7 @@ public class Snippet {
 </p>
 </details>
 
-##### Links
+### Links
 
 *   Home page: https://github.com/oleg-cherednik/gson-utils
 
