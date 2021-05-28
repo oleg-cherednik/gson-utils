@@ -6,6 +6,7 @@
 ![travis-ci](https://travis-ci.com/oleg-cherednik/gson-utils.svg?branch=master)
 ![circle-ci](https://circleci.com/gh/oleg-cherednik/gson-utils/tree/master.svg?style=shield)
 [![codacy-quality](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e?branch=master)](https://app.codacy.com/gh/oleg-cherednik/gson-utils/dashboard?branch=master)
+[![sonarcloud](https://sonarcloud.io/api/project_badges/measure?project=com.lapots.breed.judge:judge-rule-engine&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.lapots.breed.judge:judge-rule-engine)
 
 <details><summary>develop</summary>
 <p>
