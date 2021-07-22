@@ -184,7 +184,7 @@ public class Snippet {
 ```java
 public class Snippet {
 
-    public static Map<String, Data> jsonStringToMap() {
+    public static Map<Integer, Data> jsonStringToMap() {
         String json = """
                       {
                           "1" : {
