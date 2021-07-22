@@ -34,13 +34,16 @@
 *   Lazy read support for list from `Writer`;
 *   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`). 
 
-## Gradle
+
+##  Build Tools
+
+### Gradle
 
 ```groovy
 compile 'ru.oleg-cherednik.utils.gson:gson-utils:2.1'
 ```
 
-## Maven
+### Maven
 
 ```xml
 <dependency>
@@ -66,10 +69,6 @@ The second part is the `gson-utils` version. This number is unique.
 <p>
 
 ##### Read json from string
-
-<details>
-<summary>details</summary>
-<p>
 
 ###### Read json string to a custom object type (but not a collection)
 
