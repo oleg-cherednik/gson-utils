@@ -7,7 +7,8 @@
 ![circle-ci](https://circleci.com/gh/oleg-cherednik/gson-utils/tree/master.svg?style=shield)
 [![codacy-quality](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e?branch=master)](https://app.codacy.com/gh/oleg-cherednik/gson-utils/dashboard?branch=master)
 
-<details><summary>develop</summary>
+<details>
+<summary>develop</summary>
 <p>
 
 [![travis-ci](https://travis-ci.com/oleg-cherednik/gson-utils.svg?branch=dev)](https://travis-ci.com/oleg-cherednik/gson-utils)
@@ -60,12 +61,14 @@ The second part is the `gson-utils` version. This number is unique.
 
 #### Read json
 
-<details><summary>details</summary>
+<details>
+<summary>details</summary>
 <p>
 
 ##### Read json from string
 
-<details><summary>details</summary>
+<details>
+<summary>details</summary>
 <p>
 
 ###### Read json string to a custom object type (but not a collection)
@@ -398,9 +401,6 @@ public class Snippet {
    
 }
 ```
-
-</p>
-</details>
 
 </p>
 </details>
