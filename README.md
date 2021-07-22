@@ -7,8 +7,7 @@
 ![circle-ci](https://circleci.com/gh/oleg-cherednik/gson-utils/tree/master.svg?style=shield)
 [![codacy-quality](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e?branch=master)](https://app.codacy.com/gh/oleg-cherednik/gson-utils/dashboard?branch=master)
 
-<details>
-<summary>develop</summary>
+<details><summary>develop</summary>
 <p>
 
 [![travis-ci](https://travis-ci.com/oleg-cherednik/gson-utils.svg?branch=dev)](https://travis-ci.com/oleg-cherednik/gson-utils)
@@ -60,12 +59,34 @@ The second part is the `gson-utils` version. This number is unique.
 
 *   [GsonUtils](#gsonutils-class) - utility class with set of methods to use json transformation;
 
+<details><summary>Data class for examples</summary>
+<p>
+
+```java   
+package ru.olegcherednik.utils.gson.data;
+
+public class Data {
+    private int intVal;
+    private String strVal;
+
+    public int getIntValue() {
+        return intValue;
+    }
+
+    public String getStrVal() {
+        return strValue;
+    }
+}
+```
+
+</p>
+</details>
+
 ### GsonUtils class
 
 #### Read json
 
-<details>
-<summary>details</summary>
+<details><summary>details</summary>
 <p>
 
 ##### Read json string to a custom object type (but not a collection)
@@ -82,12 +103,6 @@ public class Snippet {
                       """;
         return GsonUtils.readValue(json, Data.class);
     }
-                 
-    private static class Data {
-        int intVal;
-        String strVal;
-    }
-   
 }
 ```
 
@@ -110,13 +125,8 @@ public class Snippet {
                       ]
                       """;
         return GsonUtils.readList(json, Data.class);
-    }
-                 
-    private static class Data {
-        int intVal;
-        String strVal;
-    }
-   
+    }        
+
 }
 ```
 
@@ -141,11 +151,6 @@ public class Snippet {
         return GsonUtils.readMap(json);
     }
                  
-    private static class Data {
-        int intVal;
-        String strVal;
-    }
-   
 }
 ```
 **Note:** `Map` values have either primitive type or `Map` or `List`.
@@ -171,11 +176,6 @@ public class Snippet {
         return GsonUtils.readMap(json, Data.class);
     }
                  
-    private static class Data {
-        int intVal;
-        String strVal;
-    }
-   
 }
 ```
 
@@ -200,11 +200,6 @@ public class Snippet {
         return GsonUtils.readMap(json, Integer.class, Data.class);
     }
                  
-    private static class Data {
-        int intVal;
-        String strVal;
-    }
-   
 }
 ```
 
@@ -225,11 +220,6 @@ public class Snippet {
         }
     }
                  
-    private static class Data {
-        int intVal;
-        String strVal;
-    }
-   
 }
 ```
 
@@ -255,11 +245,6 @@ public class Snippet {
         }
     }
                  
-    private static class Data {
-        int intVal;
-        String strVal;
-    }
-   
 }
 ```
 
@@ -292,11 +277,6 @@ public class Snippet {
         }
     }
                  
-    private static class Data {
-        int intVal;
-        String strVal;
-    }
-   
 }
 ```
 ##### Read json from a reader to a map with string as keys and map or primitive types as a values
@@ -349,11 +329,6 @@ public class Snippet {
         }
     }
                  
-    private static class Data {
-        int intVal;
-        String strVal;
-    }
-   
 }
 ```
 
@@ -380,11 +355,6 @@ public class Snippet {
         }
     }
                  
-    private static class Data {
-        int intVal;
-        String strVal;
-    }
-   
 }
 ```
 
