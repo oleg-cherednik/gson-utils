@@ -15,6 +15,7 @@ plugins {
     id 'jacoco'
     id 'io.codearte.nexus-staging' version '0.22.0'
 //    id 'org.cadixdev.licenser' version '0.6.1'
+    id 'com.github.hierynomus.license' version '0.15.0'
 }
 
 apply plugin: 'com.bmuschko.nexus'
@@ -72,6 +73,11 @@ test {
 //    header = project.file('APACHE.txt')
 //    newLine = false
 //}
+
+license {
+    header rootProject.file('APACHE.txt')
+    strictCheck false
+}
 
 modifyPom {
     project {
