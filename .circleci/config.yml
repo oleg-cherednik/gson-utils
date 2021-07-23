@@ -15,7 +15,7 @@ jobs:
 
       - run:
           name: Build
-          command: gradle build --stacktrace
+          command: gradle compileJava compileTestJava --stacktrace
       - run:
           name: Test
           command: gradle test
