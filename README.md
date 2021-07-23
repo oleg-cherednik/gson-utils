@@ -361,6 +361,90 @@ public class Snippet {
 </p>
 </details>
 
+#### Write json
+
+<details><summary>details</summary>
+<p>
+
+##### Write a custom object to json string
+
+```java
+public class Snippet {
+
+    public static String objToJsonString() {
+        Data data = new Data(555, "victory");
+        return GsonUtils.writeValue(data);
+    }
+                 
+}
+```
+```json
+{"intVal":555,"strVal":"victory"}
+```
+
+##### Write a list to json string
+
+```java
+public class Snippet {
+
+    public static String listToJsonString() {
+        List<Data> data = List.of(new Data(555, "victory"), new Data(666, "omen"));
+        return GsonUtils.writeValue(map);
+    }
+                 
+}
+```
+```json
+[{"intVal":555,"strVal":"victory"},{"intVal":666,"strVal":"omen"}]
+```
+
+##### Write a map to json string
+
+```java
+public class Snippet {
+
+    public static String mapToJsonString() {
+        Map<String, Data> data = Map.of(
+                "victory", new Data(555, "victory"),
+                "omen", new Data(666, "omen"));
+        return GsonUtils.writeValue(data);
+    }
+                 
+}
+```
+```json
+{"victory":{"intVal":555,"strVal":"victory"},"omen":{"intVal":666,"strVal":"omen"}}
+```
+
+##### Write any object to pretty print json string
+
+```java
+public class Snippet {
+
+    public static String mapToPrettyPrintJsonString() {
+        Map<String, Data> data = Map.of(
+                "victory", new Data(555, "victory"),
+                "omen", new Data(666, "omen"));
+        return GsonUtils.prettyPrint().writeValue(data);
+    }
+   
+}
+```
+```json
+{
+  "victory": {
+    "intVal": 555,
+    "strVal": "victory"
+  },
+  "omen": {
+    "intVal": 666,
+    "strVal": "omen"
+  }
+}
+```
+
+</p>
+</details>
 
 sss
 
