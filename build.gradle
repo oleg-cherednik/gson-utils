@@ -9,12 +9,11 @@ buildscript {
 }
 
 plugins {
-    id 'java'
     id 'java-library'
     id 'application'
     id 'jacoco'
-    id 'io.codearte.nexus-staging' version '0.11.0'
-    id 'org.cadixdev.licenser' version '0.6.0'
+    id 'io.codearte.nexus-staging' version '0.22.0'
+//    id 'org.cadixdev.licenser' version '0.6.1'
 }
 
 apply plugin: 'com.bmuschko.nexus'
@@ -68,10 +67,10 @@ test {
     useTestNG()
 }
 
-license {
-    header = project.file('APACHE.txt')
-    newLine = false
-}
+//license {
+//    header = project.file('APACHE.txt')
+//    newLine = false
+//}
 
 modifyPom {
     project {
