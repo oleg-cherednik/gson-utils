@@ -21,7 +21,7 @@ jobs:
           command: gradle test
       - run:
           name: Test Coverage
-          command: jacocoTestReport
+          command: gradle jacocoTestReport
 #      - run:
 #          name: Send to CodeCov
 #          command: |
