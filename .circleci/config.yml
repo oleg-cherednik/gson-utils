@@ -14,10 +14,10 @@ jobs:
       - checkout
 
       - run:
-          name: Build
+          name: Run build
           command: gradle compileJava compileTestJava --stacktrace
       - run:
-          name: Test
+          name: Run tests
           command: gradle test
       - run:
           name: Test coverage report
