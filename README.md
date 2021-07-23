@@ -54,6 +54,7 @@ compile 'ru.oleg-cherednik.utils.gson:gson-utils:2.1'
 
 In the version, first part is the major version of `Gson` that is used in this utils.
 The second part is the `gson-utils` version. This number is unique.
+
 `gson-utils` does not contain dependency to the specific `gson` version, so you have to
 add it additionally:
 
