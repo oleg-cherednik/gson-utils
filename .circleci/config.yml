@@ -22,8 +22,7 @@ jobs:
       - run:
           name: Test coverage report
           command: gradle jacocoTestReport
-#      - run:
-#          name: Send to CodeCov
-#          command: |
-#            bash <(curl -s https://codecov.io/bash) |
-#            bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r build/reports/jacoco/test/jacocoTestReport.xml
+      - run:
+          name: Send to CodeCov
+          command: |
+            bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r build/reports/jacoco/test/jacocoTestReport.xml
