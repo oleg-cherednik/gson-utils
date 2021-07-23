@@ -33,7 +33,7 @@
 *   Lazy read support for list from `Writer`;
 *   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`). 
 
-##  Build Tools
+## Build Tools
 
 ### Gradle
 
