@@ -13,11 +13,17 @@ jobs:
     steps:
       - checkout
 
-      - run: gradle dependencies
-      - run: gradle build --stacktrace test jacocoTestReport
-
+      - run:
+          name: Build
+          command: gradle build --stacktrace
+      - run:
+          name: Test
+          command: gradle test
+      - run:
+          name: Test Coverage
+          command: jacocoTestReport
       - run:
           name: Send to CodeCov
           command: |
-            bash <(curl -s https://codecov.io/bash) |
+#            bash <(curl -s https://codecov.io/bash) |
             bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r build/reports/jacoco/test/jacocoTestReport.xml
