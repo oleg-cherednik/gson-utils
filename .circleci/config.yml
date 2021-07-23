@@ -15,13 +15,13 @@ jobs:
 
       - run:
           name: Run build
-          command: gradlew compileJava compileTestJava --stacktrace
+          command: ./gradlew compileJava compileTestJava --stacktrace
       - run:
           name: Run tests
-          command: gradlew test
+          command: ./gradlew test
       - run:
           name: Test coverage report
-          command: gradlew jacocoTestReport
+          command: ./gradlew jacocoTestReport
       - run:
           name: Send test coverage report to CodeCov
           command: |
