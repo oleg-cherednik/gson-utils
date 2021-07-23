@@ -66,8 +66,16 @@ The second part is the `gson-utils` version. This number is unique.
 package ru.olegcherednik.utils.gson.data;
 
 public class Data {
+
     private int intVal;
     private String strVal;
+
+    public Date() {}
+
+    public Data(int intValue, String strValue) {
+        this.intValue = intValue;
+        this.strValue = strValue;
+    }
 
     public int getIntValue() {
         return intValue;
@@ -76,6 +84,7 @@ public class Data {
     public String getStrVal() {
         return strValue;
     }
+
 }
 ```
 
