@@ -33,7 +33,6 @@
 *   Lazy read support for list from `Writer`;
 *   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`). 
 
-
 ##  Build Tools
 
 ### Gradle
@@ -68,7 +67,6 @@ compile 'com.google.code.gson:gson:2.8.7'
     <version>2.8.7</version>
 </dependency>
 ```
-  
 
 ## Usage 
 
