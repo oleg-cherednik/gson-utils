@@ -53,7 +53,21 @@ compile 'ru.oleg-cherednik.utils.gson:gson-utils:2.1'
 ```                                                    
 
 In the version, first part is the major version of `Gson` that is used in this utils.
-The second part is the `gson-utils` version. This number is unique. 
+The second part is the `gson-utils` version. This number is unique.
+`gson-utils` does not contain dependency to the specific `gson` version, so you have to
+add it additionally:
+
+```groovy
+compile 'com.google.code.gson:gson:2.8.7'
+```
+```xml
+<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.8.7</version>
+</dependency>
+```
+  
 
 ## Usage 
 
