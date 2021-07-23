@@ -10,6 +10,7 @@ buildscript {
 
 plugins {
     id 'java-library'
+    id 'maven-publish'
     id 'application'
     id 'jacoco'
     id 'io.codearte.nexus-staging' version '0.22.0'
