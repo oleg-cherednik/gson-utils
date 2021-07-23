@@ -455,6 +455,11 @@ public class Snippet {
 </p>
 </details>
 
-sss
+### Links
 
+*   Home page: https://github.com/oleg-cherednik/gson-utils
+
+*   Maven:
+    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.utils/gson-utils
+    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/utils/gson-utils/
    
