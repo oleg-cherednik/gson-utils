@@ -12,7 +12,8 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'jacoco'
-    id 'io.codearte.nexus-staging' version '0.22.0'
+//    id 'signing'
+//    id 'io.codearte.nexus-staging' version '0.22.0'
     id 'org.cadixdev.licenser' version '0.6.1'
 }
 
@@ -72,6 +73,126 @@ license {
     newLine = false
 }
 
+//signing {
+//    sign configurations.archives
+//}
+
+//task javadocJar(type: Jar) {
+//    classifier = 'javadoc'
+//    from javadoc
+//}
+
+//task sourcesJar(type: Jar) {
+//    classifier = 'sources'
+//    from sourceSets.main.allSource
+//}
+
+//artifacts {
+//    archives javadocJar, sourcesJar
+//}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            pom {
+                name = "gson-utils"
+
+                description = "\n" +
+                        "    Gson usability utilities.\n" +
+                        "    It's designed to add additional features like easy and centralized configuration,\n" +
+                        "    builder or static method set.\n" +
+                        "  "
+
+                url = 'https://github.com/oleg-cherednik/gson-utils'
+                inceptionYear = '2021'
+
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'oleg.cherednik'
+                        name = 'Oleg Cherednik'
+                        email = 'oleg.cherednik@gmail.com'
+                    }
+                }
+
+                scm {
+                    url = 'https://github.com/oleg-cherednik/gson-utils'
+                    connection = 'scm:https://github.com/oleg-cherednik/gson-utils.git'
+                    developerConnection = 'scm:git@github.com:oleg-cherednik/gson-utils.git'
+                }
+            }
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
+
+
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+////            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//
+//            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+//                authentication(userName: ossrhUsername, password: ossrhPassword)
+//            }
+//
+//            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+//                authentication(userName: ossrhUsername, password: ossrhPassword)
+//            }
+//
+//            pom.project {
+//                name rootProject.name
+////                packaging 'jar'
+//                // optionally artifactId can be defined here
+//                description "Gson usability utilities. It's designed to add additional" +
+//                        " features like easy and centralized configuration, builder or static" +
+//                        " method set."
+//
+//                url 'https://github.com/oleg-cherednik/gson-utils'
+//                inceptionYear '2021'
+//
+//                scm {
+//                    url 'https://github.com/oleg-cherednik/gson-utils'
+//                    connection 'scm:https://github.com/oleg-cherednik/gson-utils.git'
+//                    developerConnection 'scm:git@github.com:oleg-cherednik/gson-utils.git'
+//                }
+//
+//                licenses {
+//                    license {
+//                        name 'The Apache Software License, Version 2.0'
+//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                        distribution 'repo'
+//                    }
+//                }
+//
+//                developers {
+//                    developer {
+//                        id 'oleg.cherednik'
+//                        name 'Oleg Cherednik'
+//                        email 'oleg.cherednik@gmail.com'
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+
 //modifyPom {
 //    project {
 //        name 'gson-utils'
@@ -117,7 +238,7 @@ license {
 //    snapshotRepositoryUrl 'https://oss.sonatype.org/content/repositories/snapshots'
 //}
 
-nexusStaging {
-    packageGroup 'ru.oleg-cherednik'
-    stagingProfileId 'd3835bf60f05b9'
-}
+//nexusStaging {
+//    packageGroup 'ru.oleg-cherednik'
+//    stagingProfileId 'd3835bf60f05b9'
+//}
