@@ -13,7 +13,7 @@ plugins {
     id 'maven-publish'
     id 'jacoco'
 //    id 'signing'
-//    id 'io.codearte.nexus-staging' version '0.22.0'
+    id 'io.codearte.nexus-staging' version '0.22.0'
     id 'org.cadixdev.licenser' version '0.6.1'
 }
 
@@ -35,7 +35,7 @@ tasks.withType(JavaCompile) {
 }
 
 configurations {
-    jar.archiveName = "gson-utils-${version}.jar"
+    jar.archiveName = "${rootProject.name}-${version}.jar"
 }
 
 dependencies {
@@ -98,11 +98,11 @@ java {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
             from components.java
 
             pom {
-                name = "gson-utils"
+                name = rootProject.name
 
                 description = "\n" +
                         "    Gson usability utilities.\n" +
