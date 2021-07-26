@@ -478,9 +478,27 @@ public class Snippet {
 <details><summary>details</summary>
 <p>
 
-First of all a `GsonUtlsBulder` bean should be created with custom settings.
+#### Create gson bean based on the default configuration
 
-This is *optional*, because *default configuration* provided by `GsonUtilsHelper` can be used. 
+`GsonUtilsHelper` class contains *default gson configuration*. This configuration
+can be used to create gson bean:
+
+```java
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public GsonDecorator gsonDecorator() {
+        return GsonUtilsHelper.createGsonDecorator();
+    }
+
+}
+```
+
+#### Create gson bean based on the custom configuration
+
+To customize gson configuration, a new instance of `GsonUtilsBuilder` should be
+created and configured. And then this instance should be used to create `GsonDecorator`.
 
 ```java
 @Configuration
@@ -492,15 +510,6 @@ public class AppConfig {
         return new GsonUtilsBuilder();
     }
 
-}
-```
-
-Second, an instance of `GsonDecorator` should be created. 
-
-```java
-@Configuration
-public class AppConfig {
-
     @Bean
     public GsonDecorator gsonDecorator(GsonUtilsBuilder gsonUtilsBuilder) {
         return GsonUtilsHelper.createGsonDecorator(gsonUtilsBuilder);
@@ -509,7 +518,9 @@ public class AppConfig {
 }
 ```
 
-And finally, this bean can be used instead of Gson to work with json with customized settings.
+### Using of gson bean
+
+A new `GsonDecorator` should be used to work with json instead of using a `Gson` instance. 
 
 ```java
 @Service
