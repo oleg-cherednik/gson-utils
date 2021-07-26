@@ -69,8 +69,8 @@ compile 'com.google.code.gson:gson:2.8.7'
 ## Usage 
 
 *   [GsonUtils](#gsonutils-class) - utility class with set of methods to use json transformation;
-*   [GsonDecorator](#gsondecorator-class) - decorator class to hold Gson instance with additional methods;
 *   [GsonUtilsBuilder](#gsonutilsbulder-class) - builder for Gson instance contains all configuration properties;
+*   [GsonDecorator](#gsondecorator-class) - decorator class to hold Gson instance with additional methods;
 *   [GsonUtilsHelper](#gsonutilshelper-class) - helper class is used as a holder for default properties;
 
 <details><summary>Data class for examples</summary>
@@ -468,6 +468,71 @@ public class Snippet {
 
 </p>
 </details>
+
+### GsonUtilsBuilder class
+
+### GsonDecorator class
+
+#### Use with Spring
+
+<details><summary>details</summary>
+<p>
+
+First of all a `GsonUtlsBulder` bean should be created with custom settings.
+
+This is *optional*, because *default configuration* provided by `GsonUtilsHelper` can be used. 
+
+```java
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public GsonUtilsBuilder gsonUtilsBuilder() {
+        return new GsonUtilsBuilder()
+                .addCustomizer(gsonBuilder -> gsonBuilder.registerTypeAdapter(Data.class, new DataTypeAdapter()));
+    }
+
+}
+```
+
+Second, an instance of `GsonDecorator` should be created. 
+
+```java
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public GsonDecorator gsonDecorator(GsonUtilsBuilder gsonUtilsBuilder) {
+        return GsonUtilsHelper.createGsonDecorator(gsonUtilsBuilder);
+    }
+
+}
+```
+
+And finally, this bean can be used instead of Gson to work with json with customized settings.
+
+```java
+@Service
+public class SpringBootService {
+
+    @Autowired
+    private GsonDecorator gson;
+
+    public String toJson(Data data) {
+        return gson.writeValue(data);
+    }
+
+    public Data fromJson(String json) {
+        return gson.readValue(json, Data.class);
+    }
+
+}
+```
+
+</p>
+</details>
+
+### GsonUtilsHelper class
 
 ### Links
 
