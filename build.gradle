@@ -47,6 +47,17 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.20.2'
     testImplementation 'commons-io:commons-io:2.11.0'
     testImplementation 'org.mockito:mockito-core:3.11.2'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-web:2.3.8.RELEASE')
+//            {
+//        exclude group: 'org.junit.jupiter', module: 'junit-jupiter'
+//    }
+//    testImplementation 'org.springframework.boot:spring-boot-starter-json:2.3.8.RELEASE'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test:2.3.8.RELEASE')
+//            {
+//        exclude group: 'org.junit.vintage'
+//    }
 }
 
 jacocoTestReport {

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.gson.utils.data;
+package ru.olegcherednik.gson.utils.dto;
 
 import java.time.ZonedDateTime;
 import java.util.List;

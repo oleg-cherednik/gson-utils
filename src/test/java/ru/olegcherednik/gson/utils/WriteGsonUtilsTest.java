@@ -19,7 +19,7 @@
 package ru.olegcherednik.gson.utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.gson.utils.data.Data;
+import ru.olegcherednik.gson.utils.dto.Data;
 import ru.olegcherednik.gson.utils.utils.ListUtils;
 import ru.olegcherednik.gson.utils.utils.MapUtils;
 
