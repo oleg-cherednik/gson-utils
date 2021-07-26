@@ -488,8 +488,13 @@ public class AppConfig {
 
     @Bean
     public GsonUtilsBuilder gsonUtilsBuilder() {
-        return new GsonUtilsBuilder()
-                .addCustomizer(gsonBuilder -> gsonBuilder.registerTypeAdapter(Data.class, new DataTypeAdapter()));
+        return new GsonUtilsBuilder().addCustomizer(gsonBuilder ->
+                gsonBuilder.registerTypeAdapter(Data.class, new DataTypeAdapter()));
+    }
+
+    @Bean
+    public GsonDecorator gsonDecorator(GsonUtilsBuilder gsonUtilsBuilder) {
+        return GsonUtilsHelper.createGsonDecorator(gsonUtilsBuilder);
     }
 
 }
