@@ -492,11 +492,6 @@ public class AppConfig {
                 gsonBuilder.registerTypeAdapter(Data.class, new DataTypeAdapter()));
     }
 
-    @Bean
-    public GsonDecorator gsonDecorator(GsonUtilsBuilder gsonUtilsBuilder) {
-        return GsonUtilsHelper.createGsonDecorator(gsonUtilsBuilder);
-    }
-
 }
 ```
 
