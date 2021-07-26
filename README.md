@@ -69,6 +69,9 @@ compile 'com.google.code.gson:gson:2.8.7'
 ## Usage 
 
 *   [GsonUtils](#gsonutils-class) - utility class with set of methods to use json transformation;
+*   [GsonDecorator](#gsondecorator-class) - decorator class to hold Gson instance with additional methods;
+*   [GsonUtilsBuilder](#gsonutilsbulder-class) - builder for Gson instance contains all configuration properties;
+*   [GsonUtilsHelper](#gsonutilshelper-class) - helper class is used as a holder for default properties;
 
 <details><summary>Data class for examples</summary>
 <p>
