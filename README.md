@@ -473,7 +473,7 @@ public class Snippet {
 
 ### GsonDecorator class
 
-#### Use with Spring
+#### Spring bean
 
 <details><summary>details</summary>
 <p>
