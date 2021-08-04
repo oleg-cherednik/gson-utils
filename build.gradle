@@ -1,6 +1,7 @@
 buildscript {
     repositories {
-        jcenter()
+        mavenLocal()
+        mavenCentral()
     }
 }
 
@@ -30,7 +31,7 @@ tasks.withType(JavaCompile) {
 }
 
 configurations {
-    jar.archiveName = "${rootProject.name}-${version}.jar"
+    jar.archiveFileName = "${rootProject.name}-${version}.jar"
 }
 
 dependencies {
@@ -48,22 +49,19 @@ dependencies {
     testImplementation 'commons-io:commons-io:2.11.0'
     testImplementation 'org.mockito:mockito-core:3.11.2'
 
-    testImplementation('org.springframework.boot:spring-boot-starter-web:2.3.8.RELEASE')
-//            {
-//        exclude group: 'org.junit.jupiter', module: 'junit-jupiter'
-//    }
-//    testImplementation 'org.springframework.boot:spring-boot-starter-json:2.3.8.RELEASE'
+    testImplementation('org.springframework.boot:spring-boot-starter-web:2.3.8.RELEASE') {
+        exclude group: 'org.junit.jupiter', module: 'junit-jupiter'
+    }
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test:2.3.8.RELEASE')
-//            {
-//        exclude group: 'org.junit.vintage'
-//    }
+    testImplementation('org.springframework.boot:spring-boot-starter-test:2.3.8.RELEASE') {
+        exclude group: 'org.junit.vintage'
+    }
 }
 
 jacocoTestReport {
     reports {
-        xml.enabled true
-        html.enabled true
+        xml.required = true
+        html.required = true
     }
 }
 
@@ -76,7 +74,7 @@ test {
 license {
     header rootProject.file('APACHE.txt')
     include '**/*.java'
-    newLine = false
+    newLine false
 }
 
 signing {
