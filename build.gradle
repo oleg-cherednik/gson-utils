@@ -35,7 +35,7 @@ configurations {
 }
 
 dependencies {
-    api "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
+    implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
 
     compileOnly "com.google.code.gson:gson:${property('gson.version')}"
 
