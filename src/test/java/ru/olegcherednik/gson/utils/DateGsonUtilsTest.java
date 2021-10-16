@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.olegcherednik.gson.utils.GsonUtilsBuilder.ZONE_MODIFIER_USE_ORIGINAL;
 import static ru.olegcherednik.gson.utils.utils.PrettyPrintUtils.UNIX_LINE_SEPARATOR;
 import static ru.olegcherednik.gson.utils.utils.PrettyPrintUtils.withUnixLineSeparator;
 
@@ -84,9 +85,19 @@ public class DateGsonUtilsTest {
 
     public void shouldRetrieveJsonWithCustomFormatWriteSerializeWithCustomFormatter() throws IOException {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
-        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().dateTimeFormatter(dateTimeFormatter));
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
+                new GsonUtilsBuilder().dateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, dateTimeFormatter));
         String json = gson.writeValue(new Data());
         assertThat(json).isEqualTo("{\"notNullValue\":\"04:16:59 2021-10-09\"}");
+    }
+
+    /*
+                    "Asia/Singapore", ZonedDateTime.parse(str, ISO_LOCAL_DATE_TIME.withZone(ZoneId.of("Asia/Singapore"))),
+                "Australia/Sydney", ZonedDateTime.parse(str, ISO_LOCAL_DATE_TIME.withZone(ZoneId.of("Australia/Sydney"))));
+     */
+
+    public void shouldRetrieveJsonWhenUseCustomTimeZone() {
+
     }
 
     private static Map<String, Date> createData() {

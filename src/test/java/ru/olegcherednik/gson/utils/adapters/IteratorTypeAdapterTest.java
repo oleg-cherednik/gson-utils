@@ -120,7 +120,7 @@ public class IteratorTypeAdapterTest {
     }
 
     public void shouldThrowGsonUtilsExceptionWhenFactoryThrowsException() {
-        assertThatThrownBy(() -> IteratorTypeAdapter.FACTORY.create(null, null))
+        assertThatThrownBy(() -> IteratorTypeAdapter.INSTANCE.create(null, null))
                 .isExactlyInstanceOf(GsonUtilsException.class)
                 .hasCauseInstanceOf(NullPointerException.class);
     }

@@ -52,7 +52,7 @@ public class ZonedDateTimeGsonUtilsTest {
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteZonedDateTimeSingaporeZone() throws IOException {
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
-                new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneId.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
+                new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneOffset.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
 
         Map<String, ZonedDateTime> map = createData();
         String actual = gson.writeValue(map);

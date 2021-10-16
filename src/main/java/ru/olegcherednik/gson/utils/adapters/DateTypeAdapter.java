@@ -28,6 +28,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
@@ -35,9 +36,11 @@ import java.util.Date;
  */
 public class DateTypeAdapter extends TypeAdapter<Date> {
 
+    protected final UnaryOperator<ZoneOffset> zoneModifier;
     protected final DateTimeFormatter df;
 
-    public DateTypeAdapter(DateTimeFormatter df) {
+    public DateTypeAdapter(UnaryOperator<ZoneOffset> zoneModifier, DateTimeFormatter df) {
+        this.zoneModifier = zoneModifier;
         this.df = df;
     }
 
@@ -46,7 +49,8 @@ public class DateTypeAdapter extends TypeAdapter<Date> {
         if (value == null)
             out.nullValue();
         else {
-            OffsetDateTime dateTime = value.toInstant().atOffset(ZoneOffset.UTC);
+            ZoneOffset zone = zoneModifier.apply(ZoneOffset.UTC);
+            OffsetDateTime dateTime = value.toInstant().atOffset(zone);
             out.value(df.format(dateTime));
         }
     }

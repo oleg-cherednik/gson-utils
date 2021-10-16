@@ -23,7 +23,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import ru.olegcherednik.gson.utils.utils.MapUtils;
 
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -53,7 +52,8 @@ public class GsonUtilsHelperTest {
                 "  \"UTC\": \"2017-07-23T13:57:14.225Z\"" + UNIX_LINE_SEPARATOR +
                 '}');
 
-        GsonUtilsHelper.setGsonBuilder(new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneId.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
+        GsonUtilsHelper.setGsonBuilder(new GsonUtilsBuilder().zonedDateTimeFormatter(zone ->
+                ZoneOffset.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
         assertThat(GsonUtils.writeValue(map)).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"}");
         assertThat(withUnixLineSeparator(GsonUtils.prettyPrint().writeValue(map))).isEqualTo('{' + UNIX_LINE_SEPARATOR +
                 "  \"UTC\": \"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"" + UNIX_LINE_SEPARATOR +

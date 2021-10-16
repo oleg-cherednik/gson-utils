@@ -44,7 +44,7 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
 
     private final TypeAdapter<V> elementTypeAdapter;
 
-    public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
+    public static final TypeAdapterFactory INSTANCE = new TypeAdapterFactory() {
         @Override
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
             try {

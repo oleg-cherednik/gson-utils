@@ -20,7 +20,7 @@ package ru.olegcherednik.gson.utils;
 
 import org.testng.annotations.Test;
 
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
@@ -49,7 +49,7 @@ public class ZonedDateTimePrettyPrintGsonUtilsTest {
 
     public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
         GsonDecorator gsonUtils = GsonUtilsHelper.createPrettyPrintGsonDecorator(
-                new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneId.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
+                new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneOffset.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
 
         Map<String, ZonedDateTime> map = ZonedDateTimeGsonUtilsTest.createData();
         String actual = gsonUtils.writeValue(map);
