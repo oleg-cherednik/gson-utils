@@ -52,7 +52,7 @@ public class ZonedDateTimeGsonUtilsTest {
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteZonedDateTimeSingaporeZone() throws IOException {
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
-                new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneOffset.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
+                new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneId.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
 
         Map<String, ZonedDateTime> map = createData();
         String actual = gson.writeValue(map);
@@ -126,6 +126,7 @@ public class ZonedDateTimeGsonUtilsTest {
 
         private final ZonedDateTime notNullValue = ZonedDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME.withZone(ZoneOffset.UTC));
         private final ZonedDateTime nullValue = null;
+
     }
 
 }

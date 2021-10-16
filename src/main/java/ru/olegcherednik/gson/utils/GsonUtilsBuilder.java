@@ -35,6 +35,7 @@ import ru.olegcherednik.utils.reflection.FieldUtils;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -54,8 +55,8 @@ import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
  */
 public class GsonUtilsBuilder {
 
-    public static final UnaryOperator<ZoneOffset> ZONE_MODIFIER_USE_ORIGINAL = UnaryOperator.identity();
-    public static final UnaryOperator<ZoneOffset> ZONE_MODIFIER_TO_UTC = zoneOffset -> ZoneOffset.UTC;
+    public static final UnaryOperator<ZoneId> ZONE_MODIFIER_USE_ORIGINAL = UnaryOperator.identity();
+    public static final UnaryOperator<ZoneId> ZONE_MODIFIER_TO_UTC = zone -> ZoneOffset.UTC;
 
     protected Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>)GsonBuilder::enableComplexMapKeySerialization)
             .andThen(b -> b.registerTypeAdapterFactory(IteratorTypeAdapter.INSTANCE))
@@ -97,7 +98,7 @@ public class GsonUtilsBuilder {
 
     // ---------- extended ----------
 
-    public GsonUtilsBuilder zonedDateTimeFormatter(UnaryOperator<ZoneOffset> zoneModifier, DateTimeFormatter dateTimeFormatter) {
+    public GsonUtilsBuilder zonedDateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
         return registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(zoneModifier, dateTimeFormatter));
     }
 
@@ -105,7 +106,7 @@ public class GsonUtilsBuilder {
         return registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(dateTimeFormatter));
     }
 
-    public GsonUtilsBuilder dateTimeFormatter(UnaryOperator<ZoneOffset> zoneModifier, DateTimeFormatter dateTimeFormatter) {
+    public GsonUtilsBuilder dateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
         return registerTypeAdapter(Date.class, new DateTypeAdapter(zoneModifier, dateTimeFormatter));
     }
 

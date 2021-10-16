@@ -25,7 +25,6 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.function.UnaryOperator;
@@ -36,10 +35,10 @@ import java.util.function.UnaryOperator;
  */
 public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
 
-    protected final UnaryOperator<ZoneOffset> zoneModifier;
+    protected final UnaryOperator<ZoneId> zoneModifier;
     protected final DateTimeFormatter df;
 
-    public ZonedDateTimeTypeAdapter(UnaryOperator<ZoneOffset> zoneModifier, DateTimeFormatter df) {
+    public ZonedDateTimeTypeAdapter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter df) {
         this.zoneModifier = zoneModifier;
         this.df = df;
     }
@@ -49,7 +48,7 @@ public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
         if (value == null)
             out.nullValue();
         else {
-            ZoneId zone = zoneModifier.apply(value.getOffset());
+            ZoneId zone = zoneModifier.apply(value.getZone());
             out.value(df.format(value.withZoneSameInstant(zone)));
         }
     }
