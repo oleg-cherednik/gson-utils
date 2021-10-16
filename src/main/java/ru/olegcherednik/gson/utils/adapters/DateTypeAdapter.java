@@ -24,43 +24,44 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.function.UnaryOperator;
+import java.util.Date;
 
 /**
  * @author Oleg Cherednik
- * @since 08.01.2021
+ * @since 09.10.2021
  */
-public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
+public class DateTypeAdapter extends TypeAdapter<Date> {
 
-    protected final UnaryOperator<ZoneId> zoneModifier;
     protected final DateTimeFormatter df;
 
-    public ZonedDateTimeTypeAdapter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter df) {
-        this.zoneModifier = zoneModifier;
+    public DateTypeAdapter(DateTimeFormatter df) {
         this.df = df;
     }
 
     @Override
-    public void write(JsonWriter out, ZonedDateTime value) throws IOException {
+    public void write(JsonWriter out, Date value) throws IOException {
         if (value == null)
             out.nullValue();
         else {
-            ZoneId zone = zoneModifier.apply(value.getZone());
-            out.value(df.format(value.withZoneSameInstant(zone)));
+            OffsetDateTime dateTime = value.toInstant().atOffset(ZoneOffset.UTC);
+            out.value(df.format(dateTime));
         }
     }
 
     @Override
-    public ZonedDateTime read(JsonReader in) throws IOException {
-        ZonedDateTime res = null;
+    public Date read(JsonReader in) throws IOException {
+        Date res = null;
 
         if (in.peek() == JsonToken.NULL)
             in.nextNull();
-        else
-            res = ZonedDateTime.parse(in.nextString(), df);
+        else {
+            String str = in.nextString();
+            OffsetDateTime dateTime = OffsetDateTime.parse(str, df);
+            res = new Date(dateTime.toInstant().toEpochMilli());
+        }
 
         return res;
     }
