@@ -23,12 +23,15 @@ import ru.olegcherednik.gson.utils.utils.MapUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.olegcherednik.gson.utils.GsonUtilsBuilder.ZONE_MODIFIER_USE_ORIGINAL;
 import static ru.olegcherednik.gson.utils.utils.PrettyPrintUtils.UNIX_LINE_SEPARATOR;
 import static ru.olegcherednik.gson.utils.utils.PrettyPrintUtils.withUnixLineSeparator;
 
@@ -39,67 +42,72 @@ import static ru.olegcherednik.gson.utils.utils.PrettyPrintUtils.withUnixLineSep
 @Test
 public class LocalDateTimeGsonUtilsTest {
 
+    private final LocalDateTime localDateTime = LocalDateTime.now();
+    private final String str = ISO_ZONED_DATE_TIME.format(localDateTime.atZone(ZoneId.systemDefault())
+                                                                       .withZoneSameInstant(ZoneOffset.UTC));
+    private final Map<String, LocalDateTime> expected = MapUtils.of("local", localDateTime);
+    private final Data data = new Data(localDateTime);
+
     public void shouldRetrieveJsonWhenWriteLocalDateTime() throws IOException {
-        Map<String, LocalDateTime> map = createData();
-        String actual = GsonUtils.writeValue(map);
+        String actual = GsonUtils.writeValue(expected);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo("{\"local\":\"2017-07-23T13:57:14.225\"}");
+        assertThat(actual).isEqualTo("{\"local\":\"" + str + "\"}");
     }
 
     public void shouldRetrievePrettyPrintJsonWhenWriteLocalDateTimeMapWithPrettyPrint() {
-        Map<String, LocalDateTime> map = createData();
-        String actual = GsonUtils.prettyPrint().writeValue(map);
+        String actual = GsonUtils.prettyPrint().writeValue(expected);
         assertThat(withUnixLineSeparator(actual)).isEqualTo('{' + UNIX_LINE_SEPARATOR +
-                "  \"local\": \"2017-07-23T13:57:14.225\"" + UNIX_LINE_SEPARATOR +
+                "  \"local\": \"" + str + '"' + UNIX_LINE_SEPARATOR +
                 '}');
     }
 
     public void shouldRetrieveDeserializedZonedLocalDateTimeMapWhenReadJsonAsMap() {
-        String json = "{\"local\":\"2017-07-23T13:57:14.225\"}";
-        Map<String, LocalDateTime> expected = createData();
+        String json = "{\"local\":\"" + str + "\"}";
         Map<String, LocalDateTime> actual = GsonUtils.readMap(json, String.class, LocalDateTime.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldReadNullableValueWhenListContainsNull() {
-        String json = "[null,\"2017-07-23T13:57:14.225\"]";
+        String json = "[null,\"" + str + "\"]";
         List<LocalDateTime> actual = GsonUtils.readList(json, LocalDateTime.class);
 
         assertThat(actual).hasSize(2);
         assertThat(actual.get(0)).isNull();
-        assertThat(actual.get(1)).isEqualTo(LocalDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME));
+        assertThat(actual.get(1)).isEqualTo(localDateTime);
     }
 
     public void shouldWriteNullWhenSerializeWithNullValue() {
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().serializeNulls());
-        String json = gson.writeValue(new Data());
-        assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225\",\"nullValue\":null}");
+        String json = gson.writeValue(data);
+        assertThat(json).isEqualTo("{\"notNullValue\":\"" + str + "\",\"nullValue\":null}");
     }
 
     public void shouldIgnoreNullValueWhenSerializeWithIgnoreNullValue() {
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder());
-        String json = gson.writeValue(new Data());
-        assertThat(json).isEqualTo("{\"notNullValue\":\"2017-07-23T13:57:14.225\"}");
+        String json = gson.writeValue(data);
+        assertThat(json).isEqualTo("{\"notNullValue\":\"" + str + "\"}");
     }
 
     public void shouldRetrieveJsonWithCustomFormatWriteSerializeWithCustomFormatter() throws IOException {
-        DateTimeFormatter localDateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
-        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().localDateTimeFormatter(localDateTimeFormatter));
-        String json = gson.writeValue(new Data());
-        assertThat(json).isEqualTo("{\"notNullValue\":\"13:57:14 2017-07-23\"}");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
+        String str = dateTimeFormatter.format(localDateTime.atZone(ZoneId.systemDefault()));
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder()
+                .localDateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, dateTimeFormatter));
+        String json = gson.writeValue(data);
+        assertThat(json).isEqualTo("{\"notNullValue\":\"" + str + "\"}");
     }
 
-    private static Map<String, LocalDateTime> createData() {
-        String str = "2017-07-23T13:57:14.225";
-        return MapUtils.of("local", LocalDateTime.parse(str, ISO_LOCAL_DATE_TIME));
-    }
-
-    @SuppressWarnings("unused")
+    @SuppressWarnings({ "unused", "FieldCanBeLocal" })
     private static class Data {
 
-        private final LocalDateTime notNullValue = LocalDateTime.parse("2017-07-23T13:57:14.225", ISO_LOCAL_DATE_TIME);
+        private final LocalDateTime notNullValue;
         private final LocalDateTime nullValue = null;
+
+        public Data(LocalDateTime notNullValue) {
+            this.notNullValue = notNullValue;
+        }
+
     }
 
 }

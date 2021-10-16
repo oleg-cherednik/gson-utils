@@ -61,7 +61,7 @@ public class GsonUtilsBuilder {
     protected Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>)GsonBuilder::enableComplexMapKeySerialization)
             .andThen(b -> b.registerTypeAdapterFactory(IteratorTypeAdapter.INSTANCE))
             .andThen(b -> b.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_ZONED_DATE_TIME)))
-            .andThen(b -> b.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(ISO_LOCAL_DATE_TIME)))
+            .andThen(b -> b.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME)))
             .andThen(b -> b.registerTypeAdapter(Date.class, new DateTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME)));
 
     public Gson gson() {
@@ -98,15 +98,33 @@ public class GsonUtilsBuilder {
 
     // ---------- extended ----------
 
+    public GsonUtilsBuilder zonedModifier(UnaryOperator<ZoneId> zoneModifier) {
+        zonedDateTimeFormatter(zoneModifier, ISO_ZONED_DATE_TIME);
+        localDateTimeFormatter(zoneModifier, ISO_LOCAL_DATE_TIME);
+        return dateFormatter(zoneModifier, ISO_OFFSET_DATE_TIME);
+    }
+
+    public GsonUtilsBuilder dateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
+        zonedDateTimeFormatter(ZONE_MODIFIER_TO_UTC, dateTimeFormatter);
+        localDateTimeFormatter(ZONE_MODIFIER_TO_UTC, dateTimeFormatter);
+        return dateFormatter(ZONE_MODIFIER_TO_UTC, dateTimeFormatter);
+    }
+
+    public GsonUtilsBuilder dateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
+        zonedDateTimeFormatter(zoneModifier, dateTimeFormatter);
+        localDateTimeFormatter(zoneModifier, dateTimeFormatter);
+        return dateFormatter(zoneModifier, dateTimeFormatter);
+    }
+
     public GsonUtilsBuilder zonedDateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
         return registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(zoneModifier, dateTimeFormatter));
     }
 
-    public GsonUtilsBuilder localDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
-        return registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(dateTimeFormatter));
+    public GsonUtilsBuilder localDateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
+        return registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(zoneModifier, dateTimeFormatter));
     }
 
-    public GsonUtilsBuilder dateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
+    public GsonUtilsBuilder dateFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
         return registerTypeAdapter(Date.class, new DateTypeAdapter(zoneModifier, dateTimeFormatter));
     }
 

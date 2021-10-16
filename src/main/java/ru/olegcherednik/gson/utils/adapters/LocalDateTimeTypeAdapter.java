@@ -20,12 +20,14 @@ package ru.olegcherednik.gson.utils.adapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
@@ -33,30 +35,23 @@ import java.time.format.DateTimeFormatter;
  */
 public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
 
-    protected final DateTimeFormatter df;
+    protected final ZoneId localZone = ZoneId.systemDefault();
+    protected final ZonedDateTimeTypeAdapter zonedDateTimeTypeAdapter;
 
-    public LocalDateTimeTypeAdapter(DateTimeFormatter df) {
-        this.df = df;
+    public LocalDateTimeTypeAdapter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter df) {
+        zonedDateTimeTypeAdapter = new ZonedDateTimeTypeAdapter(zoneModifier, df);
     }
 
     @Override
     public void write(JsonWriter out, LocalDateTime value) throws IOException {
-        if (value == null)
-            out.nullValue();
-        else
-            out.value(df.format(value));
+        ZonedDateTime zonedDateTime = value == null ? null : value.atZone(localZone);
+        zonedDateTimeTypeAdapter.write(out, zonedDateTime);
     }
 
     @Override
     public LocalDateTime read(JsonReader in) throws IOException {
-        LocalDateTime res = null;
-
-        if (in.peek() == JsonToken.NULL)
-            in.nextNull();
-        else
-            res = LocalDateTime.parse(in.nextString(), df);
-
-        return res;
+        ZonedDateTime zonedDateTime = zonedDateTimeTypeAdapter.read(in);
+        return zonedDateTime == null ? null : zonedDateTime.withZoneSameInstant(localZone).toLocalDateTime();
     }
 
 }
