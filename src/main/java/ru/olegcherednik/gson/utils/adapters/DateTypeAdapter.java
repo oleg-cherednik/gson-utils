@@ -20,7 +20,6 @@ package ru.olegcherednik.gson.utils.adapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
@@ -46,34 +45,17 @@ public class DateTypeAdapter extends TypeAdapter<Date> {
 
     @Override
     public void write(JsonWriter out, Date value) throws IOException {
-        if (value == null)
-            out.nullValue();
-        else {
-            ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
-            ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(value.toInstant(), ZoneId.systemDefault());
-            out.value(df.format(zonedDateTime.withZoneSameInstant(zone)));
-        }
+        ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
+        ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(value.toInstant(), ZoneId.systemDefault());
+        out.value(df.format(zonedDateTime.withZoneSameInstant(zone)));
     }
 
     @Override
     public Date read(JsonReader in) throws IOException {
-        Date res = null;
-
-        if (in.peek() == JsonToken.NULL)
-            in.nextNull();
-        else {
-            ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
-            DateTimeFormatter dateTimeFormatter = df.getZone() == null ? df.withZone(zone) : df;
-            ZonedDateTime zonedDateTime = ZonedDateTime.parse(in.nextString(), dateTimeFormatter);
-            res = Date.from(zonedDateTime.toInstant());
-        }
-
-        return res;
-    }
-
-    @Override
-    public String toString() {
-        return Date.class.getSimpleName() + ':' + getClass().getSimpleName();
+        ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
+        DateTimeFormatter dateTimeFormatter = df.getZone() == null ? df.withZone(zone) : df;
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(in.nextString(), dateTimeFormatter);
+        return Date.from(zonedDateTime.toInstant());
     }
 
 }

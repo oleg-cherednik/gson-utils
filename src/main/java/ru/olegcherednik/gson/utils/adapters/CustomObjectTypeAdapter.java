@@ -44,8 +44,8 @@ public class CustomObjectTypeAdapter extends TypeAdapter<Object> {
     public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
         @Override
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-            TypeAdapter<Object> delegate = (TypeAdapter<Object>)ObjectTypeAdapter.FACTORY.<T>create(gson, type);
-            return delegate == null ? null : (TypeAdapter<T>)new CustomObjectTypeAdapter(gson, delegate);
+            TypeAdapter<Object> typeAdapter = (TypeAdapter<Object>)ObjectTypeAdapter.FACTORY.<T>create(gson, type);
+            return typeAdapter == null ? null : (TypeAdapter<T>)new CustomObjectTypeAdapter(gson, typeAdapter);
         }
     };
 
@@ -77,6 +77,7 @@ public class CustomObjectTypeAdapter extends TypeAdapter<Object> {
         try {
             return new BigInteger(str);
         } catch (NumberFormatException ignore) {
+            // ignore
         }
 
         return val;

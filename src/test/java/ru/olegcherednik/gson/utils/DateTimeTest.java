@@ -72,12 +72,23 @@ public class DateTimeTest {
         checkData(gson.readValue(json, Data.class));
     }
 
-    public void shouldUseGivenZOneAndFormatWhenConvertAllDateFormat() {
+    public void shouldUseGivenZoneAndFormatWhenConvertAllDateFormat() {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("HH:mm:ss.SSS yyyy-MM-dd");
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder()
                 .dateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, df));
         String json = gson.writeValue(data);
         String expected = df.format(ZonedDateTime.ofInstant(date.toInstant(), ZoneOffset.systemDefault()));
+        checkJson(json, expected);
+        checkData(gson.readValue(json, Data.class));
+    }
+
+    public void shouldUseGivenZoneAndFormatWithZoneWhenConvertAllDateFormat() {
+        ZoneId zone = ZoneId.of("Asia/Singapore");
+        DateTimeFormatter df = ISO_ZONED_DATE_TIME.withZone(zone);
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
+                new GsonUtilsBuilder().dateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, df));
+        String json = gson.writeValue(data);
+        String expected = df.format(ZonedDateTime.ofInstant(date.toInstant(), zone));
         checkJson(json, expected);
         checkData(gson.readValue(json, Data.class));
     }

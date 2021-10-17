@@ -70,6 +70,11 @@ public class GsonUtilsHelperTest {
         assertThat(GsonUtilsHelper.prettyPrintGson()).isSameAs(expectedPrettyPrintGson);
     }
 
+    public void shouldCreateDecorator() {
+        assertThat(GsonUtilsHelper.createGsonDecorator()).isNotNull();
+        assertThat(GsonUtilsHelper.createPrettyPrintGsonDecorator()).isNotNull();
+    }
+
     private static Map<String, ZonedDateTime> createData() {
         String str = "2017-07-23T13:57:14.225";
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");

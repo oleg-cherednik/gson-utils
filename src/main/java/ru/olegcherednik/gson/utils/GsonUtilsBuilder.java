@@ -24,6 +24,7 @@ import com.google.gson.FieldNamingStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
+import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.bind.ObjectTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.CustomObjectTypeAdapter;
@@ -132,23 +133,28 @@ public class GsonUtilsBuilder {
     }
 
     public GsonUtilsBuilder zonedDateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        return registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(zoneModifier, dateTimeFormatter));
+        TypeAdapter<ZonedDateTime> typeAdapter = new ZonedDateTimeTypeAdapter(zoneModifier, dateTimeFormatter);
+        return registerTypeAdapter(ZonedDateTime.class, typeAdapter.nullSafe());
     }
 
     public GsonUtilsBuilder localDateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        return registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(zoneModifier, dateTimeFormatter));
+        TypeAdapter<LocalDateTime> typeAdapter = new LocalDateTimeTypeAdapter(zoneModifier, dateTimeFormatter);
+        return registerTypeAdapter(LocalDateTime.class, typeAdapter.nullSafe());
     }
 
     public GsonUtilsBuilder dateFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        return registerTypeAdapter(Date.class, new DateTypeAdapter(zoneModifier, dateTimeFormatter));
+        TypeAdapter<Date> typeAdapter = new DateTypeAdapter(zoneModifier, dateTimeFormatter);
+        return registerTypeAdapter(Date.class, typeAdapter.nullSafe());
     }
 
     public GsonUtilsBuilder instantFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        return registerTypeAdapter(Instant.class, new InstantTypeAdapter(zoneModifier, dateTimeFormatter));
+        TypeAdapter<Instant> typeAdapter = new InstantTypeAdapter(zoneModifier, dateTimeFormatter);
+        return registerTypeAdapter(Instant.class, typeAdapter.nullSafe());
     }
 
     public GsonUtilsBuilder offsetDateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        return registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeTypeAdapter(zoneModifier, dateTimeFormatter));
+        TypeAdapter<OffsetDateTime> typeAdapter = new OffsetDateTimeTypeAdapter(zoneModifier, dateTimeFormatter);
+        return registerTypeAdapter(OffsetDateTime.class, typeAdapter.nullSafe());
     }
 
     public GsonUtilsBuilder addCustomizer(Consumer<GsonBuilder> customizer) {
