@@ -21,6 +21,7 @@ package ru.olegcherednik.gson.utils;
 import com.google.gson.Gson;
 import org.testng.annotations.Test;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -83,13 +84,14 @@ public class DateTimeTest {
     private static void checkJson(String json, String expected) {
         Map<String, Object> actual = toMap(json);
         assertThat(actual.get("date")).isInstanceOf(String.class).isEqualTo(expected);
-//        assertThat(actual.get("instant")).isInstanceOf(String.class).isEqualTo(expected);
+        assertThat(actual.get("instant")).isInstanceOf(String.class).isEqualTo(expected);
         assertThat(actual.get("localDateTime")).isInstanceOf(String.class).isEqualTo(expected);
         assertThat(actual.get("zonedDateTime")).isInstanceOf(String.class).isEqualTo(expected);
     }
 
     private void checkData(Data actual) {
         assertThat(actual.date).isEqualTo(data.date);
+        assertThat(actual.instant).isEqualTo(data.instant);
         assertThat(actual.localDateTime).isEqualTo(data.localDateTime);
         assertThat(actual.zonedDateTime).isEqualTo(data.zonedDateTime);
     }
@@ -102,7 +104,7 @@ public class DateTimeTest {
     private static class Data {
 
         private final Date date;
-        //        private final Instant instant;
+        private final Instant instant;
         private final LocalDateTime localDateTime;
         private final ZonedDateTime zonedDateTime;
 //        private final OffsetDateTime offsetDateTime = OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
@@ -111,8 +113,9 @@ public class DateTimeTest {
 
         public Data(Date date) {
             this.date = date;
-            localDateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-            zonedDateTime = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+            instant = date.toInstant();
+            localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+            zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
         }
 
     }

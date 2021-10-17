@@ -24,40 +24,40 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
- * @since 09.10.2021
+ * @since 17.10.2021
  */
-public class DateTypeAdapter extends TypeAdapter<Date> {
+public class InstantTypeAdapter extends TypeAdapter<Instant> {
 
     protected final UnaryOperator<ZoneId> zoneModifier;
     protected final DateTimeFormatter df;
 
-    public DateTypeAdapter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter df) {
+    public InstantTypeAdapter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter df) {
         this.zoneModifier = zoneModifier;
         this.df = df;
     }
 
     @Override
-    public void write(JsonWriter out, Date value) throws IOException {
+    public void write(JsonWriter out, Instant value) throws IOException {
         if (value == null)
             out.nullValue();
         else {
             ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
-            ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(value.toInstant(), ZoneId.systemDefault());
+            ZonedDateTime zonedDateTime = value.atZone(ZoneId.systemDefault());
             out.value(df.format(zonedDateTime.withZoneSameInstant(zone)));
         }
     }
 
     @Override
-    public Date read(JsonReader in) throws IOException {
-        Date res = null;
+    public Instant read(JsonReader in) throws IOException {
+        Instant res = null;
 
         if (in.peek() == JsonToken.NULL)
             in.nextNull();
@@ -65,15 +65,10 @@ public class DateTypeAdapter extends TypeAdapter<Date> {
             ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
             DateTimeFormatter dateTimeFormatter = df.getZone() == null ? df.withZone(zone) : df;
             ZonedDateTime zonedDateTime = ZonedDateTime.parse(in.nextString(), dateTimeFormatter);
-            res = Date.from(zonedDateTime.toInstant());
+            res = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toInstant();
         }
 
         return res;
-    }
-
-    @Override
-    public String toString() {
-        return Date.class.getSimpleName() + ':' + getClass().getSimpleName();
     }
 
 }
