@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -87,6 +88,7 @@ public class DateTimeTest {
         assertThat(actual.get("instant")).isInstanceOf(String.class).isEqualTo(expected);
         assertThat(actual.get("localDateTime")).isInstanceOf(String.class).isEqualTo(expected);
         assertThat(actual.get("zonedDateTime")).isInstanceOf(String.class).isEqualTo(expected);
+        assertThat(actual.get("offsetDateTime")).isInstanceOf(String.class).isEqualTo(expected);
     }
 
     private void checkData(Data actual) {
@@ -94,6 +96,7 @@ public class DateTimeTest {
         assertThat(actual.instant).isEqualTo(data.instant);
         assertThat(actual.localDateTime).isEqualTo(data.localDateTime);
         assertThat(actual.zonedDateTime).isEqualTo(data.zonedDateTime);
+        assertThat(actual.offsetDateTime).isEqualTo(data.offsetDateTime);
     }
 
     private static Map<String, Object> toMap(String json) {
@@ -107,7 +110,7 @@ public class DateTimeTest {
         private final Instant instant;
         private final LocalDateTime localDateTime;
         private final ZonedDateTime zonedDateTime;
-//        private final OffsetDateTime offsetDateTime = OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
+        private final OffsetDateTime offsetDateTime;
 //        private final LocalDate localDate = LocalDate.now();
 //        private final LocalTime localTime = LocalTime.now();
 
@@ -116,6 +119,7 @@ public class DateTimeTest {
             instant = date.toInstant();
             localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
             zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+            offsetDateTime = OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
         }
 
     }
