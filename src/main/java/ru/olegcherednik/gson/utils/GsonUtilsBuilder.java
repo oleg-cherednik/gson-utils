@@ -45,9 +45,7 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
 /**
  * @author Oleg Cherednik
@@ -60,7 +58,7 @@ public class GsonUtilsBuilder {
 
     protected Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>)GsonBuilder::enableComplexMapKeySerialization)
             .andThen(b -> b.registerTypeAdapterFactory(IteratorTypeAdapter.INSTANCE))
-            .andThen(b -> b.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_ZONED_DATE_TIME)))
+            .andThen(b -> b.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME)))
             .andThen(b -> b.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME)))
             .andThen(b -> b.registerTypeAdapter(Date.class, new DateTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME)));
 
@@ -99,8 +97,8 @@ public class GsonUtilsBuilder {
     // ---------- extended ----------
 
     public GsonUtilsBuilder zonedModifier(UnaryOperator<ZoneId> zoneModifier) {
-        zonedDateTimeFormatter(zoneModifier, ISO_ZONED_DATE_TIME);
-        localDateTimeFormatter(zoneModifier, ISO_LOCAL_DATE_TIME);
+        zonedDateTimeFormatter(zoneModifier, ISO_OFFSET_DATE_TIME);
+        localDateTimeFormatter(zoneModifier, ISO_OFFSET_DATE_TIME);
         return dateFormatter(zoneModifier, ISO_OFFSET_DATE_TIME);
     }
 

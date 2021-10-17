@@ -78,7 +78,6 @@ public class DateGsonUtilsTest {
     }
 
     public void shouldWriteNullWhenSerializeWithNullValue() {
-
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().serializeNulls());
         String json = gson.writeValue(data);
         assertThat(json).isEqualTo("{\"notNullValue\":\"" + str + "\",\"nullValue\":null}");
@@ -91,10 +90,10 @@ public class DateGsonUtilsTest {
     }
 
     public void shouldRetrieveJsonWithCustomFormatWriteSerializeWithCustomFormatter() throws IOException {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
-        String str = dateTimeFormatter.format(ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()));
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
+        String str = df.format(ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()));
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
-                new GsonUtilsBuilder().dateFormatter(ZONE_MODIFIER_USE_ORIGINAL, dateTimeFormatter));
+                new GsonUtilsBuilder().dateFormatter(ZONE_MODIFIER_USE_ORIGINAL, df));
         String json = gson.writeValue(data);
         assertThat(json).isEqualTo("{\"notNullValue\":\"" + str + "\"}");
     }

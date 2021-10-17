@@ -32,6 +32,7 @@ import java.util.Map;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.olegcherednik.gson.utils.GsonUtilsBuilder.ZONE_MODIFIER_TO_UTC;
 import static ru.olegcherednik.gson.utils.GsonUtilsBuilder.ZONE_MODIFIER_USE_ORIGINAL;
 
 /**
@@ -78,8 +79,10 @@ public class ZonedDateTimeGsonUtilsTest {
         String json = "{\"UTC\":\"2017-07-23T13:57:14.225Z\"," +
                 "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\"," +
                 "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00[Australia/Sydney]\"}";
+        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
+                new GsonUtilsBuilder().zonedDateTimeFormatter(ZONE_MODIFIER_TO_UTC, ISO_ZONED_DATE_TIME));
         Map<String, ZonedDateTime> expected = createData();
-        Map<String, ZonedDateTime> actual = GsonUtils.readMap(json, String.class, ZonedDateTime.class);
+        Map<String, ZonedDateTime> actual = gson.readMap(json, String.class, ZonedDateTime.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }

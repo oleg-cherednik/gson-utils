@@ -59,8 +59,11 @@ public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
 
         if (in.peek() == JsonToken.NULL)
             in.nextNull();
-        else
-            res = ZonedDateTime.parse(in.nextString(), df);
+        else {
+            ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
+            DateTimeFormatter dateTimeFormatter = df.getZone() == null ? df.withZone(zone) : df;
+            res = ZonedDateTime.parse(in.nextString(), dateTimeFormatter);
+        }
 
         return res;
     }

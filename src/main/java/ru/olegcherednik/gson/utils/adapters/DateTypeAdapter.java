@@ -20,6 +20,7 @@ package ru.olegcherednik.gson.utils.adapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
@@ -35,23 +36,39 @@ import java.util.function.UnaryOperator;
  */
 public class DateTypeAdapter extends TypeAdapter<Date> {
 
-    protected final ZoneId localZone = ZoneId.systemDefault();
-    protected final ZonedDateTimeTypeAdapter zonedDateTimeTypeAdapter;
+    protected final UnaryOperator<ZoneId> zoneModifier;
+    protected final DateTimeFormatter df;
 
     public DateTypeAdapter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter df) {
-        zonedDateTimeTypeAdapter = new ZonedDateTimeTypeAdapter(zoneModifier, df);
+        this.zoneModifier = zoneModifier;
+        this.df = df;
     }
 
     @Override
     public void write(JsonWriter out, Date value) throws IOException {
-        ZonedDateTime zonedDateTime = value == null ? null : ZonedDateTime.ofInstant(value.toInstant(), localZone);
-        zonedDateTimeTypeAdapter.write(out, zonedDateTime);
+        if (value == null)
+            out.nullValue();
+        else {
+            ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
+            ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(value.toInstant(), ZoneId.systemDefault());
+            out.value(df.format(zonedDateTime.withZoneSameInstant(zone)));
+        }
     }
 
     @Override
     public Date read(JsonReader in) throws IOException {
-        ZonedDateTime zonedDateTime = zonedDateTimeTypeAdapter.read(in);
-        return zonedDateTime == null ? null : Date.from(zonedDateTime.toInstant());
+        Date res = null;
+
+        if (in.peek() == JsonToken.NULL)
+            in.nextNull();
+        else {
+            ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
+            DateTimeFormatter dateTimeFormatter = df.getZone() == null ? df.withZone(zone) : df;
+            ZonedDateTime zonedDateTime = ZonedDateTime.parse(in.nextString(), dateTimeFormatter);
+            res = Date.from(zonedDateTime.toInstant());
+        }
+
+        return res;
     }
 
 }

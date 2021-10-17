@@ -20,6 +20,7 @@ package ru.olegcherednik.gson.utils.adapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
@@ -35,23 +36,39 @@ import java.util.function.UnaryOperator;
  */
 public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
 
-    protected final ZoneId localZone = ZoneId.systemDefault();
-    protected final ZonedDateTimeTypeAdapter zonedDateTimeTypeAdapter;
+    protected final UnaryOperator<ZoneId> zoneModifier;
+    protected final DateTimeFormatter df;
 
     public LocalDateTimeTypeAdapter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter df) {
-        zonedDateTimeTypeAdapter = new ZonedDateTimeTypeAdapter(zoneModifier, df);
+        this.zoneModifier = zoneModifier;
+        this.df = df;
     }
 
     @Override
     public void write(JsonWriter out, LocalDateTime value) throws IOException {
-        ZonedDateTime zonedDateTime = value == null ? null : value.atZone(localZone);
-        zonedDateTimeTypeAdapter.write(out, zonedDateTime);
+        if (value == null)
+            out.nullValue();
+        else {
+            ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
+            ZonedDateTime zonedDateTime = value.atZone(ZoneId.systemDefault());
+            out.value(df.format(zonedDateTime.withZoneSameInstant(zone)));
+        }
     }
 
     @Override
     public LocalDateTime read(JsonReader in) throws IOException {
-        ZonedDateTime zonedDateTime = zonedDateTimeTypeAdapter.read(in);
-        return zonedDateTime == null ? null : zonedDateTime.withZoneSameInstant(localZone).toLocalDateTime();
+        LocalDateTime res = null;
+
+        if (in.peek() == JsonToken.NULL)
+            in.nextNull();
+        else {
+            ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
+            DateTimeFormatter dateTimeFormatter = df.getZone() == null ? df.withZone(zone) : df;
+            ZonedDateTime zonedDateTime = ZonedDateTime.parse(in.nextString(), dateTimeFormatter);
+            res = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+        }
+
+        return res;
     }
 
 }
