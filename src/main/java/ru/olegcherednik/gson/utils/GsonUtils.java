@@ -40,7 +40,7 @@ public final class GsonUtils {
         return print().readValue(json, valueClass);
     }
 
-    public static List<?> readList(String json) {
+    public static List<Object> readList(String json) {
         return print().readList(json);
     }
 
@@ -48,7 +48,7 @@ public final class GsonUtils {
         return print().readList(json, valueClass);
     }
 
-    public static Map<String, ?> readMap(String json) {
+    public static Map<String, Object> readMap(String json) {
         return print().readMap(json);
     }
 
@@ -70,7 +70,7 @@ public final class GsonUtils {
         return print().readValue(in, valueClass);
     }
 
-    public static List<?> readList(Reader in) {
+    public static List<Object> readList(Reader in) {
         return print().readList(in);
     }
 
@@ -78,7 +78,7 @@ public final class GsonUtils {
         return print().readList(in, valueClass);
     }
 
-    public static Iterator<?> readListLazy(Reader in) {
+    public static Iterator<Object> readListLazy(Reader in) {
         return print().readListLazy(in);
     }
 
@@ -86,7 +86,7 @@ public final class GsonUtils {
         return print().readListLazy(in, valueClass);
     }
 
-    public static Map<String, ?> readMap(Reader in) {
+    public static Map<String, Object> readMap(Reader in) {
         return print().readMap(in);
     }
 

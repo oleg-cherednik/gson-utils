@@ -64,13 +64,13 @@ public class GsonDecorator {
         return withRuntimeException(() -> supplier.get().fromJson(json, valueClass));
     }
 
-    public List<?> readList(String json) {
+    public List<Object> readList(String json) {
         return readList(json, Object.class);
     }
 
     public <V> List<V> readList(String json, Class<V> valueClass) {
         if (json == null)
-            return null;
+            return Collections.emptyList();
         if (isEmpty(json))
             return Collections.emptyList();
 
@@ -82,13 +82,13 @@ public class GsonDecorator {
         });
     }
 
-    public Map<String, ?> readMap(String json) {
+    public Map<String, Object> readMap(String json) {
         if (json == null)
-            return null;
+            return Collections.emptyMap();
         if (isEmpty(json))
             return Collections.emptyMap();
 
-        return withRuntimeException(() -> (Map<String, ?>)supplier.get().fromJson(json, LinkedHashMap.class));
+        return withRuntimeException(() -> (Map<String, Object>)supplier.get().fromJson(json, LinkedHashMap.class));
     }
 
     public <V> Map<String, V> readMap(String json, Class<V> valueClass) {
@@ -97,7 +97,7 @@ public class GsonDecorator {
 
     public <K, V> Map<K, V> readMap(String json, Class<K> keyClass, Class<V> valueClass) {
         if (json == null)
-            return null;
+            return Collections.emptyMap();
         if (isEmpty(json))
             return Collections.emptyMap();
 
@@ -122,13 +122,13 @@ public class GsonDecorator {
         return read(in, valueClass);
     }
 
-    public List<?> readList(Reader in) {
+    public List<Object> readList(Reader in) {
         return readList(in, Object.class);
     }
 
     public <V> List<V> readList(Reader in, Class<V> valueClass) {
         if (in == null)
-            return null;
+            return Collections.emptyList();
 
         Objects.requireNonNull(valueClass, "'valueClass' should not be null");
 
@@ -138,13 +138,13 @@ public class GsonDecorator {
         });
     }
 
-    public Iterator<?> readListLazy(Reader in) {
+    public Iterator<Object> readListLazy(Reader in) {
         return readListLazy(in, Object.class);
     }
 
     public <V> Iterator<V> readListLazy(Reader in, Class<V> valueClass) {
         if (in == null)
-            return null;
+            return Collections.emptyIterator();
 
         Objects.requireNonNull(valueClass, "'valueClass' should not be null");
 
@@ -155,8 +155,10 @@ public class GsonDecorator {
         });
     }
 
-    public Map<String, ?> readMap(Reader in) {
-        return (Map<String, ?>)read(in, LinkedHashMap.class);
+    public Map<String, Object> readMap(Reader in) {
+        if (in == null)
+            return Collections.emptyMap();
+        return (Map<String, Object>)withRuntimeException(() -> supplier.get().fromJson(in, LinkedHashMap.class));
     }
 
     public <V> Map<String, V> readMap(Reader in, Class<V> valueClass) {
@@ -165,7 +167,7 @@ public class GsonDecorator {
 
     public <K, V> Map<K, V> readMap(Reader in, Class<K> keyClass, Class<V> valueClass) {
         if (in == null)
-            return null;
+            return Collections.emptyMap();
 
         Objects.requireNonNull(keyClass, "'keyClass' should not be null");
         Objects.requireNonNull(valueClass, "'valueClass' should not be null");

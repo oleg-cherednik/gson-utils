@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -44,10 +45,13 @@ public class ReadReaderGsonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(GsonUtils.readValue((Reader)null, Object.class)).isNull();
-        assertThat(GsonUtils.readList((Reader)null, Object.class)).isNull();
-        assertThat(GsonUtils.readListLazy(null, Object.class)).isNull();
-        assertThat(GsonUtils.readMap((Reader)null)).isNull();
-        assertThat(GsonUtils.readMap((Reader)null, String.class, String.class)).isNull();
+    }
+
+    public void shouldRetrieveEmptyCollectionWhenObjectNull() {
+        assertThat(GsonUtils.readList((Reader)null, Object.class)).isSameAs(Collections.emptyList());
+        assertThat(GsonUtils.readListLazy(null, Object.class)).isSameAs(Collections.emptyIterator());
+        assertThat(GsonUtils.readMap((Reader)null)).isSameAs(Collections.emptyMap());
+        assertThat(GsonUtils.readMap((Reader)null, String.class, String.class)).isSameAs(Collections.emptyMap());
     }
 
     public void shouldRetrieveMapWhenReadReaderAsMap() throws IOException {

@@ -40,9 +40,12 @@ public class ReadStringGsonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(GsonUtils.readValue((String)null, Object.class)).isNull();
-        assertThat(GsonUtils.readList((String)null, Object.class)).isNull();
-        assertThat(GsonUtils.readMap((String)null)).isNull();
-        assertThat(GsonUtils.readMap((String)null, String.class, String.class)).isNull();
+    }
+
+    public void shouldRetrieveEmptyCollectionWhenObjectNull() {
+        assertThat(GsonUtils.readList((String)null, Object.class)).isSameAs(Collections.emptyList());
+        assertThat(GsonUtils.readMap((String)null)).isSameAs(Collections.emptyMap());
+        assertThat(GsonUtils.readMap((String)null, String.class, String.class)).isSameAs(Collections.emptyMap());
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadJson() {
