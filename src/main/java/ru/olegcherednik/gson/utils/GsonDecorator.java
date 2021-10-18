@@ -64,7 +64,7 @@ public class GsonDecorator {
         return withRuntimeException(() -> supplier.get().fromJson(json, valueClass));
     }
 
-    public List<Object> readList(String json) {
+    public List<?> readList(String json) {
         return readList(json, Object.class);
     }
 
@@ -82,13 +82,13 @@ public class GsonDecorator {
         });
     }
 
-    public Map<String, Object> readMap(String json) {
+    public Map<String, ?> readMap(String json) {
         if (json == null)
             return Collections.emptyMap();
         if (isEmpty(json))
             return Collections.emptyMap();
 
-        return withRuntimeException(() -> (Map<String, Object>)supplier.get().fromJson(json, LinkedHashMap.class));
+        return (Map<String, ?>)withRuntimeException(() -> supplier.get().fromJson(json, LinkedHashMap.class));
     }
 
     public <V> Map<String, V> readMap(String json, Class<V> valueClass) {
@@ -122,7 +122,7 @@ public class GsonDecorator {
         return read(in, valueClass);
     }
 
-    public List<Object> readList(Reader in) {
+    public List<?> readList(Reader in) {
         return readList(in, Object.class);
     }
 
@@ -138,7 +138,7 @@ public class GsonDecorator {
         });
     }
 
-    public Iterator<Object> readListLazy(Reader in) {
+    public Iterator<?> readListLazy(Reader in) {
         return readListLazy(in, Object.class);
     }
 
@@ -155,10 +155,10 @@ public class GsonDecorator {
         });
     }
 
-    public Map<String, Object> readMap(Reader in) {
+    public Map<String, ?> readMap(Reader in) {
         if (in == null)
             return Collections.emptyMap();
-        return (Map<String, Object>)withRuntimeException(() -> supplier.get().fromJson(in, LinkedHashMap.class));
+        return (Map<String, ?>)withRuntimeException(() -> supplier.get().fromJson(in, LinkedHashMap.class));
     }
 
     public <V> Map<String, V> readMap(Reader in, Class<V> valueClass) {
