@@ -18,20 +18,19 @@
  */
 package ru.olegcherednik.gson.utils;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
+ * Marker annotation that can be used to define factory method as one to use for instantiating new instances of the
+ * associated class. The method should be a <b>static</b> and contain <b>exactly one</b> {@link String} argument.
+ *
  * @author Oleg Cherednik
- * @since 07.01.2021
+ * @since 18.10.2021
  */
-public class GsonUtilsException extends RuntimeException {
-
-    private static final long serialVersionUID = 7388854489932550662L;
-
-    public GsonUtilsException(String message) {
-        super(message);
-    }
-
-    public GsonUtilsException(Throwable cause) {
-        super(cause);
-    }
-
+@Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JsonCreator {
 }

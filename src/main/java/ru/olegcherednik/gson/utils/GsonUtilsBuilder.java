@@ -29,6 +29,7 @@ import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.bind.ObjectTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.CustomObjectTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.DateTypeAdapter;
+import ru.olegcherednik.gson.utils.adapters.EnumIdTypeAdapterFactory;
 import ru.olegcherednik.gson.utils.adapters.InstantTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.IteratorTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.LocalDateTimeTypeAdapter;
@@ -72,7 +73,8 @@ public class GsonUtilsBuilder {
             .andThen(b -> b.registerTypeAdapter(Instant.class,
                     new InstantTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME).nullSafe()))
             .andThen(b -> b.registerTypeAdapter(OffsetDateTime.class,
-                    new OffsetDateTimeTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME).nullSafe()));
+                    new OffsetDateTimeTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME).nullSafe()))
+            .andThen(b -> b.registerTypeAdapterFactory(new EnumIdTypeAdapterFactory()));
 
     public Gson gson() {
         return postCreate(gsonBuilder().create());
