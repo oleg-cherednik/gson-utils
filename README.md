@@ -29,14 +29,15 @@
 *   Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
 *   `Reader`/`Writer` support for objects, lists and maps;
 *   Lazy read support for list from `Writer`;
-*   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`). 
+*   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`).
+*   Advanced `Reader`/`Writer` support for enums. 
 
 ## Build Tools
 
 ### Gradle
 
 ```groovy
-compile 'ru.oleg-cherednik.gson:gson-utils:2.1'
+compile 'ru.oleg-cherednik.gson:gson-utils:2.2'
 ```
 
 ### Maven
@@ -45,7 +46,7 @@ compile 'ru.oleg-cherednik.gson:gson-utils:2.1'
 <dependency>
     <groupId>ru.oleg-cherednik.gson</groupId>
     <artifactId>gson-utils</artifactId>
-    <version>2.1</version>
+    <version>2.2</version>
 </dependency>
 ```                                                    
 
