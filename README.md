@@ -515,10 +515,6 @@ That's it! You can use `gson-utils` methods as usual.
 </p>
 </details>
 
-### GsonUtilsBuilder class
-
-### GsonDecorator class
-
 ### Spring bean
 
 <details><summary>details</summary>
@@ -588,6 +584,10 @@ public class SpringBootService {
 
 </p>
 </details>
+
+### GsonUtilsBuilder class
+
+### GsonDecorator class
 
 ### GsonUtilsHelper class
 
