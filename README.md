@@ -587,6 +587,28 @@ public class SpringBootService {
 
 ### GsonUtilsBuilder class
 
+The class provides set ability to customize `Gson` instance and create a new
+`Gson` instances with current settings.
+
+#### Use custom type adapter factory
+
+Following snippet shows how to serialize `Date` to `UTC` time zone and format `"HH:mm:ss yyyy-MM-dd"`. 
+You have to create a new instance of `GsonUtilsBuilder` and add custom implementation.
+
+```java
+public class Snippet {
+
+    public static Gson createCustomGson() {
+        UnaryOperator<ZoneId> zoneModifier = GsonUtilsBuilder.ZONE_MODIFIER_TO_UTC;
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
+        TypeAdapter<Date> typeAdapter = new DateTypeAdapter(zoneModifier, dateTimeFormatter);
+        GsonUtilsBuilder builder = new GsonUtilsBuilder().registerTypeAdapter(Data.class, typeAdapter);
+        return builder.gson();
+    }
+   
+}
+```
+
 ### GsonDecorator class
 
 ### GsonUtilsHelper class
