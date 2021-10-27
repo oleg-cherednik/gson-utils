@@ -470,6 +470,14 @@ public class Snippet {
 </p>
 </details>
 
+#### Work with enum
+
+<details><summary>details</summary>
+<p>
+
+</p>
+</details>
+
 ### GsonUtilsBuilder class
 
 ### GsonDecorator class
@@ -499,7 +507,7 @@ public class AppConfig {
 #### Create gson bean based on the custom configuration
 
 To customize gson configuration, a new instance of `GsonUtilsBuilder` should be
-created and configured. And then this instance should be used to create `GsonDecorator`.
+created and configured. Then this instance should be used to create `GsonDecorator`.
 
 ```java
 @Configuration
