@@ -26,6 +26,8 @@ import java.lang.annotation.Target;
 /**
  * Marker annotation that can be used to define factory method as one to use for instantiating new instances of the
  * associated class. The method should be a <b>static</b> and contain <b>exactly one</b> {@link String} argument.
+ * <p>
+ * This annotation works only with {@link EnumId}.
  *
  * @author Oleg Cherednik
  * @since 18.10.2021
