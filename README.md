@@ -474,7 +474,7 @@ public class Snippet {
 
 ### GsonDecorator class
 
-#### Spring bean
+### Spring bean
 
 <details><summary>details</summary>
 <p>
