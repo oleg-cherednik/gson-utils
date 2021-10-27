@@ -587,11 +587,11 @@ public class SpringBootService {
 
 ### GsonUtilsBuilder class
 
-The class provides set ability to customize `Gson` instance and create a new
-`Gson` instances with current settings.
-
 <details><summary>details</summary>
 <p>
+
+The class provides set ability to customize `Gson` instance and create a new
+`Gson` instances with current settings.
 
 #### Use custom type adapter factory
 
