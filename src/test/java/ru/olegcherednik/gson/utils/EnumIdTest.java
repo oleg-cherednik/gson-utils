@@ -143,7 +143,7 @@ public class EnumIdTest {
         assertThat(actual).isEqualTo(new Data(Auto.AUDI, Color.NONE));
     }
 
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({ "FieldCanBeLocal", "EqualsAndHashcode" })
     private static class Data {
 
         private final Auto notNullAuto;
@@ -308,12 +308,12 @@ public class EnumIdTest {
 
         @JsonCreator
         public static Country one(int id) {
-            throw new RuntimeException("Factory method (int) problem");
+            throw new GsonUtilsException("Factory method (int) problem");
         }
 
         @JsonCreator
         public static Country two(String id, int param) {
-            throw new RuntimeException("Factory method (two arguments) problem");
+            throw new GsonUtilsException("Factory method (two arguments) problem");
         }
 
         @JsonCreator
