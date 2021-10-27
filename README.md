@@ -30,7 +30,7 @@
 *   `Reader`/`Writer` support for objects, lists and maps;
 *   Lazy read support for list from `Writer`;
 *   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`).
-*   Advanced `Reader`/`Writer` support for enums. 
+*   Advanced `Reader`/`Writer` support for `enum`. 
 
 ## Build Tools
 
