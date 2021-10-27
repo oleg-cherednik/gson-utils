@@ -73,6 +73,7 @@ compile 'com.google.code.gson:gson:2.8.7'
 *   [GsonUtilsBuilder](#gsonutilsbulder-class) - builder for Gson instance contains all configuration properties;
 *   [GsonDecorator](#gsondecorator-class) - decorator class to hold Gson instance with additional methods;
 *   [GsonUtilsHelper](#gsonutilshelper-class) - helper class is used as a holder for default properties;
+*   [EnumId](#work-with-enum) - advanced enum serialization support;
 
 <details><summary>Data class for examples</summary>
 <p>
