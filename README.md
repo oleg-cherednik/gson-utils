@@ -475,6 +475,45 @@ public class Snippet {
 <details><summary>details</summary>
 <p>
 
+By default, `Gson` serializes or deserializes enums by the case-sensitive `name`.
+It could give a problem as well as sometime it's better to change name of the
+constant when serialize it into `json`.
+
+To solve these issues, `GsonUtils` provides an interface `EnumId` with range of
+method to serialize or deserialize enums. To use it, you have to declare your
+enums according to the following snippet:
+
+```java
+public enum Auto implements EnumId {
+    AUDI("audi"),
+    BMW("bmw"),
+    MERCEDES("mercedes");
+
+    private final String id;
+
+    Auto(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @JsonCreator
+    public static Auto parseId(String id) {
+        return EnumId.parseId(Auto.class, id);
+    }
+}
+```  
+
+Where `@JsonCreator` is an *optional* annotation to mark a single method that
+accepts exactly one string parameter to deserialize an enum constant.
+
+That's it! You can use `gson-utils` methods as usual. 
+
+##### Write a custom object to json string
+
 </p>
 </details>
 
