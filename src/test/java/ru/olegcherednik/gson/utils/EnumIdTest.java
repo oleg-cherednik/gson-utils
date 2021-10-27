@@ -81,8 +81,7 @@ public class EnumIdTest {
         String json = GsonUtils.writeValue(People.OLEG_CHEREDNIK);
         assertThat(json).isEqualTo("\"oleg-cherednik\"");
         assertThatCode(() -> GsonUtils.readValue(json, People.class))
-                .isExactlyInstanceOf(GsonUtilsException.class)
-                .hasMessageContaining("Factory method problem");
+                .isExactlyInstanceOf(GsonUtilsException.class);
     }
 
     public void shouldIgnoreNotCorrectFactoryMethodWhenMultiplePotentialFactoryMethodsExist() {
