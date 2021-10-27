@@ -287,7 +287,7 @@ public class EnumIdTest {
 
         @JsonCreator
         public static People one(String id) {
-            throw new RuntimeException("Factory method problem");
+            throw new GsonUtilsException("Factory method problem");
         }
     }
 
