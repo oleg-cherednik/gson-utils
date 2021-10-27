@@ -590,6 +590,9 @@ public class SpringBootService {
 The class provides set ability to customize `Gson` instance and create a new
 `Gson` instances with current settings.
 
+<details><summary>details</summary>
+<p>
+
 #### Use custom type adapter factory
 
 Following snippet shows how to serialize `Date` to `UTC` time zone and format `"HH:mm:ss yyyy-MM-dd"`. 
@@ -608,10 +611,24 @@ public class Snippet {
    
 }
 ```
+</p>
+</details>
 
 ### GsonDecorator class
 
+<details><summary>details</summary>
+<p>
+
+</p>
+</details>
+
 ### GsonUtilsHelper class
+
+<details><summary>details</summary>
+<p>
+
+</p>
+</details>
 
 ### Links
 
