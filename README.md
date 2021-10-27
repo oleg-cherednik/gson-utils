@@ -515,8 +515,6 @@ That's it! You can use `gson-utils` methods as usual.
 </p>
 </details>
 
-##### Write a custom object to json string
-
 ### GsonUtilsBuilder class
 
 ### GsonDecorator class
