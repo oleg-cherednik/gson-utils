@@ -23,6 +23,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import ru.olegcherednik.gson.utils.EnumId;
 import ru.olegcherednik.gson.utils.GsonUtilsException;
@@ -54,15 +55,26 @@ public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
         return new TypeAdapter<T>() {
             @Override
             public void write(JsonWriter out, T value) throws IOException {
-                out.value(((EnumId)value).getId());
+                String id = value == null ? null : ((EnumId)value).getId();
+
+                if (id == null)
+                    out.nullValue();
+                else
+                    out.value(id);
             }
 
             @Override
             public T read(JsonReader in) throws IOException {
-                String id = in.nextString();
+                String id = null;
+
+                if (in.peek() == JsonToken.NULL)
+                    in.nextNull();
+                else
+                    id = in.nextString();
+
                 return read.apply(id);
             }
-        }.nullSafe();
+        };
 
     }
 
@@ -96,7 +108,7 @@ public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
             try {
                 return MethodUtils.invokeStaticMethod(method, id);
             } catch (Exception e) {
-                throw new GsonUtilsException(e);
+                throw new GsonUtilsException(e.getCause());
             }
         };
     }

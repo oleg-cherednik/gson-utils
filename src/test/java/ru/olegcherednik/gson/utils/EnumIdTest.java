@@ -77,8 +77,70 @@ public class EnumIdTest {
                 .isExactlyInstanceOf(GsonUtilsException.class);
     }
 
+    public void shouldThrowExceptionWithOriginalMessageWhenUseCustomFactoryMethod() {
+        String json = GsonUtils.writeValue(People.OLEG_CHEREDNIK);
+        assertThat(json).isEqualTo("\"oleg-cherednik\"");
+        assertThatCode(() -> GsonUtils.readValue(json, People.class))
+                .isExactlyInstanceOf(GsonUtilsException.class)
+                .hasMessageContaining("Factory method problem");
+    }
+
+    public void shouldIgnoreNotCorrectFactoryMethodWhenMultiplePotentialFactoryMethodsExist() {
+        String json = GsonUtils.writeValue(Country.RUSSIAN_FEDERATION);
+        assertThat(json).isEqualTo("\"russian-federation\"");
+        Country actual = GsonUtils.readValue(json, Country.class);
+        assertThat(actual).isSameAs(Country.RUSSIAN_FEDERATION);
+    }
+
     public void shouldUseNameWhenNoGetId() {
         assertThat(GsonUtils.writeValue(Shape.SQUARE)).isEqualTo("\"SQUARE\"");
+    }
+
+    public void shouldParseByNameCaseInsensitive() {
+        assertThat(EnumId.parseName(People.class, "OLEG_CHEREDNIK")).isSameAs(People.OLEG_CHEREDNIK);
+        assertThat(EnumId.parseName(People.class, "Oleg_Cherednik")).isSameAs(People.OLEG_CHEREDNIK);
+    }
+
+    public void shouldThrowExceptionWhenConstantByNameWasNotFound() {
+        assertThatCode(() -> EnumId.parseName(People.class, "UNKNOWN"))
+                .isExactlyInstanceOf(EnumConstantNotPresentException.class);
+    }
+
+    public void shouldRetrieveDefaultValueWhenConstantByNameWasNotFound() {
+        People actual = EnumId.parseName(People.class, "UNKNOWN", People.OLEG_CHEREDNIK);
+        assertThat(actual).isSameAs(People.OLEG_CHEREDNIK);
+    }
+
+    public void shouldRetrieveFoundConstantWhenFindByIdOrName() {
+        assertThat(EnumId.parseIdOrName(People.class, "OLEG_CHEREDNIK")).isSameAs(People.OLEG_CHEREDNIK);
+        assertThat(EnumId.parseIdOrName(People.class, "Oleg_Cherednik")).isSameAs(People.OLEG_CHEREDNIK);
+        assertThat(EnumId.parseIdOrName(People.class, "oleg-cherednik")).isSameAs(People.OLEG_CHEREDNIK);
+        assertThat(EnumId.parseIdOrName(People.class, "Oleg-Cherednik")).isSameAs(People.OLEG_CHEREDNIK);
+    }
+
+    public void shouldThrowExceptionWhenConstantByNameOrIdWasNotFound() {
+        assertThatCode(() -> EnumId.parseIdOrName(People.class, "UNKNOWN"))
+                .isExactlyInstanceOf(EnumConstantNotPresentException.class);
+    }
+
+    public void shouldRetrieveDefaultValueWhenConstantByIdWasNotFound() {
+        People actual = EnumId.parseId(People.class, "UNKNOWN", People.OLEG_CHEREDNIK);
+        assertThat(actual).isSameAs(People.OLEG_CHEREDNIK);
+    }
+
+    public void shouldThrowExceptionWhenConstantByIdWasNotFound() {
+        assertThatCode(() -> EnumId.parseId(People.class, "UNKNOWN"))
+                .isExactlyInstanceOf(EnumConstantNotPresentException.class);
+    }
+
+    public void shouldReadWriteConstantWithNullId() {
+        Data data = new Data(Auto.AUDI, Color.NONE);
+        String json = GsonUtils.writeValue(data);
+        assertThat(json).isEqualTo("{\"notNullAuto\":\"audi\"}");
+
+        json = "{\"notNullAuto\":\"audi\",\"notNullColor\":null}";
+        Data actual = GsonUtils.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(new Data(Auto.AUDI, Color.NONE));
     }
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -92,6 +154,17 @@ public class EnumIdTest {
         public Data(Auto notNullAuto, Color notNullColor) {
             this.notNullAuto = notNullAuto;
             this.notNullColor = notNullColor;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (!(obj instanceof Data))
+                return false;
+            Data data = (Data)obj;
+            return notNullAuto == data.notNullAuto && notNullColor == data.notNullColor
+                    && nullAuto == data.nullAuto && nullColor == data.nullColor;
         }
 
     }
@@ -122,7 +195,8 @@ public class EnumIdTest {
     public enum Color implements EnumId {
         RED("Red"),
         GREEN("Green"),
-        BLUE("Blue");
+        BLUE("Blue"),
+        NONE(null);
 
         private final String id;
 
@@ -195,6 +269,57 @@ public class EnumIdTest {
             return EnumId.parseId(Vodka.class, id);
         }
 
+    }
+
+    public enum People implements EnumId {
+        OLEG_CHEREDNIK("oleg-cherednik");
+
+        private final String id;
+
+        People(String id) {
+            this.id = id;
+        }
+
+        @Override
+        public String getId() {
+            return id;
+        }
+
+        @JsonCreator
+        public static People one(String id) {
+            throw new RuntimeException("Factory method problem");
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public enum Country implements EnumId {
+        RUSSIAN_FEDERATION("russian-federation");
+
+        private final String id;
+
+        Country(String id) {
+            this.id = id;
+        }
+
+        @Override
+        public String getId() {
+            return id;
+        }
+
+        @JsonCreator
+        public static Country one(int id) {
+            throw new RuntimeException("Factory method (int) problem");
+        }
+
+        @JsonCreator
+        public static Country two(String id, int param) {
+            throw new RuntimeException("Factory method (two arguments) problem");
+        }
+
+        @JsonCreator
+        public static Country three(String id) {
+            return EnumId.parseId(Country.class, id);
+        }
     }
 
 }

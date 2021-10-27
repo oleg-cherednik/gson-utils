@@ -25,7 +25,7 @@ import java.util.Optional;
  * {@link Enum#name()} as constant in database or in any formatted string, because after any refactoring,
  * all existed database records should be modified as well.<p>
  * For serialization, the enum should override {@link #getId()} to define a string value.<p>
- * For deserializatio, the enum should contain exactly one static method with single {@link String} argument
+ * For deserialization, the enum should contain exactly one static method with single {@link String} argument
  * and either be annotated with {@link JsonCreator} annotation or has name <b>parseId</b>.
  *
  * @author Oleg Cherednik
@@ -62,7 +62,7 @@ public interface EnumId {
 
     static <T extends Enum<?> & EnumId> T parseIdOrName(Class<T> cls, String idOrName) {
         T res = parseId(cls.getEnumConstants(), idOrName, null);
-        return Optional.ofNullable(res).orElse(parseName(cls, idOrName));
+        return Optional.ofNullable(res).orElseGet(() -> parseName(cls, idOrName));
     }
 
     static <T extends Enum<?> & EnumId> T parseId(Class<T> cls, String id) {
