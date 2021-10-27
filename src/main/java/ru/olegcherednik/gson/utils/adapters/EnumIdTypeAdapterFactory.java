@@ -113,16 +113,16 @@ public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
         };
     }
 
-    @SuppressWarnings("PMD.AvoidReassigningParameters")
-    private static List<Method> getJsonCreateMethods(Class<?> rawType) {
+    private static List<Method> getJsonCreateMethods(final Class<?> rawType) {
         List<Method> res = new ArrayList<>();
+        Class<?> type = rawType;
 
-        while (rawType != Object.class) {
-            for (Method method : rawType.getDeclaredMethods())
+        while (type != Object.class) {
+            for (Method method : type.getDeclaredMethods())
                 if (isValidFactoryMethod(method))
                     res.add(method);
 
-            rawType = rawType.getSuperclass();
+            type = type.getSuperclass();
         }
 
         return res;
