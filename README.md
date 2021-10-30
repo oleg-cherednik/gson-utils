@@ -19,7 +19,9 @@
 
 # gson-utils
 > [Gson](https://github.com/google/gson) usability utilities. It's designed to
-> add additional features like easy and centralized configuration, builder or static method set. 
+> add additional features like easy and centralized configuration, builder or
+> static method set. Artifact does not include direct `Gson` dependencies. It is
+> up to you to add them into your project. 
 
 ## Features
 *   Encapsulate all checked exceptions from Gson with custom runtime exception;
@@ -591,8 +593,8 @@ public class SpringBootService {
 <details><summary>details</summary>
 <p>
 
-The class provides set ability to customize `Gson` instance and create a new
-`Gson` instances with current settings.
+The class provides ability to customize `Gson` instance and create a new `Gson`
+instances with current settings.
 
 #### Use custom type adapter factory
 
@@ -620,6 +622,9 @@ public class Snippet {
 <details><summary>details</summary>
 <p>
 
+This is a decorator over the standard `Gson` class with more additional method. `GsonUtils` chooses required `Gson`
+instance and delegates all work to the `GsonDecorator`.
+
 </p>
 </details>
 
@@ -627,6 +632,8 @@ public class Snippet {
 
 <details><summary>details</summary>
 <p>
+
+This class provides set of methods to create a `Gson` instances based on given `GsonUtilsBulder`.
 
 </p>
 </details>
