@@ -82,7 +82,7 @@ license {
 }
 
 signing {
-    sign configurations.archives
+    sign publishing.publications
 }
 
 java {
@@ -93,7 +93,7 @@ java {
 publishing {
     publications {
         maven(MavenPublication) {
-            from(components.java)
+            from components.java
 
             pom {
                 name = rootProject.name
@@ -141,5 +141,4 @@ nexusPublishing {
     repositories {
         sonatype()
     }
-
 }
