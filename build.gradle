@@ -1,0 +1,144 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'jacoco'
+    id 'java-library'
+    id 'org.cadixdev.licenser' version '0.6.1'
+
+    id 'signing'
+    id 'maven-publish'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.0.0'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+group = 'ru.oleg-cherednik.gson'
+version = '2.2'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+configurations {
+    jar.archiveFileName = "${rootProject.name}-${version}.jar"
+}
+
+dependencies {
+    implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
+
+    compileOnly "com.google.code.gson:gson:${property('gson.version')}"
+
+    testImplementation('org.testng:testng:7.4.0') {
+        exclude group: 'junit', module: 'junit'
+        exclude group: 'org.apache.ant', module: 'ant'
+    }
+
+    testImplementation "com.google.code.gson:gson:${property('gson.version')}"
+    testImplementation 'org.assertj:assertj-core:3.21.0'
+    testImplementation 'commons-io:commons-io:2.11.0'
+    testImplementation 'org.mockito:mockito-core:4.0.0'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-web:2.3.8.RELEASE') {
+        exclude group: 'org.junit.jupiter'
+        exclude group: 'com.fasterxml.jackson.core'
+        exclude group: 'com.fasterxml.jackson.datatype'
+        exclude group: 'com.fasterxml.jackson.module'
+    }
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test:2.3.8.RELEASE') {
+        exclude group: 'org.junit.vintage'
+        exclude group: 'org.junit.jupiter'
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+check.dependsOn jacocoTestReport
+
+test {
+    useTestNG()
+}
+
+license {
+    header rootProject.file('APACHE.txt')
+    include '**/*.java'
+    newLine false
+}
+
+signing {
+    sign publishing.publications
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+
+            pom {
+                name = rootProject.name
+
+                description = "\n" +
+                        "    Gson usability utilities.\n" +
+                        "    It's designed to add additional features like easy and centralized configuration,\n" +
+                        "    builder or static method set.\n" +
+                        "  "
+
+                url = 'https://github.com/oleg-cherednik/gson-utils'
+                inceptionYear = '2021'
+
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'oleg.cherednik'
+                        name = 'Oleg Cherednik'
+                        email = 'oleg.cherednik@gmail.com'
+                    }
+                }
+
+                scm {
+                    url = 'https://github.com/oleg-cherednik/gson-utils'
+                    connection = 'scm:https://github.com/oleg-cherednik/gson-utils.git'
+                    developerConnection = 'scm:git@github.com:oleg-cherednik/gson-utils.git'
+                }
+            }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
