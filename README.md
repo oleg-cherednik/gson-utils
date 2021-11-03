@@ -643,6 +643,6 @@ This class provides set of methods to create a `Gson` instances based on given `
 *   Home page: https://github.com/oleg-cherednik/gson-utils
 
 *   Maven:
-    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.utils/gson-utils
-    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/utils/gson-utils/
+    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.gson/gson-utils
+    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/gson/gson-utils/
    
