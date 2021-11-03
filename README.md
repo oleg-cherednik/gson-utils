@@ -3,7 +3,7 @@
 [![java8](https://badgen.net/badge/java/8+/blue)](https://badgen.net/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-![circle-ci](https://circleci.com/gh/oleg-cherednik/gson-utils/tree/master.svg?style=shield)
+[![circle-ci](https://circleci.com/gh/oleg-cherednik/gson-utils/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/oleg-cherednik/gson-utils)
 [![codacy-quality](https://app.codacy.com/project/badge/Grade/ba0faab92b44432491376ee5d331a63e?branch=master)](https://app.codacy.com/gh/oleg-cherednik/gson-utils/dashboard?branch=master)
 
 <details><summary>develop</summary>
@@ -643,6 +643,6 @@ This class provides set of methods to create a `Gson` instances based on given `
 *   Home page: https://github.com/oleg-cherednik/gson-utils
 
 *   Maven:
-    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.utils/gson-utils
-    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/utils/gson-utils/
+    *   **central:** https://mvnrepository.com/artifact/ru.oleg-cherednik.gson/gson-utils
+    *   **download:** https://repo1.maven.org/maven2/ru/oleg-cherednik/gson/gson-utils/
    
