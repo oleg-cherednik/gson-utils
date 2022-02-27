@@ -30,7 +30,7 @@
 *   Utility class to make most common operations much more comfortable to use;
 *   Ability to change `Zone` to save `ZonedDateTime` independently of original zone;
 *   `Reader`/`Writer` support for objects, lists and maps;
-*   Lazy read support for list from `Writer`;
+*   Lazy read support for list and maps from `Writer`;
 *   Read numeric as `Integer`, `Long`, `BigInteger` or `Double` (but not only as `Double`).
 *   Advanced `Reader`/`Writer` support for `enum`. 
 
