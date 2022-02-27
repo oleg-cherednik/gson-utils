@@ -51,10 +51,6 @@ compile 'ru.oleg-cherednik.gson:gson-utils:2.2'
     <version>2.2</version>
 </dependency>
 ```                                                    
-
-In the version, first part is the major version of `Gson` that is used in this utils.
-The second part is the `gson-utils` version. This number is unique.
-
 **Note:** `gson-utils` does not contain dependency to the specific `gson` version, so you have to
 add it additionally:
 
@@ -75,7 +71,7 @@ compile 'com.google.code.gson:gson:2.8.7'
 *   [GsonUtilsBuilder](#gsonutilsbulder-class) - builder for Gson instance contains all configuration properties;
 *   [GsonDecorator](#gsondecorator-class) - decorator class to hold Gson instance with additional methods;
 *   [GsonUtilsHelper](#gsonutilshelper-class) - helper class is used as a holder for default properties;
-*   [EnumId](#work-with-enum) - advanced enum serialization support;
+*   [EnumId](#work-with-enum) - advanced enum serialization support.
 
 <details><summary>Data class for examples</summary>
 <p>
