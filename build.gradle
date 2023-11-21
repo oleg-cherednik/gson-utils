@@ -9,6 +9,7 @@ plugins {
     id 'jacoco'
     id 'java-library'
     id 'org.cadixdev.licenser' version '0.6.1'
+    id 'io.franzbecker.gradle-lombok' version '4.0.0'
 
     id 'signing'
     id 'maven-publish'
@@ -21,7 +22,7 @@ repositories {
 }
 
 group = 'ru.oleg-cherednik.gson'
-version = '2.2'
+version = '666'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -35,9 +36,14 @@ configurations {
 }
 
 dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
     implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
 
+    implementation 'ru.oleg-cherednik.json-api:json-api:666'
     compileOnly "com.google.code.gson:gson:${property('gson.version')}"
+
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     testImplementation('org.testng:testng:7.4.0') {
         exclude group: 'junit', module: 'junit'

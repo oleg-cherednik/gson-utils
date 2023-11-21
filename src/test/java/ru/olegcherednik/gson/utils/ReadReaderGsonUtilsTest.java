@@ -55,14 +55,14 @@ public class ReadReaderGsonUtilsTest {
     }
 
     public void shouldRetrieveMapWhenReadReaderAsMap() throws IOException {
-        Map<String, ?> expected = MapUtils.of(
+        Map<String, Object> expected = MapUtils.of(
                 "title", "Thinking in Java",
                 "date", "2017-07-23T13:57:14.225Z",
                 "year", 1998,
                 "authors", ListUtils.of("Bruce Eckel"));
 
         try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/book.json"))) {
-            Map<String, ?> actual = GsonUtils.readMap(in);
+            Map<String, Object> actual = GsonUtils.readMap(in);
             assertThat(actual).isNotNull();
             assertThat(actual).isEqualTo(expected);
         }
@@ -187,7 +187,7 @@ public class ReadReaderGsonUtilsTest {
 
     public void shouldReadListWithObjectsWhenReadListNoSpecifyValueClass() throws IOException {
         try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books.json"))) {
-            List<?> actual = GsonUtils.readList(in);
+            List<Object> actual = GsonUtils.readList(in);
             assertThat(actual).hasSize(2);
             assertThat(actual.get(0)).isInstanceOf(Map.class);
             assertThat(actual.get(1)).isInstanceOf(Map.class);
@@ -196,7 +196,7 @@ public class ReadReaderGsonUtilsTest {
 
     public void shouldReadListWithObjectsWhenReadListLazyNoSpecifyValueClass() throws IOException {
         try (Reader in = new InputStreamReader(ReadReaderGsonUtilsTest.class.getResourceAsStream("/books.json"))) {
-            Iterator<?> it = GsonUtils.readListLazy(in);
+            Iterator<Object> it = GsonUtils.readListLazy(in);
             assertThat(it.hasNext()).isTrue();
             assertThat(it.next()).isInstanceOf(Map.class);
             assertThat(it.hasNext()).isTrue();

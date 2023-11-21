@@ -94,12 +94,12 @@ public class GsonUtilsBuilder {
     }
 
     protected void updateFactories(Gson gson) throws Exception {
-        List<TypeAdapterFactory> factories = FieldUtils.<List<TypeAdapterFactory>>getFieldValue(gson, "factories")
-                .stream()
-                .map(factory -> factory == ObjectTypeAdapter.FACTORY ? CustomObjectTypeAdapter.FACTORY : factory)
-                .collect(Collectors.toList());
-
-        FieldUtils.setFieldValue(gson, "factories", factories);
+//        List<TypeAdapterFactory> factories = FieldUtils.<List<TypeAdapterFactory>>getFieldValue(gson, "factories")
+//                .stream()
+//                .map(factory -> factory == ObjectTypeAdapter.FACTORY ? CustomObjectTypeAdapter.FACTORY : factory)
+//                .collect(Collectors.toList());
+//
+//        FieldUtils.setFieldValue(gson, "factories", factories);
     }
 
     protected GsonBuilder gsonBuilder() {

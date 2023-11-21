@@ -18,15 +18,20 @@
  */
 package ru.olegcherednik.gson.utils;
 
+import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Test;
 import ru.olegcherednik.gson.utils.dto.Data;
 import ru.olegcherednik.gson.utils.utils.ListUtils;
 import ru.olegcherednik.gson.utils.utils.MapUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,13 +44,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class ReadStringGsonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
-        assertThat(GsonUtils.readValue((String)null, Object.class)).isNull();
+        assertThat(GsonUtils.readValue((String) null, Object.class)).isNull();
     }
 
     public void shouldRetrieveEmptyCollectionWhenObjectNull() {
-        assertThat(GsonUtils.readList((String)null, Object.class)).isSameAs(Collections.emptyList());
-        assertThat(GsonUtils.readMap((String)null)).isSameAs(Collections.emptyMap());
-        assertThat(GsonUtils.readMap((String)null, String.class, String.class)).isSameAs(Collections.emptyMap());
+        assertThat(GsonUtils.readList((String) null, Object.class)).isSameAs(Collections.emptyList());
+        assertThat(GsonUtils.readMap((String) null)).isSameAs(Collections.emptyMap());
+        assertThat(GsonUtils.readMap((String) null, String.class, String.class)).isSameAs(Collections.emptyMap());
     }
 
     public void shouldRetrieveDeserializedObjectWhenReadJson() {
@@ -132,7 +137,7 @@ public class ReadStringGsonUtilsTest {
 
     public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumeric() {
         String json = "[1,2.0,3.1,12345678912,123456789123456789123456789123456789]";
-        List<?> actual = GsonUtils.readList(json);
+        List<Object> actual = GsonUtils.readList(json);
 
         assertThat(actual).hasSize(5);
         assertThat(actual.get(0)).isEqualTo(1);
@@ -140,6 +145,20 @@ public class ReadStringGsonUtilsTest {
         assertThat(actual.get(2)).isEqualTo(3.1);
         assertThat(actual.get(3)).isEqualTo(12345678912L);
         assertThat(actual.get(4)).isEqualTo(new BigInteger("123456789123456789123456789123456789"));
+    }
+
+    public void shouldRetrieveListOfMapWhenRead() throws IOException {
+        String json = getResourceAsString("/books.json");
+        List<Map<String, Object>> actual = GsonUtils.readListOfMap(json);
+
+        int a = 0;
+        a++;
+    }
+
+    public static String getResourceAsString(String name) throws IOException {
+        try (InputStream in = ReadStringGsonUtilsTest.class.getResourceAsStream(name)) {
+            return IOUtils.toString(Objects.requireNonNull(in), StandardCharsets.UTF_8);
+        }
     }
 
 }

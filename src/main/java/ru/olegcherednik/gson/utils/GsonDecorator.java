@@ -19,6 +19,7 @@
 package ru.olegcherednik.gson.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import ru.olegcherednik.gson.utils.type.IteratorParameterizedType;
 import ru.olegcherednik.gson.utils.type.MapParameterizedType;
@@ -59,12 +60,11 @@ public class GsonDecorator {
         if (json == null)
             return null;
 
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
-
+        requireNotNullValueClass(valueClass);
         return withRuntimeException(() -> supplier.get().fromJson(json, valueClass));
     }
 
-    public List<?> readList(String json) {
+    public List<Object> readList(String json) {
         return readList(json, Object.class);
     }
 
@@ -74,21 +74,33 @@ public class GsonDecorator {
         if (isEmpty(json))
             return Collections.emptyList();
 
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+        requireNotNullValueClass(valueClass);
 
         return withRuntimeException(() -> {
-            Class<V[]> arrayCls = (Class<V[]>)Array.newInstance(valueClass, 0).getClass();
-            return Arrays.asList(supplier.get().fromJson(json, arrayCls));
+            Type type = TypeToken.getParameterized(List.class, valueClass).getType();
+            return supplier.get().fromJson(json, type);
         });
     }
 
-    public Map<String, ?> readMap(String json) {
+    public List<Map<String, Object>> readListOfMap(String json) {
+        if (json == null)
+            return Collections.emptyList();
+        if (isEmpty(json))
+            return Collections.emptyList();
+
+        return withRuntimeException(() -> {
+            return supplier.get().fromJson(json, List.class);
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> readMap(String json) {
         if (json == null)
             return Collections.emptyMap();
         if (isEmpty(json))
             return Collections.emptyMap();
 
-        return (Map<String, ?>)withRuntimeException(() -> supplier.get().fromJson(json, LinkedHashMap.class));
+        return withRuntimeException(() -> supplier.get().fromJson(json, Map.class));
     }
 
     public <V> Map<String, V> readMap(String json, Class<V> valueClass) {
@@ -101,8 +113,8 @@ public class GsonDecorator {
         if (isEmpty(json))
             return Collections.emptyMap();
 
-        Objects.requireNonNull(keyClass, "'keyClass' should not be null");
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+        requireNotNullKeyClass(keyClass);
+        requireNotNullValueClass(valueClass);
 
         return withRuntimeException(() -> supplier.get().fromJson(json, new MapParameterizedType<>(keyClass, valueClass)));
     }
@@ -122,7 +134,7 @@ public class GsonDecorator {
         return read(in, valueClass);
     }
 
-    public List<?> readList(Reader in) {
+    public List<Object> readList(Reader in) {
         return readList(in, Object.class);
     }
 
@@ -130,15 +142,15 @@ public class GsonDecorator {
         if (in == null)
             return Collections.emptyList();
 
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+        requireNotNullValueClass(valueClass);
 
         return withRuntimeException(() -> {
-            Class<V[]> arrayCls = (Class<V[]>)Array.newInstance(valueClass, 0).getClass();
+            Class<V[]> arrayCls = (Class<V[]>) Array.newInstance(valueClass, 0).getClass();
             return Arrays.asList(supplier.get().fromJson(in, arrayCls));
         });
     }
 
-    public Iterator<?> readListLazy(Reader in) {
+    public Iterator<Object> readListLazy(Reader in) {
         return readListLazy(in, Object.class);
     }
 
@@ -146,7 +158,7 @@ public class GsonDecorator {
         if (in == null)
             return Collections.emptyIterator();
 
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+        requireNotNullValueClass(valueClass);
 
         return withRuntimeException(() -> {
             Gson gson = supplier.get();
@@ -155,10 +167,11 @@ public class GsonDecorator {
         });
     }
 
-    public Map<String, ?> readMap(Reader in) {
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> readMap(Reader in) {
         if (in == null)
             return Collections.emptyMap();
-        return (Map<String, ?>)withRuntimeException(() -> supplier.get().fromJson(in, LinkedHashMap.class));
+        return withRuntimeException(() -> supplier.get().fromJson(in, LinkedHashMap.class));
     }
 
     public <V> Map<String, V> readMap(Reader in, Class<V> valueClass) {
@@ -169,8 +182,8 @@ public class GsonDecorator {
         if (in == null)
             return Collections.emptyMap();
 
-        Objects.requireNonNull(keyClass, "'keyClass' should not be null");
-        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
+        requireNotNullKeyClass(keyClass);
+        requireNotNullValueClass(valueClass);
 
         return read(in, new MapParameterizedType<>(keyClass, valueClass));
     }
@@ -207,6 +220,14 @@ public class GsonDecorator {
     private static boolean isEmpty(String json) {
         json = json.trim();
         return "{}".equals(json) || "[]".equals(json);
+    }
+
+    private static <K> void requireNotNullKeyClass(Class<K> keyClass) {
+        Objects.requireNonNull(keyClass, "'keyClass' should not be null");
+    }
+
+    private static <V> void requireNotNullValueClass(Class<V> valueClass) {
+        Objects.requireNonNull(valueClass, "'valueClass' should not be null");
     }
 
 }

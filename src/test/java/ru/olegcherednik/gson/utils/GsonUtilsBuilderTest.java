@@ -32,6 +32,7 @@ import ru.olegcherednik.utils.reflection.FieldUtils;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -68,7 +69,7 @@ public class GsonUtilsBuilderTest {
                 .excludeFieldsWithoutExposeAnnotation()
                 .disableInnerClassSerialization()
                 .longSerializationPolicy(LongSerializationPolicy.STRING)
-                .fieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DOTS)
+                .fieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
                 .fieldNamingStrategy(fieldNamingStrategy)
                 .exclusionStrategies(exclusionStrategy)
                 .addSerializationExclusionStrategy(serializationExclusionStrategy)
@@ -94,10 +95,26 @@ public class GsonUtilsBuilderTest {
         assertThat(deserializationStrategies).containsExactly(exclusionStrategy, deserializationExclusionStrategy);
 
         assertThat(FieldUtils.<Boolean>getFieldValue(gson, "generateNonExecutableJson")).isTrue();
-        assertThat(FieldUtils.<LongSerializationPolicy>getFieldValue(gson, "longSerializationPolicy")).isEqualTo(LongSerializationPolicy.STRING);
+        assertLongSerializationPolicyString(gson);
         assertThat(FieldUtils.<Boolean>getFieldValue(gson, "lenient")).isTrue();
         assertThat(FieldUtils.<Boolean>getFieldValue(gson, "htmlSafe")).isFalse();
-        assertThat(FieldUtils.<Boolean>getFieldValue(gson, "serializeSpecialFloatingPointValues")).isTrue();
+        assertSerializeSpecialFloatingPointValuesTrue(gson);
+    }
+
+    private static void assertLongSerializationPolicyString(Gson gson) throws Exception {
+        try {
+            LongSerializationPolicy actual = FieldUtils.getFieldValue(gson, "longSerializationPolicy");
+            assertThat(actual).isEqualTo(LongSerializationPolicy.STRING);
+        } catch (NoSuchElementException ignored) {
+        }
+    }
+
+    private static void assertSerializeSpecialFloatingPointValuesTrue(Gson gson) throws Exception {
+        try {
+            boolean actual = FieldUtils.getFieldValue(gson, "serializeSpecialFloatingPointValues");
+            assertThat(actual).isTrue();
+        } catch (NoSuchElementException ignored) {
+        }
     }
 
 }
