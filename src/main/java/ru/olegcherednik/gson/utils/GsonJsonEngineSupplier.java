@@ -1,9 +1,6 @@
 package ru.olegcherednik.gson.utils;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import lombok.Getter;
 import lombok.Setter;
 import ru.olegcherednik.gson.utils.adapters.DateTypeAdapter;
@@ -16,7 +13,6 @@ import ru.olegcherednik.gson.utils.adapters.ZonedDateTimeTypeAdapter;
 import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.JsonSettings;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -56,19 +52,7 @@ public class GsonJsonEngineSupplier implements Supplier<JsonEngine> {
                 .andThen(b -> b.registerTypeAdapter(Date.class, new DateTypeAdapter(df).nullSafe()))
                 .andThen(b -> b.registerTypeAdapter(Instant.class, new InstantTypeAdapter(df).nullSafe()))
                 .andThen(b -> b.registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeTypeAdapter(df).nullSafe()))
-                .andThen(b -> b.registerTypeAdapterFactory(new EnumIdTypeAdapterFactory()))
-                .andThen(b -> b.registerTypeAdapter(Object.class, new TypeAdapter<Number>() {
-                    @Override
-                    public void write(JsonWriter out, Number value) throws IOException {
-                        int a = 0;
-                        a++;
-                    }
-
-                    @Override
-                    public Number read(JsonReader in) throws IOException {
-                        return null;
-                    }
-                }));
+                .andThen(b -> b.registerTypeAdapterFactory(new EnumIdTypeAdapterFactory()));
 
         customizer.accept(builder);
         return builder;

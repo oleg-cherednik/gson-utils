@@ -16,12 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.gson.utils;
 
+package ru.olegcherednik.json.gsonutils;
+
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
 import ru.olegcherednik.json.api.enumid.EnumId;
 import ru.olegcherednik.json.api.enumid.EnumIdJsonCreator;
+
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -31,71 +40,88 @@ import static org.assertj.core.api.Assertions.assertThatCode;
  * @since 17.10.2021
  */
 @Test
-public class EnumIdTest {
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
+public class EnumIdGsonUtilsTest {
 
     public void shouldRetrieveJsonWhenEnumIdValue() {
-//        Data data = new Data(Auto.AUDI, Color.RED);
-//        String json = GsonUtils.writeValue(data);
-//        assertThat(json).isEqualTo("{\"notNullAuto\":\"audi\",\"notNullColor\":\"Red\"}");
+        Data data = new Data(Auto.AUDI, Color.RED);
+        String json = Json.writeValue(data);
+        assertThat(json).isEqualTo("{\"notNullAuto\":\"audi\",\"notNullColor\":\"Red\"}");
     }
 
     @SuppressWarnings("ConstantConditions")
     public void shouldParseJsonWhenEnumIdValue() {
-//        String json = "{\"notNullAuto\":\"bmw\",\"notNullColor\":\"Green\"}";
-//        Data actual = GsonUtils.readValue(json, Data.class);
-//        assertThat(actual).isNotNull();
-//        assertThat(actual.notNullAuto).isSameAs(Auto.BMW);
-//        assertThat(actual.notNullColor).isSameAs(Color.GREEN);
-//        assertThat(actual.nullAuto).isNull();
-//        assertThat(actual.nullColor).isNull();
+        String json = "{\"notNullAuto\":\"bmw\",\"notNullColor\":\"Green\"}";
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isNotNull();
+        assertThat(actual.notNullAuto).isSameAs(Auto.BMW);
+        assertThat(actual.notNullColor).isSameAs(Color.GREEN);
+        assertThat(actual.nullAuto).isNull();
+        assertThat(actual.nullColor).isNull();
     }
 
     public void shouldRetrieveJsonWithNullWhenEnumIdValueAndSerializeNull() {
 //        Data data = new Data(Auto.MERCEDES, Color.BLUE);
-//        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().serializeNulls());
-//        String json = gson.writeValue(data);
+//        ObjectMapper mapper = JacksonUtilsHelper.createMapper()
+//                                                .setSerializationInclusion(JsonInclude.Include.ALWAYS);
+//        String json = mapper.writeValueAsString(data);
 //        assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
 //                                           + "\"nullAuto\":null,\"nullColor\":null}");
     }
 
-    public void shouldThrowExceptionWhenReadEnumIdNoFactoryMethod() {
-//        String json = GsonUtils.writeValue(City.SAINT_PETERSBURG);
-//        assertThat(json).isEqualTo("\"Saint-Petersburg\"");
+    public void shouldRetrieveJsonWithNullWhenEnumIdValueAndSerializeNullAngGetters() {
+//        Book data = new Book();
+//        data.setNotNullAuto(Auto.MERCEDES);
+//        data.setNotNullColor(Color.BLUE);
 //
-//        assertThatCode(() -> GsonUtils.readValue(json, City.class))
-//                .isExactlyInstanceOf(GsonUtilsException.class);
+//        ObjectMapper mapper = JacksonUtilsHelper.createMapper()
+//                                                .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
+//                                                .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.ANY)
+//                                                .setSerializationInclusion(JsonInclude.Include.ALWAYS);
+//
+//        String json = mapper.writeValueAsString(data);
+//        assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
+//                                           + "\"nullAuto\":null,\"nullColor\":null}");
+    }
+
+    public void shouldThrowJsonExceptionWhenReadEnumIdNoFactoryMethod() {
+        String json = Json.writeValue(City.SAINT_PETERSBURG);
+        assertThat(json).isEqualTo("\"Saint-Petersburg\"");
+
+        assertThatCode(() -> Json.readValue(json, City.class))
+                .isExactlyInstanceOf(JsonException.class);
     }
 
     public void shouldUseJsonCreatorAnnotatedMethodWhenParseIdAlsoExists() {
-//        String json = "\"Square_jsonCreator\"";
-//        Shape actual = GsonUtils.readValue(json, Shape.class);
-//        assertThat(actual).isNotNull();
-//        assertThat(actual).isSameAs(Shape.SQUARE);
+        String json = "\"Square_jsonCreator\"";
+        Shape actual = Json.readValue(json, Shape.class);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isSameAs(Shape.SQUARE);
     }
 
-    public void shouldThrowExceptionWhenDeserializeWithMultipleJsonCreatorMethods() {
-//        String json = GsonUtils.writeValue(Vodka.SMIRNOFF);
-//        assertThat(json).isEqualTo("\"smirnoff\"");
-//        assertThatCode(() -> GsonUtils.readValue(json, Vodka.class))
-//                .isExactlyInstanceOf(GsonUtilsException.class);
+    public void shouldThrowJsonExceptionWhenDeserializeWithMultipleJsonCreatorMethods() {
+        String json = Json.writeValue(Vodka.SMIRNOFF);
+        assertThat(json).isEqualTo("\"smirnoff\"");
+        assertThatCode(() -> Json.readValue(json, Vodka.class))
+                .isExactlyInstanceOf(JsonException.class);
     }
 
-    public void shouldThrowExceptionWithOriginalMessageWhenUseCustomFactoryMethod() {
-//        String json = GsonUtils.writeValue(People.OLEG_CHEREDNIK);
-//        assertThat(json).isEqualTo("\"oleg-cherednik\"");
-//        assertThatCode(() -> GsonUtils.readValue(json, People.class))
-//                .isExactlyInstanceOf(GsonUtilsException.class);
+    public void shouldThrowJsonExceptionWithOriginalMessageWhenUseCustomFactoryMethod() {
+        String json = Json.writeValue(People.OLEG_CHEREDNIK);
+        assertThat(json).isEqualTo("\"oleg-cherednik\"");
+        assertThatCode(() -> Json.readValue(json, People.class))
+                .isExactlyInstanceOf(JsonException.class);
     }
 
     public void shouldIgnoreNotCorrectFactoryMethodWhenMultiplePotentialFactoryMethodsExist() {
-//        String json = GsonUtils.writeValue(Country.RUSSIAN_FEDERATION);
-//        assertThat(json).isEqualTo("\"russian-federation\"");
-//        Country actual = GsonUtils.readValue(json, Country.class);
-//        assertThat(actual).isSameAs(Country.RUSSIAN_FEDERATION);
+        String json = Json.writeValue(Country.RUSSIAN_FEDERATION);
+        assertThat(json).isEqualTo("\"russian-federation\"");
+        Country actual = Json.readValue(json, Country.class);
+        assertThat(actual).isSameAs(Country.RUSSIAN_FEDERATION);
     }
 
     public void shouldUseNameWhenNoGetId() {
-//        assertThat(GsonUtils.writeValue(Shape.SQUARE)).isEqualTo("\"SQUARE\"");
+        assertThat(Json.writeValue(Shape.SQUARE)).isEqualTo("\"SQUARE\"");
     }
 
     public void shouldParseByNameCaseInsensitive() {
@@ -136,29 +162,31 @@ public class EnumIdTest {
     }
 
     public void shouldReadWriteConstantWithNullId() {
-//        Data data = new Data(Auto.AUDI, Color.NONE);
-//        String json = GsonUtils.writeValue(data);
-//        assertThat(json).isEqualTo("{\"notNullAuto\":\"audi\"}");
-//
-//        json = "{\"notNullAuto\":\"audi\",\"notNullColor\":null}";
-//        Data actual = GsonUtils.readValue(json, Data.class);
-//        assertThat(actual).isEqualTo(new Data(Auto.AUDI, Color.NONE));
+        Data data = new Data(Auto.AUDI, Color.NONE);
+        String json = Json.writeValue(data);
+        assertThat(json).isEqualTo("{\"notNullAuto\":\"audi\"}");
+
+        json = "{\"notNullAuto\":\"audi\",\"notNullColor\":null}";
+        Data actual = Json.readValue(json, Data.class);
+        assertThat(actual).isEqualTo(new Data(Auto.AUDI, Color.NONE));
     }
 
-    @SuppressWarnings({ "FieldCanBeLocal", "EqualsAndHashcode" })
-    private static class Data {
+    public void shouldRetrieveDefaultWhenObjectNull() {
+        assertThat(EnumId.getId(Auto.AUDI, Auto.BMW)).isSameAs(Auto.AUDI.getId());
+        assertThat(EnumId.getId(null, Auto.BMW)).isSameAs(Auto.BMW.getId());
+    }
+
+    @SuppressWarnings({ "FieldCanBeLocal", "EqualsHashCode" })
+    @RequiredArgsConstructor
+    private static final class Data {
 
         private final Auto notNullAuto;
         private final Color notNullColor;
         private final Auto nullAuto = null;
         private final Color nullColor = null;
 
-        public Data(Auto notNullAuto, Color notNullColor) {
-            this.notNullAuto = notNullAuto;
-            this.notNullColor = notNullColor;
-        }
-
         @Override
+        @SuppressWarnings("ConstantConditions")
         public boolean equals(Object obj) {
             if (this == obj)
                 return true;
@@ -169,9 +197,14 @@ public class EnumIdTest {
                     && nullAuto == data.nullAuto && nullColor == data.nullColor;
         }
 
+        @Override
+        public int hashCode() {
+            return Objects.hash(notNullAuto, notNullColor);
+        }
     }
 
     public enum Auto implements EnumId {
+
         AUDI("audi"),
         BMW("bmw"),
         MERCEDES("mercedes");
@@ -195,6 +228,7 @@ public class EnumIdTest {
     }
 
     public enum Color implements EnumId {
+
         RED("Red"),
         GREEN("Green"),
         BLUE("Blue"),
@@ -218,6 +252,7 @@ public class EnumIdTest {
     }
 
     public enum City implements EnumId {
+
         SAINT_PETERSBURG("Saint-Petersburg");
 
         private final String id;
@@ -234,6 +269,7 @@ public class EnumIdTest {
 
     @SuppressWarnings("unused")
     public enum Shape implements EnumId {
+
         SQUARE;
 
         @EnumIdJsonCreator
@@ -248,6 +284,7 @@ public class EnumIdTest {
 
     @SuppressWarnings("unused")
     public enum Vodka implements EnumId {
+
         SMIRNOFF("smirnoff");
 
         private final String id;
@@ -274,6 +311,7 @@ public class EnumIdTest {
     }
 
     public enum People implements EnumId {
+
         OLEG_CHEREDNIK("oleg-cherednik");
 
         private final String id;
@@ -294,19 +332,13 @@ public class EnumIdTest {
     }
 
     @SuppressWarnings("unused")
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
     public enum Country implements EnumId {
+
         RUSSIAN_FEDERATION("russian-federation");
 
         private final String id;
-
-        Country(String id) {
-            this.id = id;
-        }
-
-        @Override
-        public String getId() {
-            return id;
-        }
 
         @EnumIdJsonCreator
         public static Country one(int id) {
@@ -322,6 +354,18 @@ public class EnumIdTest {
         public static Country three(String id) {
             return EnumId.parseId(Country.class, id);
         }
+    }
+
+    @Getter
+    @Setter
+    @EqualsAndHashCode
+    private static final class Book {
+
+        private Auto notNullAuto;
+        private Color notNullColor;
+        private Auto nullAuto;
+        private Color nullColor;
+
     }
 
 }

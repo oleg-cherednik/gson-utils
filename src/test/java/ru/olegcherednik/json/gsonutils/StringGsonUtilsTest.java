@@ -42,7 +42,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * @since 07.01.2021
  */
 @Test
-public class StringJacksonUtilsTest {
+public class StringGsonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.readValue((String) null, Object.class)).isNull();
@@ -157,17 +157,14 @@ public class StringJacksonUtilsTest {
     }
 
     public void shouldRetrieveIntegerValueMapWhenReadAsMapWithIntKeyAndBookType() throws IOException {
-        Map<Integer, Book> expected = MapUtils.of(
-                1, new Book(
-                        "Thinking in Java",
-                        ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                        1998,
-                        ListUtils.of("Bruce Eckel")),
-                2, new Book(
-                        "Ready for a victory",
-                        ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                        2020,
-                        ListUtils.of("Oleg Cherednik"))
+        Map<Integer, Book> expected = MapUtils.of(1, new Book("Thinking in Java",
+                                                              ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                                                              1998,
+                                                              ListUtils.of("Bruce Eckel")),
+                                                  2, new Book("Ready for a victory",
+                                                              ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
+                                                              2020,
+                                                              ListUtils.of("Oleg Cherednik"))
         );
 
         String json = ResourceData.getResourceAsString("/books_dict_int_key.json");

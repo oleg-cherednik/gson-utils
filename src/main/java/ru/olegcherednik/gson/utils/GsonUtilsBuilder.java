@@ -27,7 +27,6 @@ import com.google.gson.LongSerializationPolicy;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
-import ru.olegcherednik.gson.utils.adapters.CustomObjectTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.DateTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.EnumIdTypeAdapterFactory;
 import ru.olegcherednik.gson.utils.adapters.InstantTypeAdapter;
@@ -35,6 +34,7 @@ import ru.olegcherednik.gson.utils.adapters.IteratorTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.LocalDateTimeTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.OffsetDateTimeTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.ZonedDateTimeTypeAdapter;
+import ru.olegcherednik.json.api.JsonException;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
@@ -43,10 +43,8 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
@@ -86,7 +84,7 @@ public class GsonUtilsBuilder {
             updateFactories(gson);
             return gson;
         } catch (Exception e) {
-            throw new GsonUtilsException(e);
+            throw new JsonException(e);
         }
     }
 

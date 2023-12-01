@@ -25,8 +25,8 @@ import com.google.gson.stream.JsonWriter;
 import org.mockito.ArgumentCaptor;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import ru.olegcherednik.gson.utils.GsonUtilsException;
 import ru.olegcherednik.gson.utils.utils.ListUtils;
+import ru.olegcherednik.json.api.JsonException;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -55,7 +55,7 @@ public class IteratorTypeAdapterTest {
 
     @BeforeMethod
     public void init() {
-        elementTypeAdapter = (TypeAdapter<String>)mock(TypeAdapter.class);
+        elementTypeAdapter = (TypeAdapter<String>) mock(TypeAdapter.class);
         adapter = new IteratorTypeAdapter<>(elementTypeAdapter);
     }
 
@@ -67,23 +67,23 @@ public class IteratorTypeAdapterTest {
         assertThat(it).isNull();
     }
 
-    public void shouldThrowGsonUtilsExceptionWhenReadAndHasNextThrowsException() throws IOException {
+    public void shouldThrowJsonExceptionWhenReadAndHasNextThrowsException() throws IOException {
         JsonReader in = mock(JsonReader.class);
         when(in.hasNext()).thenThrow(new IOException());
 
         assertThatThrownBy(() -> adapter.read(in).hasNext())
-                .isExactlyInstanceOf(GsonUtilsException.class)
+                .isExactlyInstanceOf(JsonException.class)
                 .hasCauseInstanceOf(IOException.class);
     }
 
-    public void shouldThrowGsonUtilsExceptionWhenReadAndNextThrowsException() throws IOException {
+    public void shouldThrowJsonExceptionWhenReadAndNextThrowsException() throws IOException {
         JsonReader in = mock(JsonReader.class);
 
         when(in.hasNext()).thenReturn(true);
         when(elementTypeAdapter.read(same(in))).thenThrow(new IOException());
 
         assertThatThrownBy(() -> adapter.read(in).next())
-                .isExactlyInstanceOf(GsonUtilsException.class)
+                .isExactlyInstanceOf(JsonException.class)
                 .hasCauseInstanceOf(IOException.class);
     }
 
@@ -119,9 +119,9 @@ public class IteratorTypeAdapterTest {
         }
     }
 
-    public void shouldThrowGsonUtilsExceptionWhenFactoryThrowsException() {
+    public void shouldThrowJsonExceptionWhenFactoryThrowsException() {
         assertThatThrownBy(() -> IteratorTypeAdapter.INSTANCE.create(null, null))
-                .isExactlyInstanceOf(GsonUtilsException.class)
+                .isExactlyInstanceOf(JsonException.class)
                 .hasCauseInstanceOf(NullPointerException.class);
     }
 

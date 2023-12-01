@@ -25,15 +25,10 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import ru.olegcherednik.gson.utils.GsonUtilsException;
-import ru.olegcherednik.gson.utils.JsonCreator;
-import ru.olegcherednik.json.api.EnumId;
+import ru.olegcherednik.json.api.enumid.EnumId;
+import ru.olegcherednik.json.api.enumid.EnumIdSupport;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -49,7 +44,7 @@ public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
         if (!EnumId.class.isAssignableFrom(rawType))
             return null;
 
-        Function<String, T> read = createReadFunc(rawType);
+        Function<String, T> read = EnumIdSupport.createFactory(rawType);
 
         return new TypeAdapter<T>() {
             @Override
@@ -75,78 +70,6 @@ public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
             }
         };
 
-    }
-
-    private static <T> Function<String, T> createReadFunc(Class<T> rawType) {
-        List<Method> methods = getJsonCreateMethods(rawType);
-
-        if (methods.size() > 1) {
-            return id -> {
-                throw new GsonUtilsException("Multiple methods with '" + JsonCreator.class.getSimpleName()
-                                                     + "' annotation was found in '" + rawType.getSimpleName() + "' class");
-            };
-        }
-
-        if (methods.size() == 1)
-            return createFunc(methods.get(0));
-
-        Method method = getParseIdMethod(rawType);
-
-        if (method == null) {
-            return id -> {
-                throw new GsonUtilsException("Factory method for EnumIs '"
-                                                     + rawType.getSimpleName() + "' was not found");
-            };
-        }
-
-        return createFunc(method);
-    }
-
-    private static <T> Function<String, T> createFunc(Method method) {
-//        return id -> {
-//            try {
-//                return MethodUtils.invokeStaticMethod(method, id);
-//            } catch (Exception e) {
-//                throw new GsonUtilsException(e.getCause());
-//            }
-//        };
-        return null;
-    }
-
-    private static List<Method> getJsonCreateMethods(final Class<?> rawType) {
-        List<Method> res = new ArrayList<>();
-        Class<?> type = rawType;
-
-        while (type != Object.class) {
-            for (Method method : type.getDeclaredMethods())
-                if (isValidFactoryMethod(method))
-                    res.add(method);
-
-            type = type.getSuperclass();
-        }
-
-        return res;
-    }
-
-    private static Method getParseIdMethod(Class<?> rawType) {
-        while (rawType != Object.class) {
-            try {
-                return rawType.getDeclaredMethod("parseId", String.class);
-            } catch (NoSuchMethodException ignore) {
-                // ignore
-            }
-
-            rawType = rawType.getSuperclass();
-        }
-
-        return null;
-    }
-
-    private static boolean isValidFactoryMethod(Method method) {
-        return Modifier.isStatic(method.getModifiers())
-                && method.isAnnotationPresent(JsonCreator.class)
-                && method.getParameterCount() == 1
-                && method.getParameterTypes()[0] == String.class;
     }
 
 }
