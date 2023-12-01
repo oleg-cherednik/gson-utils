@@ -18,6 +18,7 @@
  */
 package ru.olegcherednik.gson.utils;
 
+import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Test;
 import ru.olegcherednik.gson.utils.dto.Data;
@@ -148,6 +149,7 @@ public class ReadStringGsonUtilsTest {
     }
 
     public void shouldRetrieveListOfMapWhenRead() throws IOException {
+        Data data = new Gson().fromJson("{}", Data.class);
         String json = getResourceAsString("/books.json");
         List<Map<String, Object>> actual = GsonUtils.readListOfMap(json);
 

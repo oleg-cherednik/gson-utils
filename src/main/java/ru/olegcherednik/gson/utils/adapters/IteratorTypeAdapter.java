@@ -21,16 +21,14 @@ package ru.olegcherednik.gson.utils.adapters;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
-import com.google.gson.internal.$Gson$Types;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import ru.olegcherednik.gson.utils.GsonUtilsException;
-import ru.olegcherednik.utils.reflection.ConstructorUtils;
-import ru.olegcherednik.utils.reflection.MethodUtils;
+import ru.olegcherednik.json.api.JsonException;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Iterator;
@@ -51,25 +49,22 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
                 if (!Iterator.class.isAssignableFrom(typeToken.getRawType()))
                     return null;
 
-                Type elementType = getIteratorElementType(typeToken.getType(), typeToken.getRawType());
+                ParameterizedType parameterizedType = (ParameterizedType) typeToken.getType();
+                Type elementType = parameterizedType.getActualTypeArguments()[0];
                 TypeAdapter<?> typeAdapter = gson.getAdapter(TypeToken.get(elementType));
-                typeAdapter = ConstructorUtils.invokeConstructor("com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper",
-                        Gson.class, gson,
-                        TypeAdapter.class, typeAdapter,
-                        Type.class, elementType);
                 //noinspection unchecked,rawtypes
-                return new IteratorTypeAdapter(typeAdapter);
+                return new IteratorTypeAdapter(createTypeAdapter(gson, typeAdapter, elementType));
             } catch (Exception e) {
-                throw new GsonUtilsException(e);
+                throw new JsonException(e);
             }
         }
 
-        private Type getIteratorElementType(Type context, Class<?> contextRawType) throws Exception {
-            Type type = MethodUtils.invokeStaticMethod($Gson$Types.class, "getSupertype",
-                    Type.class, context,
-                    Class.class, contextRawType,
-                    Class.class, Iterator.class);
-            return ((ParameterizedType)type).getActualTypeArguments()[0];
+        private TypeAdapter<?> createTypeAdapter(Gson gson, TypeAdapter<?> typeAdapter, Type elementType)
+                throws Exception {
+            Class<?> cls = Class.forName("com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper");
+            Constructor<?> con = cls.getDeclaredConstructor(Gson.class, TypeAdapter.class, Type.class);
+            con.setAccessible(true);
+            return (TypeAdapter<?>) con.newInstance(gson, typeAdapter, elementType);
         }
     };
 
@@ -109,7 +104,7 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
                 try {
                     return in.hasNext();
                 } catch (IOException e) {
-                    throw new GsonUtilsException(e);
+                    throw new JsonException(e);
                 }
             }
 
@@ -120,7 +115,7 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
                         throw new NoSuchElementException();
                     return elementTypeAdapter.read(in);
                 } catch (IOException e) {
-                    throw new GsonUtilsException(e);
+                    throw new JsonException(e);
                 }
             }
         };

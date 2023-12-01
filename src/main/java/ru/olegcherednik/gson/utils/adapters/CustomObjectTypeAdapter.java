@@ -21,17 +21,13 @@ package ru.olegcherednik.gson.utils.adapters;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
-import com.google.gson.internal.bind.ObjectTypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import ru.olegcherednik.gson.utils.GsonUtilsException;
-import ru.olegcherednik.utils.reflection.FieldUtils;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.NoSuchElementException;
 
 import static com.google.gson.stream.JsonToken.NUMBER;
 
@@ -47,23 +43,24 @@ public class CustomObjectTypeAdapter extends TypeAdapter<Object> {
     public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
         @Override
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-            TypeAdapter<Object> typeAdapter = (TypeAdapter<Object>)getTypeAdapterFactory().<T>create(gson, type);
-            return typeAdapter == null ? null : (TypeAdapter<T>)new CustomObjectTypeAdapter(gson, typeAdapter);
+//            TypeAdapter<Object> typeAdapter = (TypeAdapter<Object>)getTypeAdapterFactory().<T>create(gson, type);
+//            return typeAdapter == null ? null : (TypeAdapter<T>)new CustomObjectTypeAdapter(gson, typeAdapter);
+            return null;
         }
 
-        private TypeAdapterFactory getTypeAdapterFactory() {
-            try {
-                return FieldUtils.getStaticFieldValue(ObjectTypeAdapter.class, "FACTORY");
-            } catch (NoSuchElementException e) {
-                try {
-                    return FieldUtils.getStaticFieldValue(ObjectTypeAdapter.class, "DOUBLE_FACTORY");
-                } catch (Exception ee) {
-                    throw new GsonUtilsException(ee);
-                }
-            } catch (Exception e) {
-                throw new GsonUtilsException(e);
-            }
-        }
+//        private TypeAdapterFactory getTypeAdapterFactory() {
+//            try {
+//                return FieldUtils.getStaticFieldValue(ObjectTypeAdapter.class, "FACTORY");
+//            } catch (NoSuchElementException e) {
+//                try {
+//                    return FieldUtils.getStaticFieldValue(ObjectTypeAdapter.class, "DOUBLE_FACTORY");
+//                } catch (Exception ee) {
+//                    throw new GsonUtilsException(ee);
+//                }
+//            } catch (Exception e) {
+//                throw new GsonUtilsException(e);
+//            }
+//        }
     };
 
     public CustomObjectTypeAdapter(Gson gson, TypeAdapter<Object> delegate) {

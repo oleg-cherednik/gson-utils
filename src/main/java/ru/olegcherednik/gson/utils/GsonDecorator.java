@@ -23,6 +23,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import ru.olegcherednik.gson.utils.type.IteratorParameterizedType;
 import ru.olegcherednik.gson.utils.type.MapParameterizedType;
+import ru.olegcherednik.json.api.JsonException;
 
 import java.io.Reader;
 import java.io.Writer;
@@ -208,11 +209,11 @@ public class GsonDecorator {
 
     // ---------- misc ----------
 
-    private static <V> V withRuntimeException(Callable<V> task) {
+    public static <V> V withRuntimeException(Callable<V> task) {
         try {
             return task.call();
         } catch (Exception e) {
-            throw new GsonUtilsException(e);
+            throw new JsonException(e);
         }
     }
 

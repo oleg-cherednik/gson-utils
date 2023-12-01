@@ -21,6 +21,7 @@ package ru.olegcherednik.gson.utils.adapters;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.time.ZoneId;
@@ -32,27 +33,19 @@ import java.util.function.UnaryOperator;
  * @author Oleg Cherednik
  * @since 08.01.2021
  */
+@RequiredArgsConstructor
 public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
 
-    protected final UnaryOperator<ZoneId> zoneModifier;
     protected final DateTimeFormatter df;
-
-    public ZonedDateTimeTypeAdapter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter df) {
-        this.zoneModifier = zoneModifier;
-        this.df = df;
-    }
 
     @Override
     public void write(JsonWriter out, ZonedDateTime value) throws IOException {
-        ZoneId zone = zoneModifier.apply(value.getZone());
-        out.value(df.format(value.withZoneSameInstant(zone)));
+        out.value(df.format(value));
     }
 
     @Override
     public ZonedDateTime read(JsonReader in) throws IOException {
-        ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
-        DateTimeFormatter dateTimeFormatter = df.getZone() == null ? df.withZone(zone) : df;
-        return ZonedDateTime.parse(in.nextString(), dateTimeFormatter);
+        return ZonedDateTime.parse(in.nextString(), df);
     }
 
 }

@@ -47,17 +47,17 @@ public class ZonedDateTimePrettyPrintGsonUtilsTest {
                 '}');
     }
 
-    public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
-        GsonDecorator gsonUtils = GsonUtilsHelper.createPrettyPrintGsonDecorator(
-                new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneId.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
-
-        Map<String, ZonedDateTime> map = ZonedDateTimeGsonUtilsTest.createData();
-        String actual = gsonUtils.writeValue(map);
-        assertThat(withUnixLineSeparator(actual)).isEqualTo('{' + UNIX_LINE_SEPARATOR +
-                "  \"UTC\": \"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"," + UNIX_LINE_SEPARATOR +
-                "  \"Asia/Singapore\": \"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\"," + UNIX_LINE_SEPARATOR +
-                "  \"Australia/Sydney\": \"2017-07-23T11:57:14.225+08:00[Asia/Singapore]\"" + UNIX_LINE_SEPARATOR +
-                '}');
-    }
+//    public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() {
+//        GsonDecorator gsonUtils = GsonUtilsHelper.createPrettyPrintGsonDecorator(
+//                new GsonUtilsBuilder().zonedDateTimeFormatter(zone -> ZoneId.of("Asia/Singapore"), ISO_ZONED_DATE_TIME));
+//
+//        Map<String, ZonedDateTime> map = ZonedDateTimeGsonUtilsTest.createData();
+//        String actual = gsonUtils.writeValue(map);
+//        assertThat(withUnixLineSeparator(actual)).isEqualTo('{' + UNIX_LINE_SEPARATOR +
+//                "  \"UTC\": \"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\"," + UNIX_LINE_SEPARATOR +
+//                "  \"Asia/Singapore\": \"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\"," + UNIX_LINE_SEPARATOR +
+//                "  \"Australia/Sydney\": \"2017-07-23T11:57:14.225+08:00[Asia/Singapore]\"" + UNIX_LINE_SEPARATOR +
+//                '}');
+//    }
 
 }

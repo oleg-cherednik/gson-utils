@@ -21,6 +21,7 @@ package ru.olegcherednik.gson.utils.adapters;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
@@ -33,28 +34,20 @@ import java.util.function.UnaryOperator;
  * @author Oleg Cherednik
  * @since 17.10.2021
  */
+@RequiredArgsConstructor
 public class OffsetDateTimeTypeAdapter extends TypeAdapter<OffsetDateTime> {
 
-    protected final UnaryOperator<ZoneId> zoneModifier;
     protected final DateTimeFormatter df;
-
-    public OffsetDateTimeTypeAdapter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter df) {
-        this.zoneModifier = zoneModifier;
-        this.df = df;
-    }
 
     @Override
     public void write(JsonWriter out, OffsetDateTime value) throws IOException {
-        ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
         ZonedDateTime zonedDateTime = value.toZonedDateTime();
-        out.value(df.format(zonedDateTime.withZoneSameInstant(zone)));
+        out.value(df.format(zonedDateTime));
     }
 
     @Override
     public OffsetDateTime read(JsonReader in) throws IOException {
-        ZoneId zone = zoneModifier.apply(ZoneId.systemDefault());
-        DateTimeFormatter dateTimeFormatter = df.getZone() == null ? df.withZone(zone) : df;
-        ZonedDateTime zonedDateTime = ZonedDateTime.parse(in.nextString(), dateTimeFormatter);
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(in.nextString(), df);
         return zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toOffsetDateTime();
     }
 

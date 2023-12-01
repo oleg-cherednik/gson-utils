@@ -28,7 +28,6 @@ import com.google.gson.stream.JsonWriter;
 import ru.olegcherednik.gson.utils.EnumId;
 import ru.olegcherednik.gson.utils.GsonUtilsException;
 import ru.olegcherednik.gson.utils.JsonCreator;
-import ru.olegcherednik.utils.reflection.MethodUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -45,7 +44,7 @@ public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
 
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        Class<T> rawType = (Class<T>)type.getRawType();
+        Class<T> rawType = (Class<T>) type.getRawType();
 
         if (!EnumId.class.isAssignableFrom(rawType))
             return null;
@@ -55,7 +54,7 @@ public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
         return new TypeAdapter<T>() {
             @Override
             public void write(JsonWriter out, T value) throws IOException {
-                String id = value == null ? null : ((EnumId)value).getId();
+                String id = value == null ? null : ((EnumId) value).getId();
 
                 if (id == null)
                     out.nullValue();
@@ -84,7 +83,7 @@ public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
         if (methods.size() > 1) {
             return id -> {
                 throw new GsonUtilsException("Multiple methods with '" + JsonCreator.class.getSimpleName()
-                        + "' annotation was found in '" + rawType.getSimpleName() + "' class");
+                                                     + "' annotation was found in '" + rawType.getSimpleName() + "' class");
             };
         }
 
@@ -96,7 +95,7 @@ public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
         if (method == null) {
             return id -> {
                 throw new GsonUtilsException("Factory method for EnumIs '"
-                        + rawType.getSimpleName() + "' was not found");
+                                                     + rawType.getSimpleName() + "' was not found");
             };
         }
 
@@ -104,13 +103,14 @@ public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
     }
 
     private static <T> Function<String, T> createFunc(Method method) {
-        return id -> {
-            try {
-                return MethodUtils.invokeStaticMethod(method, id);
-            } catch (Exception e) {
-                throw new GsonUtilsException(e.getCause());
-            }
-        };
+//        return id -> {
+//            try {
+//                return MethodUtils.invokeStaticMethod(method, id);
+//            } catch (Exception e) {
+//                throw new GsonUtilsException(e.getCause());
+//            }
+//        };
+        return null;
     }
 
     private static List<Method> getJsonCreateMethods(final Class<?> rawType) {

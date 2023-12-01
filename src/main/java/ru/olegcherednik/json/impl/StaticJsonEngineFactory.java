@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import ru.olegcherednik.gson.utils.GsonJsonEngine;
 import ru.olegcherednik.gson.utils.GsonJsonEngineSupplier;
 import ru.olegcherednik.gson.utils.GsonUtilsHelper;
-import ru.olegcherednik.json.JsonEngine;
-import ru.olegcherednik.json.JsonEngineFactory;
+import ru.olegcherednik.json.api.JsonEngine;
+import ru.olegcherednik.json.api.JsonEngineFactory;
+import ru.olegcherednik.json.api.JsonSettings;
 
-import java.util.function.Supplier;
+import java.util.Objects;
 
 /**
  * @author Oleg Cherednik
@@ -21,20 +22,25 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
 
     private static final JsonEngineFactory INSTANCE = new StaticJsonEngineFactory();
 
-    private final Supplier<JsonEngine> defaultJsonEngineSupplier =
-            new GsonJsonEngineSupplier();
+    private final GsonJsonEngineSupplier jsonEngineSupplier = new GsonJsonEngineSupplier();
 
+    @SuppressWarnings("unused")
     public static JsonEngineFactory getInstance() {
         return INSTANCE;
     }
 
     @Override
     public JsonEngine createJsonEngine() {
-        return new GsonJsonEngine(GsonUtilsHelper.createGson());
+        return jsonEngineSupplier.get();
     }
 
     @Override
     public JsonEngine createJsonEnginePrettyPrint() {
-        return new GsonJsonEngine(GsonUtilsHelper.createPrettyPrintGson());
+        return jsonEngineSupplier.getPrettyPrint();
+    }
+
+    @Override
+    public void useSettings(JsonSettings jsonSettings) {
+        jsonEngineSupplier.setJsonSettings(Objects.requireNonNull(jsonSettings));
     }
 }

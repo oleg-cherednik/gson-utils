@@ -26,7 +26,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
-import com.google.gson.internal.bind.ObjectTypeAdapter;
+import com.google.gson.reflect.TypeToken;
 import ru.olegcherednik.gson.utils.adapters.CustomObjectTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.DateTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.EnumIdTypeAdapterFactory;
@@ -35,20 +35,17 @@ import ru.olegcherednik.gson.utils.adapters.IteratorTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.LocalDateTimeTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.OffsetDateTimeTypeAdapter;
 import ru.olegcherednik.gson.utils.adapters.ZonedDateTimeTypeAdapter;
-import ru.olegcherednik.utils.reflection.FieldUtils;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
@@ -59,22 +56,22 @@ import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
  */
 public class GsonUtilsBuilder {
 
-    public static final UnaryOperator<ZoneId> ZONE_MODIFIER_USE_ORIGINAL = UnaryOperator.identity();
-    public static final UnaryOperator<ZoneId> ZONE_MODIFIER_TO_UTC = zone -> ZoneOffset.UTC;
+    private DateTimeFormatter df = ISO_OFFSET_DATE_TIME;
 
-    protected Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>)GsonBuilder::enableComplexMapKeySerialization)
+    protected Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>) GsonBuilder::enableComplexMapKeySerialization)
             .andThen(b -> b.registerTypeAdapterFactory(IteratorTypeAdapter.INSTANCE))
-            .andThen(b -> b.registerTypeAdapter(ZonedDateTime.class,
-                    new ZonedDateTimeTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME).nullSafe()))
-            .andThen(b -> b.registerTypeAdapter(LocalDateTime.class,
-                    new LocalDateTimeTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME).nullSafe()))
-            .andThen(b -> b.registerTypeAdapter(Date.class,
-                    new DateTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME).nullSafe()))
-            .andThen(b -> b.registerTypeAdapter(Instant.class,
-                    new InstantTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME).nullSafe()))
-            .andThen(b -> b.registerTypeAdapter(OffsetDateTime.class,
-                    new OffsetDateTimeTypeAdapter(ZONE_MODIFIER_TO_UTC, ISO_OFFSET_DATE_TIME).nullSafe()))
-            .andThen(b -> b.registerTypeAdapterFactory(new EnumIdTypeAdapterFactory()));
+            .andThen(b -> b.registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(df).nullSafe()))
+            .andThen(b -> b.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(df).nullSafe()))
+            .andThen(b -> b.registerTypeAdapter(Date.class, new DateTypeAdapter(df).nullSafe()))
+            .andThen(b -> b.registerTypeAdapter(Instant.class, new InstantTypeAdapter(df).nullSafe()))
+            .andThen(b -> b.registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeTypeAdapter(df).nullSafe()))
+            .andThen(b -> b.registerTypeAdapterFactory(new EnumIdTypeAdapterFactory()))
+            .andThen(b -> b.registerTypeAdapterFactory(new TypeAdapterFactory() {
+                @Override
+                public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+                    return null;
+                }
+            }));
 
     public Gson gson() {
         return postCreate(gsonBuilder().create());
@@ -95,9 +92,9 @@ public class GsonUtilsBuilder {
 
     protected void updateFactories(Gson gson) throws Exception {
 //        List<TypeAdapterFactory> factories = FieldUtils.<List<TypeAdapterFactory>>getFieldValue(gson, "factories")
-//                .stream()
-//                .map(factory -> factory == ObjectTypeAdapter.FACTORY ? CustomObjectTypeAdapter.FACTORY : factory)
-//                .collect(Collectors.toList());
+//                                                       .stream()
+//                                                       .map(factory -> factory == ObjectTypeAdapter.FACTORY ? CustomObjectTypeAdapter.FACTORY : factory)
+//                                                       .collect(Collectors.toList());
 //
 //        FieldUtils.setFieldValue(gson, "factories", factories);
     }
@@ -110,52 +107,37 @@ public class GsonUtilsBuilder {
 
     // ---------- extended ----------
 
-    public GsonUtilsBuilder zonedModifier(UnaryOperator<ZoneId> zoneModifier) {
-        return zonedDateTimeFormatter(zoneModifier, ISO_OFFSET_DATE_TIME)
-                .localDateTimeFormatter(zoneModifier, ISO_OFFSET_DATE_TIME)
-                .dateFormatter(zoneModifier, ISO_OFFSET_DATE_TIME)
-                .instantFormatter(zoneModifier, ISO_OFFSET_DATE_TIME)
-                .offsetDateTimeFormatter(zoneModifier, ISO_OFFSET_DATE_TIME);
+    public GsonUtilsBuilder dateTimeFormatter(DateTimeFormatter df) {
+        this.df = Objects.requireNonNull(df);
+        return zonedDateTimeFormatter(df)
+                .localDateTimeFormatter(df)
+                .dateFormatter(df)
+                .instantFormatter(df)
+                .offsetDateTimeFormatter(df);
     }
 
-    public GsonUtilsBuilder dateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
-        return zonedDateTimeFormatter(ZONE_MODIFIER_TO_UTC, dateTimeFormatter)
-                .localDateTimeFormatter(ZONE_MODIFIER_TO_UTC, dateTimeFormatter)
-                .dateFormatter(ZONE_MODIFIER_TO_UTC, dateTimeFormatter)
-                .instantFormatter(ZONE_MODIFIER_TO_UTC, dateTimeFormatter)
-                .offsetDateTimeFormatter(ZONE_MODIFIER_TO_UTC, dateTimeFormatter);
-    }
-
-    public GsonUtilsBuilder dateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        return zonedDateTimeFormatter(zoneModifier, dateTimeFormatter)
-                .localDateTimeFormatter(zoneModifier, dateTimeFormatter)
-                .dateFormatter(zoneModifier, dateTimeFormatter)
-                .instantFormatter(zoneModifier, dateTimeFormatter)
-                .offsetDateTimeFormatter(zoneModifier, dateTimeFormatter);
-    }
-
-    public GsonUtilsBuilder zonedDateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        TypeAdapter<ZonedDateTime> typeAdapter = new ZonedDateTimeTypeAdapter(zoneModifier, dateTimeFormatter);
+    public GsonUtilsBuilder zonedDateTimeFormatter(DateTimeFormatter df) {
+        TypeAdapter<ZonedDateTime> typeAdapter = new ZonedDateTimeTypeAdapter(df);
         return registerTypeAdapter(ZonedDateTime.class, typeAdapter.nullSafe());
     }
 
-    public GsonUtilsBuilder localDateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        TypeAdapter<LocalDateTime> typeAdapter = new LocalDateTimeTypeAdapter(zoneModifier, dateTimeFormatter);
+    public GsonUtilsBuilder localDateTimeFormatter(DateTimeFormatter df) {
+        TypeAdapter<LocalDateTime> typeAdapter = new LocalDateTimeTypeAdapter(df);
         return registerTypeAdapter(LocalDateTime.class, typeAdapter.nullSafe());
     }
 
-    public GsonUtilsBuilder dateFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        TypeAdapter<Date> typeAdapter = new DateTypeAdapter(zoneModifier, dateTimeFormatter);
+    public GsonUtilsBuilder dateFormatter(DateTimeFormatter df) {
+        TypeAdapter<Date> typeAdapter = new DateTypeAdapter(df);
         return registerTypeAdapter(Date.class, typeAdapter.nullSafe());
     }
 
-    public GsonUtilsBuilder instantFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        TypeAdapter<Instant> typeAdapter = new InstantTypeAdapter(zoneModifier, dateTimeFormatter);
+    public GsonUtilsBuilder instantFormatter(DateTimeFormatter df) {
+        TypeAdapter<Instant> typeAdapter = new InstantTypeAdapter(df);
         return registerTypeAdapter(Instant.class, typeAdapter.nullSafe());
     }
 
-    public GsonUtilsBuilder offsetDateTimeFormatter(UnaryOperator<ZoneId> zoneModifier, DateTimeFormatter dateTimeFormatter) {
-        TypeAdapter<OffsetDateTime> typeAdapter = new OffsetDateTimeTypeAdapter(zoneModifier, dateTimeFormatter);
+    public GsonUtilsBuilder offsetDateTimeFormatter(DateTimeFormatter df) {
+        TypeAdapter<OffsetDateTime> typeAdapter = new OffsetDateTimeTypeAdapter(df);
         return registerTypeAdapter(OffsetDateTime.class, typeAdapter.nullSafe());
     }
 

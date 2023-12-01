@@ -6,7 +6,7 @@ import com.google.gson.stream.JsonReader;
 import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.gson.utils.type.IteratorParameterizedType;
 import ru.olegcherednik.gson.utils.type.MapParameterizedType;
-import ru.olegcherednik.json.JsonEngine;
+import ru.olegcherednik.json.api.JsonEngine;
 
 import java.io.Reader;
 import java.io.Writer;

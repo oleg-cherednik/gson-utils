@@ -31,7 +31,6 @@ import java.util.Map;
 
 import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static ru.olegcherednik.gson.utils.GsonUtilsBuilder.ZONE_MODIFIER_USE_ORIGINAL;
 import static ru.olegcherednik.gson.utils.utils.PrettyPrintUtils.UNIX_LINE_SEPARATOR;
 import static ru.olegcherednik.gson.utils.utils.PrettyPrintUtils.withUnixLineSeparator;
 
@@ -89,14 +88,14 @@ public class LocalDateTimeGsonUtilsTest {
         assertThat(json).isEqualTo("{\"notNullValue\":\"" + str + "\"}");
     }
 
-    public void shouldRetrieveJsonWithCustomFormatWriteSerializeWithCustomFormatter() throws IOException {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
-        String str = dateTimeFormatter.format(localDateTime.atZone(ZoneId.systemDefault()));
-        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder()
-                .localDateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, dateTimeFormatter));
-        String json = gson.writeValue(data);
-        assertThat(json).isEqualTo("{\"notNullValue\":\"" + str + "\"}");
-    }
+//    public void shouldRetrieveJsonWithCustomFormatWriteSerializeWithCustomFormatter() throws IOException {
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
+//        String str = dateTimeFormatter.format(localDateTime.atZone(ZoneId.systemDefault()));
+//        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder()
+//                .localDateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, dateTimeFormatter));
+//        String json = gson.writeValue(data);
+//        assertThat(json).isEqualTo("{\"notNullValue\":\"" + str + "\"}");
+//    }
 
     @SuppressWarnings({ "unused", "FieldCanBeLocal" })
     private static class Data {

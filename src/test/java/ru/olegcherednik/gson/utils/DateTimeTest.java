@@ -34,7 +34,6 @@ import java.util.Map;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static ru.olegcherednik.gson.utils.GsonUtilsBuilder.ZONE_MODIFIER_USE_ORIGINAL;
 
 /**
  * @author Oleg Cherednik
@@ -53,15 +52,15 @@ public class DateTimeTest {
         checkData(GsonUtils.readValue(json, Data.class));
     }
 
-    public void shouldUseGivenZoneWhenConvertAllDateFormat() {
-        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder()
-                .zonedModifier(ZONE_MODIFIER_USE_ORIGINAL));
-        String json = gson.writeValue(data);
-        String expected = ISO_OFFSET_DATE_TIME.format(ZonedDateTime.ofInstant(date.toInstant(),
-                ZoneOffset.systemDefault()));
-        checkJson(json, expected);
-        checkData(gson.readValue(json, Data.class));
-    }
+//    public void shouldUseGivenZoneWhenConvertAllDateFormat() {
+//        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder()
+//                .zonedModifier(ZONE_MODIFIER_USE_ORIGINAL));
+//        String json = gson.writeValue(data);
+//        String expected = ISO_OFFSET_DATE_TIME.format(ZonedDateTime.ofInstant(date.toInstant(),
+//                ZoneOffset.systemDefault()));
+//        checkJson(json, expected);
+//        checkData(gson.readValue(json, Data.class));
+//    }
 
     public void shouldUseGiveFormatWhenConvertAllDateFormat() {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("HH:mm:ss.SSS yyyy-MM-dd");
@@ -72,26 +71,26 @@ public class DateTimeTest {
         checkData(gson.readValue(json, Data.class));
     }
 
-    public void shouldUseGivenZoneAndFormatWhenConvertAllDateFormat() {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("HH:mm:ss.SSS yyyy-MM-dd");
-        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder()
-                .dateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, df));
-        String json = gson.writeValue(data);
-        String expected = df.format(ZonedDateTime.ofInstant(date.toInstant(), ZoneOffset.systemDefault()));
-        checkJson(json, expected);
-        checkData(gson.readValue(json, Data.class));
-    }
+//    public void shouldUseGivenZoneAndFormatWhenConvertAllDateFormat() {
+//        DateTimeFormatter df = DateTimeFormatter.ofPattern("HH:mm:ss.SSS yyyy-MM-dd");
+//        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder()
+//                .dateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, df));
+//        String json = gson.writeValue(data);
+//        String expected = df.format(ZonedDateTime.ofInstant(date.toInstant(), ZoneOffset.systemDefault()));
+//        checkJson(json, expected);
+//        checkData(gson.readValue(json, Data.class));
+//    }
 
-    public void shouldUseGivenZoneAndFormatWithZoneWhenConvertAllDateFormat() {
-        ZoneId zone = ZoneId.of("Asia/Singapore");
-        DateTimeFormatter df = ISO_ZONED_DATE_TIME.withZone(zone);
-        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
-                new GsonUtilsBuilder().dateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, df));
-        String json = gson.writeValue(data);
-        String expected = df.format(ZonedDateTime.ofInstant(date.toInstant(), zone));
-        checkJson(json, expected);
-        checkData(gson.readValue(json, Data.class));
-    }
+//    public void shouldUseGivenZoneAndFormatWithZoneWhenConvertAllDateFormat() {
+//        ZoneId zone = ZoneId.of("Asia/Singapore");
+//        DateTimeFormatter df = ISO_ZONED_DATE_TIME.withZone(zone);
+//        GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(
+//                new GsonUtilsBuilder().dateTimeFormatter(ZONE_MODIFIER_USE_ORIGINAL, df));
+//        String json = gson.writeValue(data);
+//        String expected = df.format(ZonedDateTime.ofInstant(date.toInstant(), zone));
+//        checkJson(json, expected);
+//        checkData(gson.readValue(json, Data.class));
+//    }
 
     private static void checkJson(String json, String expected) {
         Map<String, Object> actual = toMap(json);
