@@ -19,6 +19,7 @@
 package ru.olegcherednik.gson.utils;
 
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.EnumId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -52,7 +53,7 @@ public class EnumIdTest {
         GsonDecorator gson = GsonUtilsHelper.createGsonDecorator(new GsonUtilsBuilder().serializeNulls());
         String json = gson.writeValue(data);
         assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
-                + "\"nullAuto\":null,\"nullColor\":null}");
+                                           + "\"nullAuto\":null,\"nullColor\":null}");
     }
 
     public void shouldThrowExceptionWhenReadEnumIdNoFactoryMethod() {
@@ -161,7 +162,7 @@ public class EnumIdTest {
                 return true;
             if (!(obj instanceof Data))
                 return false;
-            Data data = (Data)obj;
+            Data data = (Data) obj;
             return notNullAuto == data.notNullAuto && notNullColor == data.notNullColor
                     && nullAuto == data.nullAuto && nullColor == data.nullColor;
         }

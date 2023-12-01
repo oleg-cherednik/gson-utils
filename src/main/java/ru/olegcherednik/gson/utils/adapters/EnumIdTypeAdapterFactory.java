@@ -25,9 +25,9 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import ru.olegcherednik.gson.utils.EnumId;
 import ru.olegcherednik.gson.utils.GsonUtilsException;
 import ru.olegcherednik.gson.utils.JsonCreator;
+import ru.olegcherednik.json.api.EnumId;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
