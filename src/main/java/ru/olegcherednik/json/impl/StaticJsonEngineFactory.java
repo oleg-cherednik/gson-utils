@@ -1,14 +1,35 @@
 package ru.olegcherednik.json.impl;
 
+import com.google.gson.GsonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.gson.utils.GsonJsonEngineSupplier;
+import ru.olegcherednik.gson.utils.DynamicToNumberStrategy;
+import ru.olegcherednik.gson.utils.GsonJsonEngine;
+import ru.olegcherednik.gson.utils.datetime.DateTypeAdapter;
+import ru.olegcherednik.gson.utils.adapters.EnumIdTypeAdapterFactory;
+import ru.olegcherednik.gson.utils.datetime.InstantTypeAdapter;
+import ru.olegcherednik.gson.utils.adapters.IteratorTypeAdapter;
+import ru.olegcherednik.gson.utils.datetime.LocalDateTimeTypeAdapter;
+import ru.olegcherednik.gson.utils.datetime.LocalDateTypeAdapter;
+import ru.olegcherednik.gson.utils.datetime.LocalTimeTypeAdapter;
+import ru.olegcherednik.gson.utils.datetime.OffsetDateTimeTypeAdapter;
+import ru.olegcherednik.gson.utils.datetime.OffsetTimeTypeAdapter;
+import ru.olegcherednik.gson.utils.datetime.ZonedDateTimeTypeAdapter;
 import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.JsonEngineFactory;
 import ru.olegcherednik.json.api.JsonSettings;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * @author Oleg Cherednik
@@ -20,25 +41,57 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
 
     private static final JsonEngineFactory INSTANCE = new StaticJsonEngineFactory();
 
-    private final GsonJsonEngineSupplier jsonEngineSupplier = new GsonJsonEngineSupplier();
-
     @SuppressWarnings("unused")
     public static JsonEngineFactory getInstance() {
         return INSTANCE;
     }
 
+    // ---------- JsonEngineFactory ----------
+
     @Override
-    public JsonEngine createJsonEngine() {
-        return jsonEngineSupplier.get();
+    public JsonEngine createJsonEngine(JsonSettings settings) {
+        GsonBuilder builder = createGsonBuilder(settings);
+        return new GsonJsonEngine(builder.create());
     }
 
     @Override
-    public JsonEngine createJsonEnginePrettyPrint() {
-        return jsonEngineSupplier.getPrettyPrint();
+    public JsonEngine createPrettyPrintJsonEngine(JsonSettings settings) {
+        GsonBuilder builder = createGsonBuilder(settings).setPrettyPrinting();
+        return new GsonJsonEngine(builder.create());
     }
 
-    @Override
-    public void useSettings(JsonSettings jsonSettings) {
-        jsonEngineSupplier.setJsonSettings(Objects.requireNonNull(jsonSettings));
+    // ---------- supplier ----------
+
+    private static GsonBuilder createGsonBuilder(JsonSettings settings) {
+        Objects.requireNonNull(settings);
+
+        GsonBuilder builder = new GsonBuilder().setObjectToNumberStrategy(DynamicToNumberStrategy.INSTANCE);
+        InstantTypeAdapter instant = new InstantTypeAdapter(settings.getInstantFormatter(), settings.getZoneModifier());
+        LocalDateTypeAdapter localDate = new LocalDateTypeAdapter(settings.getLocalDateFormatter());
+        LocalTimeTypeAdapter localTime = new LocalTimeTypeAdapter(settings.getLocalTimeFormatter());
+        LocalDateTimeTypeAdapter localDateTime = new LocalDateTimeTypeAdapter(settings.getLocalDateTimeFormatter());
+        OffsetTimeTypeAdapter offsetTime = new OffsetTimeTypeAdapter(settings.getOffsetTimeFormatter(), settings.getZoneModifier());
+        OffsetDateTimeTypeAdapter offsetDateTime = new OffsetDateTimeTypeAdapter(settings.getOffsetDateTimeFormatter(),
+                                                                                 settings.getZoneModifier());
+        ZonedDateTimeTypeAdapter zonedDateTime = new ZonedDateTimeTypeAdapter(settings.getOffsetDateTimeFormatter(),
+                                                                              settings.getZoneModifier());
+        DateTypeAdapter date = new DateTypeAdapter(instant);
+
+        Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>) GsonBuilder::enableComplexMapKeySerialization)
+                .andThen(b -> b.registerTypeAdapterFactory(IteratorTypeAdapter.INSTANCE))
+                .andThen(b -> b.registerTypeAdapterFactory(new EnumIdTypeAdapterFactory()))
+                .andThen(b -> b.registerTypeAdapter(Instant.class, instant.nullSafe()))
+                .andThen(b -> b.registerTypeAdapter(LocalTime.class, localTime.nullSafe()))
+                .andThen(b -> b.registerTypeAdapter(LocalDate.class, localDate.nullSafe()))
+                .andThen(b -> b.registerTypeAdapter(LocalDateTime.class, localDateTime.nullSafe()))
+                .andThen(b -> b.registerTypeAdapter(OffsetTime.class, offsetTime.nullSafe()))
+                .andThen(b -> b.registerTypeAdapter(OffsetDateTime.class, offsetDateTime.nullSafe()))
+                .andThen(b -> b.registerTypeAdapter(ZonedDateTime.class, zonedDateTime.nullSafe()))
+                .andThen(b -> b.registerTypeAdapter(Date.class, date.nullSafe()));
+
+        customizer.accept(builder);
+        return builder;
     }
+
+
 }

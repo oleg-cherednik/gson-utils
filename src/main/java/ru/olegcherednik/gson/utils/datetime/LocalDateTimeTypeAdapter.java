@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.gson.utils.adapters;
+package ru.olegcherednik.gson.utils.datetime;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -37,12 +37,13 @@ import java.util.function.UnaryOperator;
 @RequiredArgsConstructor
 public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
 
+    private static final ZoneId SYSTEM_DEFAULT_ZONE_ID = ZoneId.systemDefault();
+
     protected final DateTimeFormatter df;
 
     @Override
     public void write(JsonWriter out, LocalDateTime value) throws IOException {
-        ZonedDateTime zonedDateTime = value.atZone(ZoneId.systemDefault());
-        out.value(df.format(zonedDateTime));
+        out.value(df.withZone(SYSTEM_DEFAULT_ZONE_ID).format(value));
     }
 
     @Override

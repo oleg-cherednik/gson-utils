@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.gson.utils.adapters;
+package ru.olegcherednik.gson.utils.datetime;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -24,31 +24,32 @@ import com.google.gson.stream.JsonWriter;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
- * @since 17.10.2021
+ * @since 09.12.2023
  */
 @RequiredArgsConstructor
-public class InstantTypeAdapter extends TypeAdapter<Instant> {
+public class LocalTimeTypeAdapter extends TypeAdapter<LocalTime> {
+
+    private static final ZoneId SYSTEM_DEFAULT_ZONE_ID = ZoneId.systemDefault();
 
     protected final DateTimeFormatter df;
 
     @Override
-    public void write(JsonWriter out, Instant value) throws IOException {
-        ZonedDateTime zonedDateTime = value.atZone(ZoneId.systemDefault());
-        out.value(df.format(zonedDateTime));
+    public void write(JsonWriter out, LocalTime value) throws IOException {
+        out.value(df.withZone(SYSTEM_DEFAULT_ZONE_ID).format(value));
     }
 
     @Override
-    public Instant read(JsonReader in) throws IOException {
+    public LocalTime read(JsonReader in) throws IOException {
         ZonedDateTime zonedDateTime = ZonedDateTime.parse(in.nextString(), df);
-        return zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toInstant();
+        return null;//zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
     }
 
 }

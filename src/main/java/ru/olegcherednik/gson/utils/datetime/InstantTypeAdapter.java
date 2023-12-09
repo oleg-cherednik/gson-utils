@@ -16,18 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.gson.utils.adapters;
+package ru.olegcherednik.gson.utils.datetime;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import lombok.RequiredArgsConstructor;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.io.IOException;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 /**
@@ -35,20 +37,21 @@ import java.util.function.UnaryOperator;
  * @since 17.10.2021
  */
 @RequiredArgsConstructor
-public class OffsetDateTimeTypeAdapter extends TypeAdapter<OffsetDateTime> {
+public class InstantTypeAdapter extends TypeAdapter<Instant> {
 
-    protected final DateTimeFormatter df;
+    private final DateTimeFormatter df;
+    private final UnaryOperator<ZoneId> zoneModifier;
 
     @Override
-    public void write(JsonWriter out, OffsetDateTime value) throws IOException {
-        ZonedDateTime zonedDateTime = value.toZonedDateTime();
-        out.value(df.format(zonedDateTime));
+    public void write(JsonWriter out, Instant value) throws IOException {
+        ZoneId zoneId = zoneModifier.apply(df.getZone());
+        out.value(df.withZone(zoneId).format(value));
     }
 
     @Override
-    public OffsetDateTime read(JsonReader in) throws IOException {
+    public Instant read(JsonReader in) throws IOException {
         ZonedDateTime zonedDateTime = ZonedDateTime.parse(in.nextString(), df);
-        return zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toOffsetDateTime();
+        return zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toInstant();
     }
 
 }
