@@ -42,7 +42,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * @since 07.01.2021
  */
 @Test
-public class StringGsonUtilsTest {
+public class StringReadGsonUtilsTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.readValue((String) null, Object.class)).isNull();
