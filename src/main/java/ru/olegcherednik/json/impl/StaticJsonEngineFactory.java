@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ru.olegcherednik.json.gson.utils.DynamicToNumberStrategy;
-import ru.olegcherednik.json.gson.utils.GsonJsonEngine;
+import ru.olegcherednik.json.gson.utils.GsonEngine;
 import ru.olegcherednik.json.gson.utils.datetime.DateTypeAdapter;
 import ru.olegcherednik.json.gson.utils.adapters.EnumIdTypeAdapterFactory;
 import ru.olegcherednik.json.gson.utils.datetime.InstantTypeAdapter;
@@ -39,25 +39,25 @@ import java.util.function.Consumer;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StaticJsonEngineFactory implements JsonEngineFactory {
 
-    private static final JsonEngineFactory INSTANCE = new StaticJsonEngineFactory();
+    private static final StaticJsonEngineFactory INSTANCE = new StaticJsonEngineFactory();
 
     @SuppressWarnings("unused")
-    public static JsonEngineFactory getInstance() {
+    public static StaticJsonEngineFactory getInstance() {
         return INSTANCE;
     }
 
     // ---------- JsonEngineFactory ----------
 
     @Override
-    public JsonEngine createJsonEngine(JsonSettings settings) {
+    public GsonEngine createJsonEngine(JsonSettings settings) {
         GsonBuilder builder = createGsonBuilder(settings);
-        return new GsonJsonEngine(builder.create());
+        return new GsonEngine(builder.create());
     }
 
     @Override
-    public JsonEngine createPrettyPrintJsonEngine(JsonSettings settings) {
+    public GsonEngine createPrettyPrintJsonEngine(JsonSettings settings) {
         GsonBuilder builder = createGsonBuilder(settings).setPrettyPrinting();
-        return new GsonJsonEngine(builder.create());
+        return new GsonEngine(builder.create());
     }
 
     // ---------- supplier ----------

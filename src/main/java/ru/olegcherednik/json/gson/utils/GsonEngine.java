@@ -22,7 +22,7 @@ import java.util.Set;
  * @since 20.11.2023
  */
 @RequiredArgsConstructor
-public class GsonJsonEngine implements JsonEngine {
+public class GsonEngine implements JsonEngine {
 
     private final Gson gson;
 
