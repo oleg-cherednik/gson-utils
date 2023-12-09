@@ -20,7 +20,7 @@
 package ru.olegcherednik.json.gson.utils.datetime;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.gson_utils.utils.MapUtils;
+import ru.olegcherednik.json.gson.utils.MapUtils;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.api.ZoneModifier;

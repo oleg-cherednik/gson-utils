@@ -26,7 +26,7 @@ import org.mockito.ArgumentCaptor;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.gson.utils.adapters.IteratorTypeAdapter;
-import ru.olegcherednik.gson_utils.utils.ListUtils;
+import ru.olegcherednik.json.gson.utils.ListUtils;
 import ru.olegcherednik.json.api.JsonException;
 
 import java.io.IOException;

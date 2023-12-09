@@ -22,8 +22,6 @@ package ru.olegcherednik.json.gson.utils;
 import org.testng.annotations.Test;
 import ru.olegcherednik.gson_utils.dto.Book;
 import ru.olegcherednik.gson_utils.dto.Data;
-import ru.olegcherednik.gson_utils.utils.ListUtils;
-import ru.olegcherednik.gson_utils.utils.MapUtils;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
 

@@ -19,7 +19,7 @@
 package ru.olegcherednik.gson_utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.gson_utils.utils.MapUtils;
+import ru.olegcherednik.json.gson.utils.MapUtils;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
