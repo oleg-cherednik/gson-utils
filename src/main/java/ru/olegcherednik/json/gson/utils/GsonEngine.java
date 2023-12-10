@@ -107,4 +107,12 @@ public class GsonEngine implements JsonEngine {
         gson.toJson(obj, writer);
     }
 
+    // ---------- convert ----------
+
+    @Override
+    public <V> Map<String, Object> convertToMap(V obj) {
+        String json = writeValue(obj);
+        return readMap(json, String.class, Object.class);
+    }
+
 }
