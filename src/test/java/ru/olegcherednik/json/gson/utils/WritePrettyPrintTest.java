@@ -20,7 +20,7 @@
 package ru.olegcherednik.json.gson.utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.gson_utils.dto.Data;
+import ru.olegcherednik.json.gson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
 
 import java.io.ByteArrayOutputStream;
@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class WritePrettyPrintGsonUtilsTest {
+public class WritePrettyPrintTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.prettyPrint().writeValue(null)).isNull();

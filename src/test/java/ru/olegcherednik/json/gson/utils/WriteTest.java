@@ -20,7 +20,7 @@
 package ru.olegcherednik.json.gson.utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.gson_utils.dto.Data;
+import ru.olegcherednik.json.gson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
 
 import java.io.ByteArrayOutputStream;
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class WriteGsonUtilsTest {
+public class WriteTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.writeValue(null)).isNull();

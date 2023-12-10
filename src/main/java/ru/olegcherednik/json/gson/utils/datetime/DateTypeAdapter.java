@@ -24,6 +24,8 @@ import com.google.gson.stream.JsonWriter;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.Date;
 
@@ -34,16 +36,20 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class DateTypeAdapter extends TypeAdapter<Date> {
 
-    protected final TypeAdapter<Instant> delegate;
+    protected final DateFormat df;
 
     @Override
     public void write(JsonWriter out, Date value) throws IOException {
-        delegate.write(out, value.toInstant());
+        out.value(df.format(value));
     }
 
     @Override
     public Date read(JsonReader in) throws IOException {
-        return Date.from(delegate.read(in));
+        try {
+            return df.parse(in.nextString());
+        } catch (ParseException e) {
+            throw new IOException(e);
+        }
     }
 
 }

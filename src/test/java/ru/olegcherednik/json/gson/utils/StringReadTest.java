@@ -20,8 +20,8 @@
 package ru.olegcherednik.json.gson.utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.gson_utils.dto.Book;
-import ru.olegcherednik.gson_utils.dto.Data;
+import ru.olegcherednik.json.gson.utils.data.Book;
+import ru.olegcherednik.json.gson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
 
@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * @since 07.01.2021
  */
 @Test
-public class StringReadGsonUtilsTest {
+public class StringReadTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.readValue((String) null, Object.class)).isNull();

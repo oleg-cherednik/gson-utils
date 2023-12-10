@@ -20,8 +20,8 @@
 package ru.olegcherednik.json.gson.utils;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.gson_utils.dto.Book;
-import ru.olegcherednik.gson_utils.dto.Data;
+import ru.olegcherednik.json.gson.utils.data.Book;
+import ru.olegcherednik.json.gson.utils.data.Data;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
 
@@ -47,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class ReaderGsonUtilsTest {
+public class ReaderTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.readValue((Reader) null, Object.class)).isNull();
@@ -269,7 +269,7 @@ public class ReaderGsonUtilsTest {
     }
 
     private static Reader getResourceAsReader(String name) throws IOException {
-        InputStream in = Objects.requireNonNull(ReaderGsonUtilsTest.class.getResourceAsStream(name));
+        InputStream in = Objects.requireNonNull(ReaderTest.class.getResourceAsStream(name));
         return new InputStreamReader(in);
     }
 

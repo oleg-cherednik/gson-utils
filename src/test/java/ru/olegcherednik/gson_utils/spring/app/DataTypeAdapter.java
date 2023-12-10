@@ -22,7 +22,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import ru.olegcherednik.gson_utils.dto.Data;
+import ru.olegcherednik.json.gson.utils.data.Data;
 
 import java.io.IOException;
 

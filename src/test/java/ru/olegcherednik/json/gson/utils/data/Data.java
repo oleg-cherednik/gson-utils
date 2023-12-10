@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.gson_utils.dto;
+package ru.olegcherednik.json.gson.utils.data;
 
 import java.util.Objects;
 import java.util.Scanner;

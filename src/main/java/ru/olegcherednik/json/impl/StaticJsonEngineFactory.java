@@ -75,7 +75,7 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
                                                                                  settings.getZoneModifier());
         ZonedDateTimeTypeAdapter zonedDateTime = new ZonedDateTimeTypeAdapter(settings.getOffsetDateTimeFormatter(),
                                                                               settings.getZoneModifier());
-        DateTypeAdapter date = new DateTypeAdapter(instant);
+        DateTypeAdapter date = new DateTypeAdapter(settings.getDateFormatter());
 
         Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>) GsonBuilder::enableComplexMapKeySerialization)
                 .andThen(b -> b.registerTypeAdapterFactory(IteratorTypeAdapter.INSTANCE))

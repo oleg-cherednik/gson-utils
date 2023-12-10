@@ -21,7 +21,7 @@ package ru.olegcherednik.gson_utils.spring.app;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.olegcherednik.json.gson.utils.GsonUtilsBuilder;
-import ru.olegcherednik.gson_utils.dto.Data;
+import ru.olegcherednik.json.gson.utils.data.Data;
 
 /**
  * @author Oleg Cherednik
