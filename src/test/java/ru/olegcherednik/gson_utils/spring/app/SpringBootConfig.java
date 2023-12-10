@@ -18,10 +18,7 @@
  */
 package ru.olegcherednik.gson_utils.spring.app;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.olegcherednik.json.gson.utils.GsonUtilsBuilder;
-import ru.olegcherednik.json.gson.utils.data.Data;
 
 /**
  * @author Oleg Cherednik
@@ -30,11 +27,11 @@ import ru.olegcherednik.json.gson.utils.data.Data;
 @Configuration
 public class SpringBootConfig {
 
-    @Bean
-    public GsonUtilsBuilder gsonUtilsBuilder() {
-        return new GsonUtilsBuilder().addCustomizer(gsonBuilder ->
-                                                            gsonBuilder.registerTypeAdapter(Data.class, new DataTypeAdapter()));
-    }
+//    @Bean
+//    public GsonUtilsBuilder gsonUtilsBuilder() {
+//        return new GsonUtilsBuilder().addCustomizer(gsonBuilder ->
+//                                                            gsonBuilder.registerTypeAdapter(Data.class, new DataTypeAdapter()));
+//    }
 
 //    @Bean
 //    public GsonDecorator gsonDecorator(GsonUtilsBuilder gsonUtilsBuilder) {
