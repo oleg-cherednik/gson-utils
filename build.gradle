@@ -41,7 +41,6 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
     compileOnly "com.google.code.gson:gson:${property('gson.version')}"
-//    implementation "ru.oleg-cherednik.utils.reflection:reflection-utils:${property('reflection-utils.version')}"
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
@@ -54,18 +53,6 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.21.0'
     testImplementation 'commons-io:commons-io:2.11.0'
     testImplementation 'org.mockito:mockito-core:4.0.0'
-
-    testImplementation('org.springframework.boot:spring-boot-starter-web:2.3.8.RELEASE') {
-        exclude group: 'org.junit.jupiter'
-        exclude group: 'com.fasterxml.jackson.core'
-        exclude group: 'com.fasterxml.jackson.datatype'
-        exclude group: 'com.fasterxml.jackson.module'
-    }
-
-    testImplementation('org.springframework.boot:spring-boot-starter-test:2.3.8.RELEASE') {
-        exclude group: 'org.junit.vintage'
-        exclude group: 'org.junit.jupiter'
-    }
 
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 }

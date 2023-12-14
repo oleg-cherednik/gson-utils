@@ -16,26 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.gson_utils.spring.app;
+package ru.olegcherednik.json.gson.utils.type;
 
-import org.springframework.context.annotation.Configuration;
+import org.testng.annotations.Test;
+import ru.olegcherednik.json.gson.utils.type.IteratorParameterizedType;
+
+import java.util.Iterator;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Oleg Cherednik
- * @since 26.07.2021
+ * @since 11.01.2021
  */
-@Configuration
-public class SpringBootConfig {
+@Test
+public class IteratorParameterizedTypeTest {
 
-//    @Bean
-//    public GsonUtilsBuilder gsonUtilsBuilder() {
-//        return new GsonUtilsBuilder().addCustomizer(gsonBuilder ->
-//                                                            gsonBuilder.registerTypeAdapter(Data.class, new DataTypeAdapter()));
-//    }
-
-//    @Bean
-//    public GsonDecorator gsonDecorator(GsonUtilsBuilder gsonUtilsBuilder) {
-//        return GsonUtilsHelper.createGsonDecorator(gsonUtilsBuilder);
-//    }
+    public void shouldRetrieveGivenClassesWhenCreateNewInstance() {
+        IteratorParameterizedType<String> type = new IteratorParameterizedType<>(String.class);
+        assertThat(type.getActualTypeArguments()).containsExactly(String.class);
+        assertThat(type.getRawType()).isSameAs(Iterator.class);
+        assertThat(type.getOwnerType()).isNull();
+    }
 
 }
