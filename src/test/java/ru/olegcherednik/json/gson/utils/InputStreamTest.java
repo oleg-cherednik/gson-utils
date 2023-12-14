@@ -244,6 +244,13 @@ public class InputStreamTest {
                 .isExactlyInstanceOf(JsonException.class);
     }
 
+    public void shouldCloseInputStreamWhenFinishParse() throws IOException {
+        InputStream in = getResourceAsInputStream("/book.json");
+        Book actual = Json.readValue(in, Book.class);
+        assertThat(actual).isEqualTo(Book.THINKING_IN_JAVA);
+        assertThatThrownBy(in::read).isExactlyInstanceOf(IOException.class).hasMessage("Stream closed");
+    }
+
     private static InputStream getResourceAsInputStream(String name) throws IOException {
         return InputStreamTest.class.getResourceAsStream(name);
     }
