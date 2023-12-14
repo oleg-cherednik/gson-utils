@@ -16,12 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ru.olegcherednik.json.gson.type;
+package ru.olegcherednik.json.gson.types;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.gson.types.IteratorParameterizedType;
+import ru.olegcherednik.json.gson.types.MapParameterizedType;
 
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,12 +30,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 11.01.2021
  */
 @Test
-public class IteratorParameterizedTypeTest {
+public class MapParameterizedTypeTest {
 
     public void shouldRetrieveGivenClassesWhenCreateNewInstance() {
-        IteratorParameterizedType<String> type = new IteratorParameterizedType<>(String.class);
-        assertThat(type.getActualTypeArguments()).containsExactly(String.class);
-        assertThat(type.getRawType()).isSameAs(Iterator.class);
+        MapParameterizedType<String, Integer> type = new MapParameterizedType<>(String.class, Integer.class);
+        assertThat(type.getActualTypeArguments()).containsExactly(String.class, Integer.class);
+        assertThat(type.getRawType()).isSameAs(LinkedHashMap.class);
         assertThat(type.getOwnerType()).isNull();
     }
 
