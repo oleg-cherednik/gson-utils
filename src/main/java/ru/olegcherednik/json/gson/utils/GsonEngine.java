@@ -8,6 +8,7 @@ import ru.olegcherednik.json.gson.utils.type.IteratorParameterizedType;
 import ru.olegcherednik.json.gson.utils.type.MapParameterizedType;
 import ru.olegcherednik.json.api.JsonEngine;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
@@ -58,44 +59,60 @@ public class GsonEngine implements JsonEngine {
     // ---------- read Reader ----------
 
     @Override
-    public <V> V readValue(Reader reader, Class<V> valueClass) {
-        return gson.fromJson(reader, valueClass);
+    public <V> V readValue(Reader reader, Class<V> valueClass) throws IOException {
+        try (Reader r = reader) {
+            return gson.fromJson(r, valueClass);
+        }
     }
 
     @Override
-    public <V> List<V> readList(Reader reader, Class<V> valueClass) {
-        Type type = TypeToken.getParameterized(List.class, valueClass).getType();
-        return gson.fromJson(reader, type);
+    public <V> List<V> readList(Reader reader, Class<V> valueClass) throws IOException {
+        try (Reader r = reader) {
+            Type type = TypeToken.getParameterized(List.class, valueClass).getType();
+            return gson.fromJson(r, type);
+        }
     }
 
     @Override
-    public <V> Set<V> readSet(Reader reader, Class<V> valueClass) {
-        Type type = TypeToken.getParameterized(LinkedHashSet.class, valueClass).getType();
-        return gson.fromJson(reader, type);
+    public <V> Set<V> readSet(Reader reader, Class<V> valueClass) throws IOException {
+        try (Reader r = reader) {
+            Type type = TypeToken.getParameterized(LinkedHashSet.class, valueClass).getType();
+            return gson.fromJson(r, type);
+        }
     }
 
     @Override
-    public List<Map<String, Object>> readListOfMap(Reader reader) {
-        return (List<Map<String, Object>>) gson.fromJson(reader, List.class);
+    public List<Map<String, Object>> readListOfMap(Reader reader) throws IOException {
+        try (Reader r = reader) {
+            return (List<Map<String, Object>>) gson.fromJson(r, List.class);
+        }
     }
 
     @Override
-    public <V> Iterator<V> readListLazy(Reader reader, Class<V> valueClass) {
-        JsonReader jsonReader = gson.newJsonReader(reader);
-        return gson.fromJson(jsonReader, new IteratorParameterizedType<>(valueClass));
+    public <V> Iterator<V> readListLazy(Reader reader, Class<V> valueClass) throws IOException {
+        try (Reader r = reader) {
+            JsonReader jsonReader = gson.newJsonReader(r);
+            return gson.fromJson(jsonReader, new IteratorParameterizedType<>(valueClass));
+        }
     }
 
     @Override
-    public Iterator<Map<String, Object>> readListOfMapLazy(Reader reader) {
-        JsonReader jsonReader = gson.newJsonReader(reader);
-        return gson.fromJson(jsonReader, new IteratorParameterizedType<>(Map.class));
+    public Iterator<Map<String, Object>> readListOfMapLazy(Reader reader) throws IOException {
+        try (Reader r = reader) {
+            JsonReader jsonReader = gson.newJsonReader(r);
+            return gson.fromJson(jsonReader, new IteratorParameterizedType<>(Map.class));
+        }
     }
 
     @Override
-    public <K, V> Map<K, V> readMap(Reader reader, Class<K> keyClass, Class<V> valueClass) {
-        Type type = new MapParameterizedType<>(keyClass, valueClass);
-        return gson.fromJson(reader, type);
+    public <K, V> Map<K, V> readMap(Reader reader, Class<K> keyClass, Class<V> valueClass) throws IOException {
+        try (Reader r = reader) {
+            Type type = new MapParameterizedType<>(keyClass, valueClass);
+            return gson.fromJson(r, type);
+        }
     }
+
+    // ---------- write ----------
 
     @Override
     public <V> String writeValue(V obj) {
@@ -103,8 +120,10 @@ public class GsonEngine implements JsonEngine {
     }
 
     @Override
-    public <V> void writeValue(V obj, Writer writer) {
-        gson.toJson(obj, writer);
+    public <V> void writeValue(V obj, Writer writer) throws IOException {
+        try (Writer w = writer) {
+            gson.toJson(obj, w);
+        }
     }
 
     // ---------- convert ----------

@@ -70,13 +70,13 @@ public class ReaderTest {
     public void shouldRetrieveDeserializedObjectWhenReadValue() throws IOException {
         Data actual = Json.readValue(getResourceAsReader("/data.json"), Data.class);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(new Data(666, "omen"));
+        assertThat(actual).isEqualTo(Data.OMEN);
     }
 
     public void shouldRetrieveEmptyDeserializedObjectWhenReadEmptyValue() throws IOException {
         Data actual = Json.readValue(convertToReader("{}"), Data.class);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(new Data());
+        assertThat(actual).isEqualTo(Data.EMPTY);
     }
 
     public void shouldRetrieveCorrectNumericWhenObjectContainsDifferentNumericList() throws IOException {
@@ -113,7 +113,7 @@ public class ReaderTest {
     public void shouldRetrieveDeserializedListWhenReadAsList() throws IOException {
         List<Data> actual = Json.readList(getResourceAsReader("/data_list.json"), Data.class);
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo(ListUtils.of(new Data(555, "victory"), new Data(666, "omen")));
+        assertThat(actual).isEqualTo(ListUtils.of(Data.VICTORY, Data.OMEN));
     }
 
     public void shouldRetrieveIteratorOfDeserializedObjectsWhenReadAsLazyList() throws IOException {
@@ -141,26 +141,17 @@ public class ReaderTest {
     }
 
     public void shouldRetrieveIteratorOfDeserializedObjectsWhenReadValueLazyList() throws IOException {
-        Book expected1 = new Book("Thinking in Java",
-                                  ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                                  1998,
-                                  ListUtils.of("Bruce Eckel"));
-        Book expected2 = new Book("Ready for a victory",
-                                  ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                                  2020,
-                                  ListUtils.of("Oleg Cherednik"));
-
         Iterator<Book> it = Json.readListLazy(getResourceAsReader("/books.json"), Book.class);
         assertThat(it.hasNext()).isTrue();
 
         Book actual1 = it.next();
         assertThat(actual1).isNotNull();
-        assertThat(actual1).isEqualTo(expected1);
+        assertThat(actual1).isEqualTo(Book.THINKING_IN_JAVA);
         assertThat(it.hasNext()).isTrue();
 
         Book actual2 = it.next();
         assertThat(actual2).isNotNull();
-        assertThat(actual2).isEqualTo(expected2);
+        assertThat(actual2).isEqualTo(Book.READY_FOR_A_VICTORY);
         assertThat(it.hasNext()).isFalse();
     }
 
@@ -215,30 +206,17 @@ public class ReaderTest {
     }
 
     public void shouldRetrieveDeserializedMapWhenReadAsMapListWithStringKeyAndBookType() throws IOException {
-        Map<String, Book> expected = MapUtils.of("one", new Book("Thinking in Java",
-                                                                 ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                                                                 1998,
-                                                                 ListUtils.of("Bruce Eckel")),
-                                                 "two", new Book("Ready for a victory",
-                                                                 ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                                                                 2020,
-                                                                 ListUtils.of("Oleg Cherednik")));
+        Map<String, Book> expected = MapUtils.of("one", Book.THINKING_IN_JAVA,
+                                                 "two", Book.READY_FOR_A_VICTORY);
 
-        Map<String, Book> actual = Json.readMap(
-                getResourceAsReader("/books_dict_string_key.json"), Book.class);
+        Map<String, Book> actual = Json.readMap(getResourceAsReader("/books_dict_string_key.json"), Book.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
     }
 
     public void shouldRetrieveIntegerValueMapWhenReadAsMapWithIntKeyAndBookType() throws IOException {
-        Map<Integer, Book> expected = MapUtils.of(1, new Book("Thinking in Java",
-                                                              ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
-                                                              1998,
-                                                              ListUtils.of("Bruce Eckel")),
-                                                  2, new Book("Ready for a victory",
-                                                              ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
-                                                              2020,
-                                                              ListUtils.of("Oleg Cherednik")));
+        Map<Integer, Book> expected = MapUtils.of(1, Book.THINKING_IN_JAVA,
+                                                  2, Book.READY_FOR_A_VICTORY);
 
         Map<Integer, Book> actual = Json.readMap(getResourceAsReader("/books_dict_int_key.json"),
                                                  Integer.class, Book.class);

@@ -18,6 +18,11 @@
  */
 package ru.olegcherednik.json.gson.utils.data;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import ru.olegcherednik.json.gson.utils.ListUtils;
+
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -26,38 +31,24 @@ import java.util.Objects;
  * @author Oleg Cherednik
  * @since 08.01.2021
  */
-@SuppressWarnings("AssignmentOrReturnOfFieldWithMutableType")
-public final class Book {
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+public class Book {
+
+    public static final Book THINKING_IN_JAVA = new Book("Thinking in Java",
+                                                         ZonedDateTime.parse("2017-07-23T13:57:14.225Z"),
+                                                         1998,
+                                                         ListUtils.of("Bruce Eckel"));
+    public static final Book READY_FOR_A_VICTORY = new Book("Ready for a victory",
+                                                            ZonedDateTime.parse("2020-07-23T13:57:14.225Z"),
+                                                            2020,
+                                                            ListUtils.of("Oleg Cherednik"));
+
 
     private String title;
     private ZonedDateTime date;
     private int year;
     private List<String> authors;
-
-    public Book() {
-    }
-
-    public Book(String title, ZonedDateTime date, int year, List<String> authors) {
-        this.title = title;
-        this.date = date;
-        this.year = year;
-        this.authors = authors;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!(obj instanceof Book))
-            return false;
-
-        Book book = (Book)obj;
-        return year == book.year && title.equals(book.title) && date.equals(book.date) && authors.equals(book.authors);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, date, year, authors);
-    }
 
 }

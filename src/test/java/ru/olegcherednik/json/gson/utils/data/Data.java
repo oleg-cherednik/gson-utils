@@ -18,7 +18,11 @@
  */
 package ru.olegcherednik.json.gson.utils.data;
 
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Scanner;
 
 /**
@@ -26,60 +30,37 @@ import java.util.Scanner;
  * @since 07.01.2021
  */
 @SuppressWarnings("unused")
+@NoArgsConstructor
+@EqualsAndHashCode
 public class Data {
 
+    public static final Data EMPTY = new Data();
+    public static final Data VICTORY = new Data(555, "victory");
+    public static final Data OMEN = new Data(666, "omen");
+
+    @Getter
+    @Setter
     private int intVal;
+    @Getter
+    @Setter
     private String strVal;
     private String nullVal;
-
-    public Data() {
-    }
 
     public Data(int intVal, String strVal) {
         this.intVal = intVal;
         this.strVal = strVal;
     }
 
-    public int getIntVal() {
-        return intVal;
-    }
-
-    public String getStrVal() {
-        return strVal;
-    }
-
     public String getUnknownValue() {
         return intVal + '_' + strVal;
     }
 
-    public void setIntVal(int intVal) {
-        this.intVal = intVal;
-    }
-
-    public void setStrVal(String strVal) {
-        this.strVal = strVal;
-    }
-
     public void setUnknownValue(String str) {
-        Scanner scan = new Scanner(str);
-        scan.useDelimiter("_");
-        intVal = scan.nextInt();
-        strVal = scan.next();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!(obj instanceof Data))
-            return false;
-        Data data = (Data)obj;
-        return intVal == data.intVal && Objects.equals(strVal, data.strVal);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(intVal, strVal);
+        try (Scanner scan = new Scanner(str)) {
+            scan.useDelimiter("_");
+            intVal = scan.nextInt();
+            strVal = scan.next();
+        }
     }
 
 }
