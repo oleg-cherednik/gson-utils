@@ -72,7 +72,7 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
         OffsetTimeTypeAdapter offsetTime = new OffsetTimeTypeAdapter(settings.getOffsetTimeFormatter(), settings.getZoneModifier());
         OffsetDateTimeTypeAdapter offsetDateTime = new OffsetDateTimeTypeAdapter(settings.getOffsetDateTimeFormatter(),
                                                                                  settings.getZoneModifier());
-        ZonedDateTimeTypeAdapter zonedDateTime = new ZonedDateTimeTypeAdapter(settings.getOffsetDateTimeFormatter(),
+        ZonedDateTimeTypeAdapter zonedDateTime = new ZonedDateTimeTypeAdapter(settings.getZonedDateTimeFormatter(),
                                                                               settings.getZoneModifier());
         DateTypeAdapter date = new DateTypeAdapter(settings.getDateFormatter());
 
