@@ -27,6 +27,7 @@ import lombok.Setter;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
+import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.api.enumid.EnumId;
 import ru.olegcherednik.json.api.enumid.EnumIdJsonCreator;
 
@@ -61,27 +62,21 @@ public class EnumIdTest {
     }
 
     public void shouldRetrieveJsonWithNullWhenEnumIdValueAndSerializeNull() {
-//        Data data = new Data(Auto.MERCEDES, Color.BLUE);
-//        ObjectMapper mapper = JacksonUtilsHelper.createMapper()
-//                                                .setSerializationInclusion(JsonInclude.Include.ALWAYS);
-//        String json = mapper.writeValueAsString(data);
-//        assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
-//                                           + "\"nullAuto\":null,\"nullColor\":null}");
+        String json = Json.createWriter(JsonSettings.builder().serializeNull(true).build())
+                          .writeValue(new Data(Auto.MERCEDES, Color.BLUE));
+        assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
+                                           + "\"nullAuto\":null,\"nullColor\":null}");
     }
 
     public void shouldRetrieveJsonWithNullWhenEnumIdValueAndSerializeNullAngGetters() {
-//        Book data = new Book();
-//        data.setNotNullAuto(Auto.MERCEDES);
-//        data.setNotNullColor(Color.BLUE);
-//
-//        ObjectMapper mapper = JacksonUtilsHelper.createMapper()
-//                                                .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
-//                                                .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.ANY)
-//                                                .setSerializationInclusion(JsonInclude.Include.ALWAYS);
-//
-//        String json = mapper.writeValueAsString(data);
-//        assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
-//                                           + "\"nullAuto\":null,\"nullColor\":null}");
+        Book data = new Book();
+        data.setNotNullAuto(Auto.MERCEDES);
+        data.setNotNullColor(Color.BLUE);
+
+        String json = Json.createWriter(JsonSettings.builder().serializeNull(true).build())
+                          .writeValue(data);
+        assertThat(json).isEqualTo("{\"notNullAuto\":\"mercedes\",\"notNullColor\":\"Blue\","
+                                           + "\"nullAuto\":null,\"nullColor\":null}");
     }
 
     public void shouldThrowJsonExceptionWhenReadEnumIdNoFactoryMethod() {

@@ -65,6 +65,10 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
         Objects.requireNonNull(settings);
 
         GsonBuilder builder = new GsonBuilder().setObjectToNumberStrategy(DynamicToNumberStrategy.INSTANCE);
+
+        if (settings.isSerializeNull())
+            builder.serializeNulls();
+
         InstantTypeAdapter instant = new InstantTypeAdapter(settings.getInstantFormatter(), settings.getZoneModifier());
         LocalDateTypeAdapter localDate = new LocalDateTypeAdapter(settings.getLocalDateFormatter());
         LocalTimeTypeAdapter localTime = new LocalTimeTypeAdapter(settings.getLocalTimeFormatter());
