@@ -1,5 +1,6 @@
 package ru.olegcherednik.json.gson.datetime;
 
+import com.google.gson.Gson;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.testng.annotations.Test;
