@@ -17,39 +17,23 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.gson.datetime;
+package ru.olegcherednik.json.gson;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import lombok.RequiredArgsConstructor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneOffset;
 
 /**
  * @author Oleg Cherednik
- * @since 09.10.2021
+ * @since 02.01.2024
  */
-@RequiredArgsConstructor
-public class DateTypeAdapter extends TypeAdapter<Date> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class LocalZoneOffset {
 
-    protected final DateFormat df;
-
-    @Override
-    public void write(JsonWriter out, Date value) throws IOException {
-        out.value(df.format(value));
-    }
-
-    @Override
-    public Date read(JsonReader in) throws IOException {
-        try {
-            return df.parse(in.nextString());
-        } catch (ParseException e) {
-            throw new IOException(e);
-        }
-    }
+    public static final ZoneOffset UTC = ZoneOffset.UTC.getRules().getOffset(Instant.now());
+    public static final ZoneOffset ASIA_SINGAPORE = LocalZoneId.ASIA_SINGAPORE.getRules().getOffset(Instant.now());
+    public static final ZoneOffset AUSTRALIA_SYDNEY = LocalZoneId.AUSTRALIA_SYDNEY.getRules().getOffset(Instant.now());
 
 }

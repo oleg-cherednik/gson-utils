@@ -65,7 +65,6 @@ public class LocalDateTimeTest {
     private static Map<String, LocalDateTime> createData() {
         String str = "2017-07-23T13:57:14.225";
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-
         return MapUtils.of("local", LocalDateTime.parse(str, df));
     }
 

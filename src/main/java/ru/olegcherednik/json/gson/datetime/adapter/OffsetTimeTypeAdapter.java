@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.gson.datetime;
+package ru.olegcherednik.json.gson.datetime.adapter;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -25,8 +25,7 @@ import com.google.gson.stream.JsonWriter;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -34,20 +33,18 @@ import java.time.format.DateTimeFormatter;
  * @since 09.12.2023
  */
 @RequiredArgsConstructor
-public class LocalDateTypeAdapter extends TypeAdapter<LocalDate> {
-
-    private static final ZoneId SYSTEM_DEFAULT_ZONE_ID = ZoneId.systemDefault();
+public class OffsetTimeTypeAdapter extends TypeAdapter<OffsetTime> {
 
     protected final DateTimeFormatter df;
 
     @Override
-    public void write(JsonWriter out, LocalDate value) throws IOException {
-        out.value(df.withZone(SYSTEM_DEFAULT_ZONE_ID).format(value));
+    public void write(JsonWriter out, OffsetTime value) throws IOException {
+        out.value(df.format(value));
     }
 
     @Override
-    public LocalDate read(JsonReader in) throws IOException {
-        return LocalDate.parse(in.nextString(), df);
+    public OffsetTime read(JsonReader in) throws IOException {
+        return OffsetTime.parse(in.nextString(), df);
     }
 
 }

@@ -48,26 +48,25 @@ public class AutoCloseableIteratorTypeAdapter<V> extends TypeAdapter<AutoCloseab
     public static final TypeAdapterFactory INSTANCE = new TypeAdapterFactory() {
         @Override
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
-            try {
-                if (!Iterator.class.isAssignableFrom(typeToken.getRawType()))
-                    return null;
+            if (!Iterator.class.isAssignableFrom(typeToken.getRawType()))
+                return null;
 
-                ParameterizedType parameterizedType = (ParameterizedType) typeToken.getType();
-                Type elementType = parameterizedType.getActualTypeArguments()[0];
-                TypeAdapter<?> typeAdapter = gson.getAdapter(TypeToken.get(elementType));
-                //noinspection unchecked,rawtypes
-                return new AutoCloseableIteratorTypeAdapter(createTypeAdapter(gson, typeAdapter, elementType));
+            ParameterizedType parameterizedType = (ParameterizedType) typeToken.getType();
+            Type elementType = parameterizedType.getActualTypeArguments()[0];
+            TypeAdapter<?> typeAdapter = gson.getAdapter(TypeToken.get(elementType));
+            //noinspection unchecked,rawtypes
+            return new AutoCloseableIteratorTypeAdapter(createTypeAdapter(gson, typeAdapter, elementType));
+        }
+
+        private TypeAdapter<?> createTypeAdapter(Gson gson, TypeAdapter<?> typeAdapter, Type elementType) {
+            try {
+                Class<?> cls = Class.forName("com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper");
+                Constructor<?> con = cls.getDeclaredConstructor(Gson.class, TypeAdapter.class, Type.class);
+                con.setAccessible(true);
+                return (TypeAdapter<?>) con.newInstance(gson, typeAdapter, elementType);
             } catch (Exception e) {
                 throw new JsonException(e);
             }
-        }
-
-        private TypeAdapter<?> createTypeAdapter(Gson gson, TypeAdapter<?> typeAdapter, Type elementType)
-                throws Exception {
-            Class<?> cls = Class.forName("com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper");
-            Constructor<?> con = cls.getDeclaredConstructor(Gson.class, TypeAdapter.class, Type.class);
-            con.setAccessible(true);
-            return (TypeAdapter<?>) con.newInstance(gson, typeAdapter, elementType);
         }
     };
 

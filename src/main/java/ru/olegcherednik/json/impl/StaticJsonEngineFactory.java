@@ -27,29 +27,9 @@ import ru.olegcherednik.json.api.JsonEngineFactory;
 import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.gson.DynamicToNumberStrategy;
 import ru.olegcherednik.json.gson.GsonEngine;
-import ru.olegcherednik.json.gson.adapters.AutoCloseableIteratorTypeAdapter;
-import ru.olegcherednik.json.gson.adapters.EnumIdTypeAdapterFactory;
-import ru.olegcherednik.json.gson.datetime.DateTypeAdapter;
-import ru.olegcherednik.json.gson.datetime.InstantTypeAdapter;
-import ru.olegcherednik.json.gson.datetime.LocalDateTimeTypeAdapter;
-import ru.olegcherednik.json.gson.datetime.LocalDateTypeAdapter;
-import ru.olegcherednik.json.gson.datetime.LocalTimeTypeAdapter;
-import ru.olegcherednik.json.gson.datetime.OffsetDateTimeTypeAdapter;
-import ru.olegcherednik.json.gson.datetime.OffsetTimeTypeAdapter;
-import ru.olegcherednik.json.gson.datetime.ZonedDateTimeTypeAdapter;
+import ru.olegcherednik.json.gson.datetime.JavaTimeModule;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
@@ -80,8 +60,6 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
         return new GsonEngine(builder.create());
     }
 
-    // ---------- supplier ----------
-
     private static GsonBuilder createGsonBuilder(JsonSettings settings) {
         Objects.requireNonNull(settings);
 
@@ -90,36 +68,23 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
         if (settings.isSerializeNull())
             builder.serializeNulls();
 
-        UnaryOperator<ZoneId> zoneModifier = settings.getZoneId() == null ? zoneId -> zoneId
-                                                                          : zoneId -> settings.getZoneId();
-
-        InstantTypeAdapter instant = new InstantTypeAdapter(settings.getInstantFormatter(), zoneModifier);
-        LocalDateTypeAdapter localDate = new LocalDateTypeAdapter(settings.getLocalDateFormatter());
-        LocalTimeTypeAdapter localTime = new LocalTimeTypeAdapter(settings.getLocalTimeFormatter());
-        LocalDateTimeTypeAdapter localDateTime = new LocalDateTimeTypeAdapter(settings.getLocalDateTimeFormatter());
-        OffsetTimeTypeAdapter offsetTime = new OffsetTimeTypeAdapter(settings.getOffsetTimeFormatter(),
-                                                                     zoneModifier);
-        OffsetDateTimeTypeAdapter offsetDateTime = new OffsetDateTimeTypeAdapter(settings.getOffsetDateTimeFormatter(),
-                                                                                 zoneModifier);
-        ZonedDateTimeTypeAdapter zonedDateTime = new ZonedDateTimeTypeAdapter(settings.getZonedDateTimeFormatter(),
-                                                                              zoneModifier);
-        DateTypeAdapter date = new DateTypeAdapter(settings.getDateFormatter());
-
-        Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>) GsonBuilder::enableComplexMapKeySerialization)
-                .andThen(b -> b.registerTypeAdapterFactory(AutoCloseableIteratorTypeAdapter.INSTANCE))
-                .andThen(b -> b.registerTypeAdapterFactory(EnumIdTypeAdapterFactory.INSTANCE))
-                .andThen(b -> b.registerTypeAdapter(Instant.class, instant.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(LocalTime.class, localTime.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(LocalDate.class, localDate.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(LocalDateTime.class, localDateTime.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(OffsetTime.class, offsetTime.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(OffsetDateTime.class, offsetDateTime.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(ZonedDateTime.class, zonedDateTime.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(Date.class, date.nullSafe()));
-
-        customizer.accept(builder);
+        createJavaTimeModule(settings).accept(builder);
         return builder;
     }
 
+    private static JavaTimeModule createJavaTimeModule(JsonSettings settings) {
+        return JavaTimeModule.builder()
+                             .zoneId(settings.getZoneId())
+                             .date(settings.getDateFormatter())
+                             .instant(settings.getInstantFormatter())
+                             .localDate(settings.getLocalDateFormatter())
+                             .localTime(settings.getLocalTimeFormatter())
+                             .localDateTime(settings.getLocalDateTimeFormatter())
+                             .offsetTime(settings.getOffsetTimeFormatter())
+                             .offsetDateTime(settings.getOffsetDateTimeFormatter())
+                             .offsetDateTime(settings.getOffsetDateTimeFormatter())
+                             .zonedDateTime(settings.getZonedDateTimeFormatter())
+                             .build();
+    }
 
 }
