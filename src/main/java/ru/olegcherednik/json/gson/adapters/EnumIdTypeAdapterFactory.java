@@ -25,50 +25,62 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.olegcherednik.json.api.enumid.EnumId;
 import ru.olegcherednik.json.api.enumid.EnumIdSupport;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
  * @author Oleg Cherednik
  * @since 18.10.2021
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
 
+    public static final EnumIdTypeAdapterFactory INSTANCE = new EnumIdTypeAdapterFactory();
+
+    private final Map<Class<?>, TypeAdapter<?>> cache = new HashMap<>();
+
     @Override
-    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+    public synchronized <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
         Class<T> rawType = (Class<T>) type.getRawType();
 
         if (!EnumId.class.isAssignableFrom(rawType))
             return null;
 
-        Function<String, T> read = EnumIdSupport.createFactory(rawType);
+        return (TypeAdapter<T>) cache.computeIfAbsent(rawType, cls -> {
+            Function<String, T> read = EnumIdSupport.createFactory(rawType);
 
-        return new TypeAdapter<T>() {
-            @Override
-            public void write(JsonWriter out, T value) throws IOException {
-                String id = value == null ? null : ((EnumId) value).getId();
+            return new TypeAdapter<T>() {
+                @Override
+                public void write(JsonWriter out, T value) throws IOException {
+                    String id = value == null ? null : ((EnumId) value).getId();
 
-                if (id == null)
-                    out.nullValue();
-                else
-                    out.value(id);
-            }
+                    if (id == null)
+                        out.nullValue();
+                    else
+                        out.value(id);
+                }
 
-            @Override
-            public T read(JsonReader in) throws IOException {
-                String id = null;
+                @Override
+                public T read(JsonReader in) throws IOException {
+                    String id = null;
 
-                if (in.peek() == JsonToken.NULL)
-                    in.nextNull();
-                else
-                    id = in.nextString();
+                    if (in.peek() == JsonToken.NULL)
+                        in.nextNull();
+                    else
+                        id = in.nextString();
 
-                return read.apply(id);
-            }
-        };
+                    return read.apply(id);
+                }
+            };
+        });
+
 
     }
 

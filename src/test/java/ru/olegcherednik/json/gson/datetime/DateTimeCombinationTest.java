@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson.datetime;
 
 import lombok.EqualsAndHashCode;
@@ -74,7 +75,7 @@ public class DateTimeCombinationTest {
         private final ZonedDateTime zonedDateTime;
         private final Date date;
 
-        public DataOne(ZonedDateTime zonedDateTime) {
+        DataOne(ZonedDateTime zonedDateTime) {
             this(zonedDateTime.toInstant(),
                  zonedDateTime.toLocalDate(),
                  zonedDateTime.toLocalTime(),
@@ -85,14 +86,14 @@ public class DateTimeCombinationTest {
                  Date.from(zonedDateTime.toInstant()));
         }
 
-        public DataOne(Instant instant,
-                       LocalDate localDate,
-                       LocalTime localTime,
-                       LocalDateTime localDateTime,
-                       OffsetTime offsetTime,
-                       OffsetDateTime offsetDateTime,
-                       ZonedDateTime zonedDateTime,
-                       Date date) {
+        DataOne(Instant instant,
+                LocalDate localDate,
+                LocalTime localTime,
+                LocalDateTime localDateTime,
+                OffsetTime offsetTime,
+                OffsetDateTime offsetDateTime,
+                ZonedDateTime zonedDateTime,
+                Date date) {
             this.instant = instant;
             this.localDate = localDate;
             this.localTime = localTime;

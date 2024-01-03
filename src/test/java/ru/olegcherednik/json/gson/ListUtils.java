@@ -16,7 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,15 +31,14 @@ import java.util.stream.Collectors;
  * @author Oleg Cherednik
  * @since 22.12.2020
  */
+@SuppressWarnings("PMD.ShortMethodName")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ListUtils {
 
     public static <T> List<T> of(T... elements) {
         if (elements == null || elements.length == 0)
             return Collections.emptyList();
         return Collections.unmodifiableList(Arrays.stream(elements).collect(Collectors.toList()));
-    }
-
-    private ListUtils() {
     }
 
 }

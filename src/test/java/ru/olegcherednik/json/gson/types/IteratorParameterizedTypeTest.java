@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson.types;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.gson.types.IteratorParameterizedType;
 
 import java.util.Iterator;
 

@@ -16,14 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson.datetime;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.gson.MapUtils;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
-import ru.olegcherednik.json.api.ZoneModifier;
 import ru.olegcherednik.json.gson.LocalZoneId;
+import ru.olegcherednik.json.gson.MapUtils;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -42,27 +42,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ZonedDateTimeTest {
 
     public void shouldRetrieveJsonOriginalZonWhenWriteZonedDateTimeWithUseOriginalZoneModifier() {
-        JsonSettings settings = JsonSettings.builder()
-                                            .zoneModifier(ZoneModifier.USE_ORIGINAL)
-                                            .build();
-
-        String actual = Json.createWriter(settings).writeValue(createData());
+        String actual = Json.writeValue(createData());
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\","
-                                             + "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\","
-                                             + "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00[Australia/Sydney]\"}");
+        assertThat(actual).isEqualTo(
+                "{\"UTC\":\"2017-07-23T13:57:14.225Z\","
+                        + "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\","
+                        + "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00[Australia/Sydney]\"}");
     }
 
     public void shouldRetrieveJsonUtcZonWhenWriteZonedDateTimeWithConvertToUtcZoneModifier() {
         JsonSettings settings = JsonSettings.builder()
-                                            .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
+                                            .zoneId(ZoneOffset.UTC)
                                             .build();
 
         String actual = Json.createWriter(settings).writeValue(createData());
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T13:57:14.225Z\","
-                                             + "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\","
-                                             + "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
+        assertThat(actual).isEqualTo(
+                "{\"UTC\":\"2017-07-23T13:57:14.225Z\","
+                        + "\"Asia/Singapore\":\"2017-07-23T05:57:14.225Z\","
+                        + "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
     }
 
     public void shouldRetrieveJsonSystemDefaultZoneWhenWriteZonedDateTimeDefaultSettings() {
@@ -79,14 +77,15 @@ public class ZonedDateTimeTest {
 
     public void shouldRetrieveJsonSingaporeZoneWhenWriteZonedDateTimeSingaporeZone() {
         JsonSettings settings = JsonSettings.builder()
-                                            .zoneModifier(zoneId -> LocalZoneId.ASIA_SINGAPORE)
+                                            .zoneId(LocalZoneId.ASIA_SINGAPORE)
                                             .build();
 
         String actual = Json.createWriter(settings).writeValue(createData());
         assertThat(actual).isNotNull();
-        assertThat(actual).isEqualTo("{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\","
-                                             + "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\","
-                                             + "\"Australia/Sydney\":\"2017-07-23T11:57:14.225+08:00[Asia/Singapore]\"}");
+        assertThat(actual).isEqualTo(
+                "{\"UTC\":\"2017-07-23T21:57:14.225+08:00[Asia/Singapore]\","
+                        + "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00[Asia/Singapore]\","
+                        + "\"Australia/Sydney\":\"2017-07-23T11:57:14.225+08:00[Asia/Singapore]\"}");
     }
 
     public void shouldRetrieveDeserializedZonedDateTimeMapWhenReadJsonAsMap() {

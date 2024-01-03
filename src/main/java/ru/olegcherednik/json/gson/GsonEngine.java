@@ -16,21 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 import lombok.RequiredArgsConstructor;
+import ru.olegcherednik.json.api.JsonEngine;
+import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 import ru.olegcherednik.json.gson.types.IteratorParameterizedType;
 import ru.olegcherednik.json.gson.types.MapParameterizedType;
-import ru.olegcherednik.json.api.JsonEngine;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -107,19 +107,13 @@ public class GsonEngine implements JsonEngine {
     }
 
     @Override
-    public <V> Iterator<V> readListLazy(Reader reader, Class<V> valueClass) throws IOException {
-        try (Reader r = reader) {
-            JsonReader jsonReader = gson.newJsonReader(r);
-            return gson.fromJson(jsonReader, new IteratorParameterizedType<>(valueClass));
-        }
+    public <V> AutoCloseableIterator<V> readListLazy(Reader reader, Class<V> valueClass) throws IOException {
+        return gson.fromJson(gson.newJsonReader(reader), new IteratorParameterizedType<>(valueClass));
     }
 
     @Override
-    public Iterator<Map<String, Object>> readListOfMapLazy(Reader reader) throws IOException {
-        try (Reader r = reader) {
-            JsonReader jsonReader = gson.newJsonReader(r);
-            return gson.fromJson(jsonReader, new IteratorParameterizedType<>(Map.class));
-        }
+    public AutoCloseableIterator<Map<String, Object>> readListOfMapLazy(Reader reader) throws IOException {
+        return gson.fromJson(gson.newJsonReader(reader), new IteratorParameterizedType<>(Map.class));
     }
 
     @Override

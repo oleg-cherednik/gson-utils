@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson;
 
 import com.google.gson.JsonDeserializationContext;
@@ -104,6 +105,7 @@ public class ReadBroadbandTest {
         return broadbandDsThroughput;
     }
 
+    @SuppressWarnings("PMD.AvoidUsingHardCodedIP")
     private static DataModel.BroadbandThroughput getBroadbandThroughputDs() {
         DataModel.BroadbandThroughput broadbandThroughput = new DataModel.BroadbandThroughput();
         broadbandThroughput.setAverage(104830.);
@@ -129,6 +131,7 @@ public class ReadBroadbandTest {
         return broadbandUsThroughput;
     }
 
+    @SuppressWarnings("PMD.AvoidUsingHardCodedIP")
     private static DataModel.BroadbandThroughput getBroadbandThroughputUs() {
         DataModel.BroadbandThroughput broadbandThroughput = new DataModel.BroadbandThroughput();
         broadbandThroughput.setAverage(37828.);

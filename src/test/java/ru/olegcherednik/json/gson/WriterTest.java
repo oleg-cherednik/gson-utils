@@ -16,11 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.gson.data.Data;
 import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.gson.data.Data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,7 +45,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
  */
 @Test
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class WriteTest {
+public class WriterTest {
 
     public void shouldRetrieveNullWhenObjectNull() {
         assertThat(Json.writeValue(null)).isNull();
@@ -105,6 +106,7 @@ public class WriteTest {
         }
     }
 
+    @SuppressWarnings("PMD.CloseResource")
     public void shouldCloseWriterWhenFinishParse() throws IOException {
         Writer out = spy(new StringWriter());
         Json.writeValue(Data.OMEN, out);
@@ -112,6 +114,7 @@ public class WriteTest {
         assertThat(out).hasToString("{\"intVal\":666,\"strVal\":\"omen\"}");
     }
 
+    @SuppressWarnings("PMD.CloseResource")
     public void shouldCloseOutputStreamWhenFinishParse() throws IOException {
         OutputStream out = spy(new ByteArrayOutputStream());
         Json.writeValue(Data.OMEN, out);

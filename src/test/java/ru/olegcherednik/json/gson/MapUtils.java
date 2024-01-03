@@ -16,7 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -26,6 +30,8 @@ import java.util.Map;
  * @author Oleg Cherednik
  * @since 22.12.2020
  */
+@SuppressWarnings("PMD.ShortMethodName")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MapUtils {
 
     public static <K, V> Map<K, V> of(K k1, V v1) {
@@ -56,9 +62,6 @@ public final class MapUtils {
         map.put(k3, v3);
         map.put(k4, v4);
         return Collections.unmodifiableMap(map);
-    }
-
-    private MapUtils() {
     }
 
 }

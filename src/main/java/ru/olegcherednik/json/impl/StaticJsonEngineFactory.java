@@ -16,26 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.impl;
 
 import com.google.gson.GsonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ru.olegcherednik.json.api.JsonEngineFactory;
+import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.gson.DynamicToNumberStrategy;
 import ru.olegcherednik.json.gson.GsonEngine;
-import ru.olegcherednik.json.gson.datetime.DateTypeAdapter;
+import ru.olegcherednik.json.gson.adapters.AutoCloseableIteratorTypeAdapter;
 import ru.olegcherednik.json.gson.adapters.EnumIdTypeAdapterFactory;
+import ru.olegcherednik.json.gson.datetime.DateTypeAdapter;
 import ru.olegcherednik.json.gson.datetime.InstantTypeAdapter;
-import ru.olegcherednik.json.gson.adapters.IteratorTypeAdapter;
 import ru.olegcherednik.json.gson.datetime.LocalDateTimeTypeAdapter;
 import ru.olegcherednik.json.gson.datetime.LocalDateTypeAdapter;
 import ru.olegcherednik.json.gson.datetime.LocalTimeTypeAdapter;
 import ru.olegcherednik.json.gson.datetime.OffsetDateTimeTypeAdapter;
 import ru.olegcherednik.json.gson.datetime.OffsetTimeTypeAdapter;
 import ru.olegcherednik.json.gson.datetime.ZonedDateTimeTypeAdapter;
-import ru.olegcherednik.json.api.JsonEngineFactory;
-import ru.olegcherednik.json.api.JsonSettings;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -43,10 +44,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 /**
  * @author Oleg Cherednik
@@ -87,20 +90,24 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
         if (settings.isSerializeNull())
             builder.serializeNulls();
 
-        InstantTypeAdapter instant = new InstantTypeAdapter(settings.getInstantFormatter(), settings.getZoneModifier());
+        UnaryOperator<ZoneId> zoneModifier = settings.getZoneId() == null ? zoneId -> zoneId
+                                                                          : zoneId -> settings.getZoneId();
+
+        InstantTypeAdapter instant = new InstantTypeAdapter(settings.getInstantFormatter(), zoneModifier);
         LocalDateTypeAdapter localDate = new LocalDateTypeAdapter(settings.getLocalDateFormatter());
         LocalTimeTypeAdapter localTime = new LocalTimeTypeAdapter(settings.getLocalTimeFormatter());
         LocalDateTimeTypeAdapter localDateTime = new LocalDateTimeTypeAdapter(settings.getLocalDateTimeFormatter());
-        OffsetTimeTypeAdapter offsetTime = new OffsetTimeTypeAdapter(settings.getOffsetTimeFormatter(), settings.getZoneModifier());
+        OffsetTimeTypeAdapter offsetTime = new OffsetTimeTypeAdapter(settings.getOffsetTimeFormatter(),
+                                                                     zoneModifier);
         OffsetDateTimeTypeAdapter offsetDateTime = new OffsetDateTimeTypeAdapter(settings.getOffsetDateTimeFormatter(),
-                                                                                 settings.getZoneModifier());
+                                                                                 zoneModifier);
         ZonedDateTimeTypeAdapter zonedDateTime = new ZonedDateTimeTypeAdapter(settings.getZonedDateTimeFormatter(),
-                                                                              settings.getZoneModifier());
+                                                                              zoneModifier);
         DateTypeAdapter date = new DateTypeAdapter(settings.getDateFormatter());
 
         Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>) GsonBuilder::enableComplexMapKeySerialization)
-                .andThen(b -> b.registerTypeAdapterFactory(IteratorTypeAdapter.INSTANCE))
-                .andThen(b -> b.registerTypeAdapterFactory(new EnumIdTypeAdapterFactory()))
+                .andThen(b -> b.registerTypeAdapterFactory(AutoCloseableIteratorTypeAdapter.INSTANCE))
+                .andThen(b -> b.registerTypeAdapterFactory(EnumIdTypeAdapterFactory.INSTANCE))
                 .andThen(b -> b.registerTypeAdapter(Instant.class, instant.nullSafe()))
                 .andThen(b -> b.registerTypeAdapter(LocalTime.class, localTime.nullSafe()))
                 .andThen(b -> b.registerTypeAdapter(LocalDate.class, localDate.nullSafe()))

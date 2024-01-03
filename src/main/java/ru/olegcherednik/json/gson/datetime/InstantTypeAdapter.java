@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson.datetime;
 
 import com.google.gson.TypeAdapter;
@@ -36,8 +37,8 @@ import java.util.function.UnaryOperator;
 @RequiredArgsConstructor
 public class InstantTypeAdapter extends TypeAdapter<Instant> {
 
-    private final DateTimeFormatter df;
-    private final UnaryOperator<ZoneId> zoneModifier;
+    protected final DateTimeFormatter df;
+    protected final UnaryOperator<ZoneId> zoneModifier;
 
     @Override
     public void write(JsonWriter out, Instant value) throws IOException {

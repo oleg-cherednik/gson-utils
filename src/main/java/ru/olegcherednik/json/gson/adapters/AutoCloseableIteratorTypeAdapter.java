@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson.adapters;
 
 import com.google.gson.Gson;
@@ -26,6 +27,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import ru.olegcherednik.json.api.JsonException;
+import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -35,10 +37,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
+ * @param <V> Type of the value object
  * @author Oleg Cherednik
  * @since 10.01.2021
  */
-public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
+public class AutoCloseableIteratorTypeAdapter<V> extends TypeAdapter<AutoCloseableIterator<V>> {
 
     private final TypeAdapter<V> elementTypeAdapter;
 
@@ -53,7 +56,7 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
                 Type elementType = parameterizedType.getActualTypeArguments()[0];
                 TypeAdapter<?> typeAdapter = gson.getAdapter(TypeToken.get(elementType));
                 //noinspection unchecked,rawtypes
-                return new IteratorTypeAdapter(createTypeAdapter(gson, typeAdapter, elementType));
+                return new AutoCloseableIteratorTypeAdapter(createTypeAdapter(gson, typeAdapter, elementType));
             } catch (Exception e) {
                 throw new JsonException(e);
             }
@@ -68,12 +71,12 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
         }
     };
 
-    public IteratorTypeAdapter(TypeAdapter<V> elementTypeAdapter) {
+    public AutoCloseableIteratorTypeAdapter(TypeAdapter<V> elementTypeAdapter) {
         this.elementTypeAdapter = elementTypeAdapter;
     }
 
     @Override
-    public void write(JsonWriter out, Iterator<V> it) throws IOException {
+    public void write(JsonWriter out, AutoCloseableIterator<V> it) throws IOException {
         if (it == null) {
             out.nullValue();
             return;
@@ -89,7 +92,7 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
     }
 
     @Override
-    public Iterator<V> read(JsonReader in) throws IOException {
+    public AutoCloseableIterator<V> read(JsonReader in) throws IOException {
         if (in.peek() == JsonToken.NULL) {
             in.nextNull();
             return null;
@@ -97,7 +100,7 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
 
         in.beginArray();
 
-        return new Iterator<V>() {
+        return new AutoCloseableIterator<V>() {
 
             @Override
             public boolean hasNext() {
@@ -117,6 +120,11 @@ public class IteratorTypeAdapter<V> extends TypeAdapter<Iterator<V>> {
                 } catch (IOException e) {
                     throw new JsonException(e);
                 }
+            }
+
+            @Override
+            public void close() throws Exception {
+                in.close();
             }
         };
     }

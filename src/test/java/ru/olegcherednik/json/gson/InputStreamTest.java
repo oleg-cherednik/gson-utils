@@ -16,14 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson;
 
 import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.gson.data.Book;
-import ru.olegcherednik.json.gson.data.Data;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
+import ru.olegcherednik.json.gson.data.Book;
+import ru.olegcherednik.json.gson.data.Data;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -242,6 +243,7 @@ public class InputStreamTest {
                 .isExactlyInstanceOf(JsonException.class);
     }
 
+    @SuppressWarnings("PMD.CloseResource")
     public void shouldCloseInputStreamWhenFinishParse() throws IOException {
         InputStream in = getResourceAsInputStream("/book.json");
         Book actual = Json.readValue(in, Book.class);

@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson.types;
 
 import java.lang.reflect.ParameterizedType;
@@ -23,6 +24,7 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 
 /**
+ * @param <V> Type of the value object
  * @author Oleg Cherednik
  * @since 09.01.2021
  */

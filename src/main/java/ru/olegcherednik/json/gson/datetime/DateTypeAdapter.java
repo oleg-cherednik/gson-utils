@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson.datetime;
 
 import com.google.gson.TypeAdapter;
@@ -26,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.time.Instant;
 import java.util.Date;
 
 /**

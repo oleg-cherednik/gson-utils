@@ -16,16 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson.datetime;
 
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
-import ru.olegcherednik.json.api.ZoneModifier;
 import ru.olegcherednik.json.gson.LocalZoneId;
 import ru.olegcherednik.json.gson.ResourceData;
 
 import java.io.IOException;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
@@ -35,13 +36,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Oleg Cherednik
  * @since 08.01.2021
  */
-@SuppressWarnings("NewClassNamingConvention")
 @Test
 public class ZonedDateTimePrettyPrintTest {
 
     public void shouldRetrievePrettyPrintJsonUtcZoneWhenWriteZonedDateTimeMapWithPrettyPrint() throws IOException {
         JsonSettings settings = JsonSettings.builder()
-                                            .zoneModifier(ZoneModifier.CONVERT_TO_UTC)
+                                            .zoneId(ZoneOffset.UTC)
                                             .build();
 
         Map<String, ZonedDateTime> map = ZonedDateTimeTest.createData();
@@ -52,9 +52,10 @@ public class ZonedDateTimePrettyPrintTest {
         assertThat(Json.readMap(actual)).isEqualTo(Json.readMap(expected));
     }
 
-    public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint() throws IOException {
+    public void shouldRetrievePrettyPrintJsonSingaporeZoneWhenWriteZonedDateTimeMapWithPrettyPrint()
+            throws IOException {
         JsonSettings settings = JsonSettings.builder()
-                                            .zoneModifier(zone -> LocalZoneId.ASIA_SINGAPORE)
+                                            .zoneId(LocalZoneId.ASIA_SINGAPORE)
                                             .build();
 
         Map<String, ZonedDateTime> map = ZonedDateTimeTest.createData();

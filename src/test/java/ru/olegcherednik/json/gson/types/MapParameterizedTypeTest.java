@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package ru.olegcherednik.json.gson.types;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.gson.types.MapParameterizedType;
 
 import java.util.LinkedHashMap;
 
@@ -32,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class MapParameterizedTypeTest {
 
+    @SuppressWarnings("PMD.LooseCoupling")
     public void shouldRetrieveGivenClassesWhenCreateNewInstance() {
         MapParameterizedType<String, Integer> type = new MapParameterizedType<>(String.class, Integer.class);
         assertThat(type.getActualTypeArguments()).containsExactly(String.class, Integer.class);
