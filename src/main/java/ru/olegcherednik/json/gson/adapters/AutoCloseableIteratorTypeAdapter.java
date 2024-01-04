@@ -30,10 +30,8 @@ import ru.olegcherednik.json.api.JsonException;
 import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -55,18 +53,7 @@ public class AutoCloseableIteratorTypeAdapter<V> extends TypeAdapter<AutoCloseab
             Type elementType = parameterizedType.getActualTypeArguments()[0];
             TypeAdapter<?> typeAdapter = gson.getAdapter(TypeToken.get(elementType));
             //noinspection unchecked,rawtypes
-            return new AutoCloseableIteratorTypeAdapter(createTypeAdapter(gson, typeAdapter, elementType));
-        }
-
-        private TypeAdapter<?> createTypeAdapter(Gson gson, TypeAdapter<?> typeAdapter, Type elementType) {
-            try {
-                Class<?> cls = Class.forName("com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper");
-                Constructor<?> con = cls.getDeclaredConstructor(Gson.class, TypeAdapter.class, Type.class);
-                con.setAccessible(true);
-                return (TypeAdapter<?>) con.newInstance(gson, typeAdapter, elementType);
-            } catch (Exception e) {
-                throw new JsonException(e);
-            }
+            return new AutoCloseableIteratorTypeAdapter(typeAdapter);
         }
     };
 
