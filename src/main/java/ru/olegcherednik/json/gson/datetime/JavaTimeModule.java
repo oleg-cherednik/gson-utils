@@ -20,6 +20,7 @@
 package ru.olegcherednik.json.gson.datetime;
 
 import com.google.gson.GsonBuilder;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.gson.adapters.AutoCloseableIteratorTypeAdapter;
@@ -51,7 +52,7 @@ import java.util.function.Consumer;
  * @since 03.01.2024
  */
 @Builder
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class JavaTimeModule implements Consumer<GsonBuilder> {
 
     protected final ZoneId zoneId;
