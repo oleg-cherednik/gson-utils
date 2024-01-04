@@ -41,18 +41,13 @@ public final class DynamicToNumberStrategy implements ToNumberStrategy {
         String str = in.nextString();
         double val = Double.parseDouble(str);
 
-        if (str.indexOf('.') >= 0 || str.indexOf(',') >= 0)
+        if (str.indexOf('.') >= 0)
             return val;
         if (Double.compare((int) val, val) == 0)
             return (int) val;
         if (Double.compare((long) val, val) == 0)
             return (long) val;
-
-        try {
-            return new BigInteger(str);
-        } catch (NumberFormatException ignore) {
-            return val;
-        }
+        return new BigInteger(str);
     }
 
 }
