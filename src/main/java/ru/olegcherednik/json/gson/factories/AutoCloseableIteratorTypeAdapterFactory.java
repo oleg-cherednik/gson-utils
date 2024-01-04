@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.gson.adapters;
+package ru.olegcherednik.json.gson.factories;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
