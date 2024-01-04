@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
  * @since 04.01.2024
  */
 @RequiredArgsConstructor
-public class JsonReaderIterator<V> implements AutoCloseableIterator<V> {
+public class JsonReaderAutoCloseableIterator<V> implements AutoCloseableIterator<V> {
 
     protected final JsonReader in;
     protected final TypeAdapter<V> typeAdapter;

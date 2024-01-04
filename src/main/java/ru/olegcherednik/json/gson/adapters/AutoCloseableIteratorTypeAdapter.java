@@ -19,45 +19,24 @@
 
 package ru.olegcherednik.json.gson.adapters;
 
-import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
-import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
 /**
  * @param <V> Type of the value object
  * @author Oleg Cherednik
  * @since 10.01.2021
  */
+@RequiredArgsConstructor
 public class AutoCloseableIteratorTypeAdapter<V> extends TypeAdapter<AutoCloseableIterator<V>> {
 
-    private final TypeAdapter<V> elementTypeAdapter;
-
-    public static final TypeAdapterFactory INSTANCE = new TypeAdapterFactory() {
-        @Override
-        public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
-            if (!AutoCloseableIterator.class.isAssignableFrom(typeToken.getRawType()))
-                return null;
-
-            ParameterizedType parameterizedType = (ParameterizedType) typeToken.getType();
-            Type elementType = parameterizedType.getActualTypeArguments()[0];
-            TypeAdapter<?> typeAdapter = gson.getAdapter(TypeToken.get(elementType));
-            //noinspection unchecked,rawtypes
-            return new AutoCloseableIteratorTypeAdapter(typeAdapter);
-        }
-    };
-
-    public AutoCloseableIteratorTypeAdapter(TypeAdapter<V> elementTypeAdapter) {
-        this.elementTypeAdapter = elementTypeAdapter;
-    }
+    protected final TypeAdapter<V> elementTypeAdapter;
 
     @Override
     public void write(JsonWriter out, AutoCloseableIterator<V> it) throws IOException {
@@ -83,7 +62,7 @@ public class AutoCloseableIteratorTypeAdapter<V> extends TypeAdapter<AutoCloseab
         }
 
         in.beginArray();
-        return new JsonReaderIterator<>(in, elementTypeAdapter);
+        return new JsonReaderAutoCloseableIterator<>(in, elementTypeAdapter);
     }
 
 }

@@ -24,6 +24,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.gson.adapters.AutoCloseableIteratorTypeAdapter;
+import ru.olegcherednik.json.gson.adapters.AutoCloseableIteratorTypeAdapterFactory;
 import ru.olegcherednik.json.gson.adapters.EnumIdTypeAdapterFactory;
 import ru.olegcherednik.json.gson.datetime.adapter.DateTypeAdapter;
 import ru.olegcherednik.json.gson.datetime.adapter.InstantTypeAdapter;
@@ -77,7 +78,7 @@ public class JavaTimeModule implements Consumer<GsonBuilder> {
         DateTypeAdapter date = new DateTypeAdapter(this.date);
 
         Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>) GsonBuilder::enableComplexMapKeySerialization)
-                .andThen(b -> b.registerTypeAdapterFactory(AutoCloseableIteratorTypeAdapter.INSTANCE))
+                .andThen(b -> b.registerTypeAdapterFactory(AutoCloseableIteratorTypeAdapterFactory.INSTANCE))
                 .andThen(b -> b.registerTypeAdapterFactory(EnumIdTypeAdapterFactory.INSTANCE))
                 .andThen(b -> b.registerTypeAdapter(Instant.class, instant.nullSafe()))
                 .andThen(b -> b.registerTypeAdapter(LocalTime.class, localTime.nullSafe()))

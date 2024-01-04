@@ -41,7 +41,7 @@ import java.util.function.Function;
  * @since 18.10.2021
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
+public final class EnumIdTypeAdapterFactory implements TypeAdapterFactory {
 
     public static final EnumIdTypeAdapterFactory INSTANCE = new EnumIdTypeAdapterFactory();
 
