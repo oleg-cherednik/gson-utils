@@ -22,6 +22,7 @@ package ru.olegcherednik.json.gson.factories;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
+import com.google.gson.internal.bind.ObjectTypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -35,6 +36,7 @@ import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -42,37 +44,30 @@ import java.util.NoSuchElementException;
  * @since 04.01.2024
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AutoCloseableIteratorTypeAdapterFactory implements TypeAdapterFactory {
+public class IteratorTypeAdapterFactory implements TypeAdapterFactory {
 
-    public static final AutoCloseableIteratorTypeAdapterFactory INSTANCE =
-            new AutoCloseableIteratorTypeAdapterFactory();
+    public static final IteratorTypeAdapterFactory INSTANCE = new IteratorTypeAdapterFactory();
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
-        if (!AutoCloseableIterator.class.isAssignableFrom(typeToken.getRawType()))
-            return null;
-
-        ParameterizedType parameterizedType = (ParameterizedType) typeToken.getType();
-        Type elementType = getElementType(parameterizedType);
-        TypeAdapter<?> elementTypeAdapter = gson.getAdapter(TypeToken.get(elementType));
-        //noinspection unchecked,rawtypes
-        return new Adapter(elementTypeAdapter);
+        if (AutoCloseableIterator.class.isAssignableFrom(typeToken.getRawType()))
+            return AutoCloseableIteratorTypeAdapterFactory.INSTANCE.create(gson, typeToken);
+        if (Iterator.class.isAssignableFrom(typeToken.getRawType()))
+            return createForIterator(gson, typeToken);
+        return null;
     }
 
-    protected static Type getElementType(ParameterizedType parameterizedType) {
-        if (parameterizedType.getActualTypeArguments().length > 0)
-            return parameterizedType.getActualTypeArguments()[0];
-        return Object.class;
+    protected <T> TypeAdapter<T> createForIterator(Gson gson, TypeToken<T> typeToken) {
+        return new AdapterBar(gson.getAdapter(Object.class));
     }
 
     @RequiredArgsConstructor
-    public static class Adapter<V> extends TypeAdapter<AutoCloseableIterator<V>> {
+    public static class AdapterBar<V> extends TypeAdapter<Iterator<V>> {
 
         protected final TypeAdapter<V> elementTypeAdapter;
 
         @Override
-        public void write(JsonWriter out, AutoCloseableIterator<V> it) throws IOException {
+        public void write(JsonWriter out, Iterator<V> it) throws IOException {
             if (it == null) {
                 out.nullValue();
                 return;
@@ -88,20 +83,20 @@ public class AutoCloseableIteratorTypeAdapterFactory implements TypeAdapterFacto
         }
 
         @Override
-        public AutoCloseableIterator<V> read(JsonReader in) throws IOException {
+        public Iterator<V> read(JsonReader in) throws IOException {
             if (in.peek() == JsonToken.NULL) {
                 in.nextNull();
                 return null;
             }
 
             in.beginArray();
-            return new JsonReaderIterator<>(in, elementTypeAdapter);
+            return new JsonReaderIterator1<>(in, elementTypeAdapter);
         }
 
     }
 
     @RequiredArgsConstructor
-    public static class JsonReaderIterator<V> implements AutoCloseableIterator<V> {
+    public static class JsonReaderIterator1<V> implements Iterator<V> {
 
         protected final JsonReader in;
         protected final TypeAdapter<V> typeAdapter;
@@ -126,10 +121,6 @@ public class AutoCloseableIteratorTypeAdapterFactory implements TypeAdapterFacto
             }
         }
 
-        @Override
-        public void close() throws Exception {
-            in.close();
-        }
     }
 
 }

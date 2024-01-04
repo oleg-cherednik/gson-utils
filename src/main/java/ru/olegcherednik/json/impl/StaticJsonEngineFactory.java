@@ -28,6 +28,9 @@ import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.gson.DynamicToNumberStrategy;
 import ru.olegcherednik.json.gson.GsonEngine;
 import ru.olegcherednik.json.gson.datetime.JavaTimeModule;
+import ru.olegcherednik.json.gson.factories.AutoCloseableIteratorTypeAdapterFactory;
+import ru.olegcherednik.json.gson.factories.EnumIdTypeAdapterFactory;
+import ru.olegcherednik.json.gson.factories.IteratorTypeAdapterFactory;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -67,7 +70,9 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
 
         GsonBuilder builder = new GsonBuilder()
                 .setObjectToNumberStrategy(DynamicToNumberStrategy.INSTANCE)
-                .enableComplexMapKeySerialization();
+                .enableComplexMapKeySerialization()
+                .registerTypeAdapterFactory(EnumIdTypeAdapterFactory.INSTANCE)
+                .registerTypeAdapterFactory(IteratorTypeAdapterFactory.INSTANCE);
 
         if (settings.isSerializeNull())
             builder.serializeNulls();

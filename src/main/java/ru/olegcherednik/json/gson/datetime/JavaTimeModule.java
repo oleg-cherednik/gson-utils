@@ -23,8 +23,6 @@ import com.google.gson.GsonBuilder;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import ru.olegcherednik.json.gson.factories.AutoCloseableIteratorTypeAdapterFactory;
-import ru.olegcherednik.json.gson.factories.EnumIdTypeAdapterFactory;
 import ru.olegcherednik.json.gson.datetime.adapters.DateTypeAdapter;
 import ru.olegcherednik.json.gson.datetime.adapters.InstantTypeAdapter;
 import ru.olegcherednik.json.gson.datetime.adapters.LocalDateTimeTypeAdapter;
@@ -66,16 +64,6 @@ public class JavaTimeModule implements Consumer<GsonBuilder> {
 
     @Override
     public void accept(GsonBuilder builder) {
-        registerTypeAdapterFactories(builder);
-        registerTypeAdapters(builder);
-    }
-
-    protected void registerTypeAdapterFactories(GsonBuilder builder) {
-        builder.registerTypeAdapterFactory(AutoCloseableIteratorTypeAdapterFactory.INSTANCE)
-               .registerTypeAdapterFactory(EnumIdTypeAdapterFactory.INSTANCE);
-    }
-
-    protected void registerTypeAdapters(GsonBuilder builder) {
         builder.registerTypeAdapter(Instant.class, new InstantTypeAdapter(instant).nullSafe())
                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter(localDate).nullSafe())
                .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter(localTime).nullSafe())
