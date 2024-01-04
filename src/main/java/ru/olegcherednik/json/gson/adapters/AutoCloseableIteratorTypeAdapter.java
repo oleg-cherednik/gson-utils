@@ -26,13 +26,11 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import ru.olegcherednik.json.api.JsonException;
 import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.NoSuchElementException;
 
 /**
  * @param <V> Type of the value object
@@ -85,34 +83,7 @@ public class AutoCloseableIteratorTypeAdapter<V> extends TypeAdapter<AutoCloseab
         }
 
         in.beginArray();
-
-        return new AutoCloseableIterator<V>() {
-
-            @Override
-            public boolean hasNext() {
-                try {
-                    return in.hasNext();
-                } catch (IOException e) {
-                    throw new JsonException(e);
-                }
-            }
-
-            @Override
-            public V next() {
-                try {
-                    if (!hasNext())
-                        throw new NoSuchElementException();
-                    return elementTypeAdapter.read(in);
-                } catch (IOException e) {
-                    throw new JsonException(e);
-                }
-            }
-
-            @Override
-            public void close() throws Exception {
-                in.close();
-            }
-        };
+        return new JsonReaderIterator<>(in, elementTypeAdapter);
     }
 
 }
