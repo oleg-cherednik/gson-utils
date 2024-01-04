@@ -111,6 +111,10 @@ jacocoTestReport {
     }
 }
 
+javadoc {
+    options.addBooleanOption('Xdoclint:-missing', true)
+}
+
 check.dependsOn jacocoTestReport
 
 test {

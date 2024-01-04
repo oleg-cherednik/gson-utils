@@ -27,8 +27,6 @@ import ru.olegcherednik.json.gson.MapUtils;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test
 public class OffsetDateTimeTest {
 
-    public void shouldRetrieveJsonOriginalZoneWhenWriteDefaultSettings() {
+    public void shouldRetrieveJsonOriginalWhenWriteDefaultSettings() {
         String actual = Json.writeValue(createData());
         assertThat(actual).isNotNull().isEqualTo(
                 "{\"UTC\":\"2017-07-23T13:57:14.225Z\","
@@ -48,7 +46,7 @@ public class OffsetDateTimeTest {
                         + "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00\"}");
     }
 
-    public void shouldRetrieveJsonUtcZoneWhenWriteZonedDateTimeWithUtcZoneId() {
+    public void shouldRetrieveJsonUtcWhenWriteOffsetDateTimeWithUtcZoneId() {
         JsonSettings settings = JsonSettings.builder().zoneId(ZoneOffset.UTC).build();
         String actual = Json.createWriter(settings).writeValue(createData());
         assertThat(actual).isNotNull().isEqualTo(
@@ -57,7 +55,7 @@ public class OffsetDateTimeTest {
                         + "\"Australia/Sydney\":\"2017-07-23T03:57:14.225Z\"}");
     }
 
-    public void shouldRetrieveJsonSingaporeWhenWriteZonedDateTimeWithSingaporeZoneId() {
+    public void shouldRetrieveJsonSingaporeWhenWriteOffsetDateTimeWithSingaporeZoneId() {
         JsonSettings settings = JsonSettings.builder().zoneId(LocalZoneId.ASIA_SINGAPORE).build();
         String actual = Json.createWriter(settings).writeValue(createData());
         assertThat(actual).isNotNull().isEqualTo(
@@ -66,7 +64,7 @@ public class OffsetDateTimeTest {
                         + "\"Australia/Sydney\":\"2017-07-23T11:57:14.225+08:00\"}");
     }
 
-    public void shouldRetrieveDeserializedZonedDateTimeMapWhenReadJsonAsMap() {
+    public void shouldRetrieveDeserializedOffsetDateTimeMapWhenReadJsonAsMap() {
         String json = "{\"UTC\":\"2017-07-23T13:57:14.225Z\","
                 + "\"Asia/Singapore\":\"2017-07-23T13:57:14.225+08:00\","
                 + "\"Australia/Sydney\":\"2017-07-23T13:57:14.225+10:00\"}";

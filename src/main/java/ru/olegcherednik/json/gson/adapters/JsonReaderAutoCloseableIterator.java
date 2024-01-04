@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 /**
+ * @param <V> Type of the value object
  * @author Oleg Cherednik
  * @since 04.01.2024
  */

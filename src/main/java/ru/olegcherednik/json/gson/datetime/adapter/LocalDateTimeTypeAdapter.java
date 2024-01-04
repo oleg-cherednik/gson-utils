@@ -23,11 +23,9 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import lombok.RequiredArgsConstructor;
-import ru.olegcherednik.json.api.JsonSettings;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**

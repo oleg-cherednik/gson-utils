@@ -29,10 +29,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 11.01.2021
  */
 @Test
+@SuppressWarnings("NewClassNamingConvention")
 public class AutoCloseableIteratorParameterizedTypeTest {
 
     public void shouldRetrieveGivenClassesWhenCreateNewInstance() {
-        AutoCloseableIteratorParameterizedType<String> type = new AutoCloseableIteratorParameterizedType<>(String.class);
+        AutoCloseableIteratorParameterizedType<String> type =
+                new AutoCloseableIteratorParameterizedType<>(String.class);
         assertThat(type.getActualTypeArguments()).containsExactly(String.class);
         assertThat(type.getRawType()).isSameAs(AutoCloseableIterator.class);
         assertThat(type.getOwnerType()).isNull();

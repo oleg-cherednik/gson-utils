@@ -23,7 +23,6 @@ import com.google.gson.GsonBuilder;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import ru.olegcherednik.json.gson.adapters.AutoCloseableIteratorTypeAdapter;
 import ru.olegcherednik.json.gson.adapters.AutoCloseableIteratorTypeAdapterFactory;
 import ru.olegcherednik.json.gson.adapters.EnumIdTypeAdapterFactory;
 import ru.olegcherednik.json.gson.datetime.adapter.DateTypeAdapter;
@@ -42,7 +41,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -54,9 +52,9 @@ import java.util.function.Consumer;
  */
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@SuppressWarnings("all")
 public class JavaTimeModule implements Consumer<GsonBuilder> {
 
-    protected final ZoneId zoneId;
     protected final DateTimeFormatter instant;
     protected final DateTimeFormatter localDate;
     protected final DateTimeFormatter localTime;
@@ -68,32 +66,24 @@ public class JavaTimeModule implements Consumer<GsonBuilder> {
 
     @Override
     public void accept(GsonBuilder builder) {
-        InstantTypeAdapter instant = new InstantTypeAdapter(this.instant);
-        LocalDateTypeAdapter localDate = new LocalDateTypeAdapter(this.localDate);
-        LocalTimeTypeAdapter localTime = new LocalTimeTypeAdapter(this.localTime);
-        LocalDateTimeTypeAdapter localDateTime = new LocalDateTimeTypeAdapter(this.localDateTime);
-        OffsetTimeTypeAdapter offsetTime = new OffsetTimeTypeAdapter(withZoneId(this.offsetTime));
-        OffsetDateTimeTypeAdapter offsetDateTime = new OffsetDateTimeTypeAdapter(withZoneId(this.offsetDateTime));
-        ZonedDateTimeTypeAdapter zonedDateTime = new ZonedDateTimeTypeAdapter(withZoneId(this.zonedDateTime));
-        DateTypeAdapter date = new DateTypeAdapter(this.date);
-
-        Consumer<GsonBuilder> customizer = ((Consumer<GsonBuilder>) GsonBuilder::enableComplexMapKeySerialization)
-                .andThen(b -> b.registerTypeAdapterFactory(AutoCloseableIteratorTypeAdapterFactory.INSTANCE))
-                .andThen(b -> b.registerTypeAdapterFactory(EnumIdTypeAdapterFactory.INSTANCE))
-                .andThen(b -> b.registerTypeAdapter(Instant.class, instant.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(LocalTime.class, localTime.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(LocalDate.class, localDate.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(LocalDateTime.class, localDateTime.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(OffsetTime.class, offsetTime.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(OffsetDateTime.class, offsetDateTime.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(ZonedDateTime.class, zonedDateTime.nullSafe()))
-                .andThen(b -> b.registerTypeAdapter(Date.class, date.nullSafe()));
-
-        customizer.accept(builder);
+        registerTypeAdapterFactories(builder);
+        registerTypeAdapters(builder);
     }
 
-    protected DateTimeFormatter withZoneId(DateTimeFormatter df) {
-        return zoneId == null ? df : df.withZone(zoneId);
+    protected void registerTypeAdapterFactories(GsonBuilder builder) {
+        builder.registerTypeAdapterFactory(AutoCloseableIteratorTypeAdapterFactory.INSTANCE)
+               .registerTypeAdapterFactory(EnumIdTypeAdapterFactory.INSTANCE);
+    }
+
+    protected void registerTypeAdapters(GsonBuilder builder) {
+        builder.registerTypeAdapter(Instant.class, new InstantTypeAdapter(instant).nullSafe())
+               .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter(localDate).nullSafe())
+               .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter(localTime).nullSafe())
+               .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter(localDateTime).nullSafe())
+               .registerTypeAdapter(OffsetTime.class, new OffsetTimeTypeAdapter(offsetTime).nullSafe())
+               .registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeTypeAdapter(offsetDateTime).nullSafe())
+               .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter(zonedDateTime).nullSafe())
+               .registerTypeAdapter(Date.class, new DateTypeAdapter(date).nullSafe());
     }
 
 }

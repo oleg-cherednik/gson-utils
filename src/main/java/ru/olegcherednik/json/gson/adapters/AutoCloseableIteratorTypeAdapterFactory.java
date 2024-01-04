@@ -41,15 +41,15 @@ public final class AutoCloseableIteratorTypeAdapterFactory implements TypeAdapte
             new AutoCloseableIteratorTypeAdapterFactory();
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
         if (!AutoCloseableIterator.class.isAssignableFrom(typeToken.getRawType()))
             return null;
 
-        ParameterizedType parameterizedType = (ParameterizedType) typeToken.getType();
-        Type elementType = parameterizedType.getActualTypeArguments()[0];
-        TypeAdapter<?> typeAdapter = gson.getAdapter(TypeToken.get(elementType));
+        Type elementType = ((ParameterizedType) typeToken.getType()).getActualTypeArguments()[0];
+        TypeAdapter<?> elementTypeAdapter = gson.getAdapter(TypeToken.get(elementType));
         //noinspection unchecked,rawtypes
-        return new AutoCloseableIteratorTypeAdapter(typeAdapter);
+        return new AutoCloseableIteratorTypeAdapter(elementTypeAdapter);
     }
 
 }

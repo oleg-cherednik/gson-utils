@@ -29,6 +29,8 @@ import ru.olegcherednik.json.gson.DynamicToNumberStrategy;
 import ru.olegcherednik.json.gson.GsonEngine;
 import ru.olegcherednik.json.gson.datetime.JavaTimeModule;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -63,28 +65,33 @@ public final class StaticJsonEngineFactory implements JsonEngineFactory {
     private static GsonBuilder createGsonBuilder(JsonSettings settings) {
         Objects.requireNonNull(settings);
 
-        GsonBuilder builder = new GsonBuilder().setObjectToNumberStrategy(DynamicToNumberStrategy.INSTANCE);
+        GsonBuilder builder = new GsonBuilder()
+                .setObjectToNumberStrategy(DynamicToNumberStrategy.INSTANCE)
+                .enableComplexMapKeySerialization();
 
         if (settings.isSerializeNull())
             builder.serializeNulls();
 
-        createJavaTimeModule(settings).accept(builder);
+        createJavaTimeModuleConsumer(settings).accept(builder);
         return builder;
     }
 
-    private static JavaTimeModule createJavaTimeModule(JsonSettings settings) {
+    private static JavaTimeModule createJavaTimeModuleConsumer(JsonSettings settings) {
         return JavaTimeModule.builder()
-                             .zoneId(settings.getZoneId())
                              .date(settings.getDateFormatter())
                              .instant(settings.getInstantFormatter())
                              .localDate(settings.getLocalDateFormatter())
                              .localTime(settings.getLocalTimeFormatter())
                              .localDateTime(settings.getLocalDateTimeFormatter())
                              .offsetTime(settings.getOffsetTimeFormatter())
-                             .offsetDateTime(settings.getOffsetDateTimeFormatter())
-                             .offsetDateTime(settings.getOffsetDateTimeFormatter())
-                             .zonedDateTime(settings.getZonedDateTimeFormatter())
+                             .offsetDateTime(withZoneId(settings.getOffsetDateTimeFormatter(), settings.getZoneId()))
+                             .offsetDateTime(withZoneId(settings.getOffsetDateTimeFormatter(), settings.getZoneId()))
+                             .zonedDateTime(withZoneId(settings.getZonedDateTimeFormatter(), settings.getZoneId()))
                              .build();
+    }
+
+    private static DateTimeFormatter withZoneId(DateTimeFormatter df, ZoneId zoneId) {
+        return zoneId == null ? df : df.withZone(zoneId);
     }
 
 }

@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ListUtils {
 
+    @SafeVarargs
     public static <T> List<T> of(T... elements) {
         if (elements == null || elements.length == 0)
             return Collections.emptyList();
