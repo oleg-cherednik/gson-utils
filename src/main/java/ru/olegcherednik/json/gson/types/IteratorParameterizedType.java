@@ -19,6 +19,8 @@
 
 package ru.olegcherednik.json.gson.types;
 
+import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Iterator;
@@ -43,7 +45,7 @@ public class IteratorParameterizedType<V> implements ParameterizedType {
 
     @Override
     public Type getRawType() {
-        return Iterator.class;
+        return AutoCloseableIterator.class;
     }
 
     @Override

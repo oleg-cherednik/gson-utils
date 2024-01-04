@@ -20,6 +20,7 @@
 package ru.olegcherednik.json.gson.types;
 
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 
 import java.util.Iterator;
 
@@ -35,7 +36,7 @@ public class IteratorParameterizedTypeTest {
     public void shouldRetrieveGivenClassesWhenCreateNewInstance() {
         IteratorParameterizedType<String> type = new IteratorParameterizedType<>(String.class);
         assertThat(type.getActualTypeArguments()).containsExactly(String.class);
-        assertThat(type.getRawType()).isSameAs(Iterator.class);
+        assertThat(type.getRawType()).isSameAs(AutoCloseableIterator.class);
         assertThat(type.getOwnerType()).isNull();
     }
 

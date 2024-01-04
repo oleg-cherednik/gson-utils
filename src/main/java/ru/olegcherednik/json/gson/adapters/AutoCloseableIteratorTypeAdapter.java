@@ -48,7 +48,7 @@ public class AutoCloseableIteratorTypeAdapter<V> extends TypeAdapter<AutoCloseab
     public static final TypeAdapterFactory INSTANCE = new TypeAdapterFactory() {
         @Override
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
-            if (!Iterator.class.isAssignableFrom(typeToken.getRawType()))
+            if (!AutoCloseableIterator.class.isAssignableFrom(typeToken.getRawType()))
                 return null;
 
             ParameterizedType parameterizedType = (ParameterizedType) typeToken.getType();
