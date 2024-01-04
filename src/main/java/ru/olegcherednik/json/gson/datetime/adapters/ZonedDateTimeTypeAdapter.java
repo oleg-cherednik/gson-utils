@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.gson.datetime.adapter;
+package ru.olegcherednik.json.gson.datetime.adapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -25,31 +25,26 @@ import com.google.gson.stream.JsonWriter;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Oleg Cherednik
- * @since 09.10.2021
+ * @since 08.01.2021
  */
 @RequiredArgsConstructor
-public class DateTypeAdapter extends TypeAdapter<Date> {
+public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
 
-    protected final DateFormat df;
+    protected final DateTimeFormatter df;
 
     @Override
-    public void write(JsonWriter out, Date value) throws IOException {
+    public void write(JsonWriter out, ZonedDateTime value) throws IOException {
         out.value(df.format(value));
     }
 
     @Override
-    public Date read(JsonReader in) throws IOException {
-        try {
-            return df.parse(in.nextString());
-        } catch (ParseException e) {
-            throw new IOException(e);
-        }
+    public ZonedDateTime read(JsonReader in) throws IOException {
+        return ZonedDateTime.parse(in.nextString(), df);
     }
 
 }

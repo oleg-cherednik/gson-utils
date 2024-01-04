@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.gson.datetime.adapter;
+package ru.olegcherednik.json.gson.datetime.adapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -25,26 +25,26 @@ import com.google.gson.stream.JsonWriter;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.time.OffsetTime;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 
 /**
  * @author Oleg Cherednik
- * @since 09.12.2023
+ * @since 17.10.2021
  */
 @RequiredArgsConstructor
-public class OffsetTimeTypeAdapter extends TypeAdapter<OffsetTime> {
+public class InstantTypeAdapter extends TypeAdapter<Instant> {
 
     protected final DateTimeFormatter df;
 
     @Override
-    public void write(JsonWriter out, OffsetTime value) throws IOException {
+    public void write(JsonWriter out, Instant value) throws IOException {
         out.value(df.format(value));
     }
 
     @Override
-    public OffsetTime read(JsonReader in) throws IOException {
-        return OffsetTime.parse(in.nextString(), df);
+    public Instant read(JsonReader in) throws IOException {
+        return Instant.from(df.parse(in.nextString()));
     }
 
 }

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package ru.olegcherednik.json.gson.datetime.adapter;
+package ru.olegcherednik.json.gson.datetime.adapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -25,26 +25,26 @@ import com.google.gson.stream.JsonWriter;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
  * @author Oleg Cherednik
- * @since 09.12.2023
+ * @since 08.01.2021
  */
 @RequiredArgsConstructor
-public class LocalTimeTypeAdapter extends TypeAdapter<LocalTime> {
+public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
 
     protected final DateTimeFormatter df;
 
     @Override
-    public void write(JsonWriter out, LocalTime value) throws IOException {
+    public void write(JsonWriter out, LocalDateTime value) throws IOException {
         out.value(df.format(value));
     }
 
     @Override
-    public LocalTime read(JsonReader in) throws IOException {
-        return LocalTime.parse(in.nextString(), df);
+    public LocalDateTime read(JsonReader in) throws IOException {
+        return LocalDateTime.parse(in.nextString(), df);
     }
 
 }
