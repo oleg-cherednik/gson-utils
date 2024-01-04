@@ -23,18 +23,17 @@ import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Iterator;
 
 /**
  * @param <V> Type of the value object
  * @author Oleg Cherednik
  * @since 09.01.2021
  */
-public class IteratorParameterizedType<V> implements ParameterizedType {
+public class AutoCloseableIteratorParameterizedType<V> implements ParameterizedType {
 
     private final Class<V> valueClass;
 
-    public IteratorParameterizedType(Class<V> valueClass) {
+    public AutoCloseableIteratorParameterizedType(Class<V> valueClass) {
         this.valueClass = valueClass;
     }
 

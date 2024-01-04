@@ -22,8 +22,6 @@ package ru.olegcherednik.json.gson.types;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 
-import java.util.Iterator;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -31,10 +29,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 11.01.2021
  */
 @Test
-public class IteratorParameterizedTypeTest {
+public class AutoCloseableIteratorParameterizedTypeTest {
 
     public void shouldRetrieveGivenClassesWhenCreateNewInstance() {
-        IteratorParameterizedType<String> type = new IteratorParameterizedType<>(String.class);
+        AutoCloseableIteratorParameterizedType<String> type = new AutoCloseableIteratorParameterizedType<>(String.class);
         assertThat(type.getActualTypeArguments()).containsExactly(String.class);
         assertThat(type.getRawType()).isSameAs(AutoCloseableIterator.class);
         assertThat(type.getOwnerType()).isNull();

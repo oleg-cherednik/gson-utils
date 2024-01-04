@@ -24,7 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
-import ru.olegcherednik.json.gson.types.IteratorParameterizedType;
+import ru.olegcherednik.json.gson.types.AutoCloseableIteratorParameterizedType;
 import ru.olegcherednik.json.gson.types.MapParameterizedType;
 
 import java.io.IOException;
@@ -108,12 +108,12 @@ public class GsonEngine implements JsonEngine {
 
     @Override
     public <V> AutoCloseableIterator<V> readListLazy(Reader reader, Class<V> valueClass) throws IOException {
-        return gson.fromJson(gson.newJsonReader(reader), new IteratorParameterizedType<>(valueClass));
+        return gson.fromJson(gson.newJsonReader(reader), new AutoCloseableIteratorParameterizedType<>(valueClass));
     }
 
     @Override
     public AutoCloseableIterator<Map<String, Object>> readListOfMapLazy(Reader reader) throws IOException {
-        return gson.fromJson(gson.newJsonReader(reader), new IteratorParameterizedType<>(Map.class));
+        return gson.fromJson(gson.newJsonReader(reader), new AutoCloseableIteratorParameterizedType<>(Map.class));
     }
 
     @Override
