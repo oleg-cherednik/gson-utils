@@ -23,12 +23,19 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import ru.olegcherednik.json.api.JsonException;
 import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.NoSuchElementException;
 
 /**
  * @author Oleg Cherednik
@@ -49,7 +56,73 @@ public final class AutoCloseableIteratorTypeAdapterFactory implements TypeAdapte
         Type elementType = ((ParameterizedType) typeToken.getType()).getActualTypeArguments()[0];
         TypeAdapter<?> elementTypeAdapter = gson.getAdapter(TypeToken.get(elementType));
         //noinspection unchecked,rawtypes
-        return new AutoCloseableIteratorTypeAdapter(elementTypeAdapter);
+        return new Adapter(elementTypeAdapter);
+    }
+
+    @RequiredArgsConstructor
+    public static class Adapter<V> extends TypeAdapter<AutoCloseableIterator<V>> {
+
+        protected final TypeAdapter<V> elementTypeAdapter;
+
+        @Override
+        public void write(JsonWriter out, AutoCloseableIterator<V> it) throws IOException {
+            if (it == null) {
+                out.nullValue();
+                return;
+            }
+
+            out.beginArray();
+
+            while (it.hasNext()) {
+                elementTypeAdapter.write(out, it.next());
+            }
+
+            out.endArray();
+        }
+
+        @Override
+        public AutoCloseableIterator<V> read(JsonReader in) throws IOException {
+            if (in.peek() == JsonToken.NULL) {
+                in.nextNull();
+                return null;
+            }
+
+            in.beginArray();
+            return new JsonReaderIterator<>(in, elementTypeAdapter);
+        }
+
+    }
+
+    @RequiredArgsConstructor
+    public static class JsonReaderIterator<V> implements AutoCloseableIterator<V> {
+
+        protected final JsonReader in;
+        protected final TypeAdapter<V> typeAdapter;
+
+        @Override
+        public boolean hasNext() {
+            try {
+                return in.hasNext();
+            } catch (IOException e) {
+                throw new JsonException(e);
+            }
+        }
+
+        @Override
+        public V next() {
+            try {
+                if (!hasNext())
+                    throw new NoSuchElementException();
+                return typeAdapter.read(in);
+            } catch (IOException e) {
+                throw new JsonException(e);
+            }
+        }
+
+        @Override
+        public void close() throws Exception {
+            in.close();
+        }
     }
 
 }
