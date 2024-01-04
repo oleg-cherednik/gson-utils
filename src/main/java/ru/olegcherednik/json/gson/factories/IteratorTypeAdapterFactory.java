@@ -22,7 +22,6 @@ package ru.olegcherednik.json.gson.factories;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
-import com.google.gson.internal.bind.ObjectTypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -34,8 +33,6 @@ import ru.olegcherednik.json.api.JsonException;
 import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -53,21 +50,17 @@ public class IteratorTypeAdapterFactory implements TypeAdapterFactory {
         if (AutoCloseableIterator.class.isAssignableFrom(typeToken.getRawType()))
             return AutoCloseableIteratorTypeAdapterFactory.INSTANCE.create(gson, typeToken);
         if (Iterator.class.isAssignableFrom(typeToken.getRawType()))
-            return createForIterator(gson, typeToken);
+            return new AdapterBar<>(gson.getAdapter(Object.class));
         return null;
     }
 
-    protected <T> TypeAdapter<T> createForIterator(Gson gson, TypeToken<T> typeToken) {
-        return new AdapterBar(gson.getAdapter(Object.class));
-    }
-
     @RequiredArgsConstructor
-    public static class AdapterBar<V> extends TypeAdapter<Iterator<V>> {
+    public static class AdapterBar<T> extends TypeAdapter<T> {
 
-        protected final TypeAdapter<V> elementTypeAdapter;
+        protected final TypeAdapter<Object> elementTypeAdapter;
 
         @Override
-        public void write(JsonWriter out, Iterator<V> it) throws IOException {
+        public void write(JsonWriter out, T it) throws IOException {
             if (it == null) {
                 out.nullValue();
                 return;
@@ -75,28 +68,28 @@ public class IteratorTypeAdapterFactory implements TypeAdapterFactory {
 
             out.beginArray();
 
-            while (it.hasNext()) {
-                elementTypeAdapter.write(out, it.next());
+            while (((Iterator<?>) it).hasNext()) {
+                elementTypeAdapter.write(out, ((Iterator<?>) it).next());
             }
 
             out.endArray();
         }
 
         @Override
-        public Iterator<V> read(JsonReader in) throws IOException {
+        public T read(JsonReader in) throws IOException {
             if (in.peek() == JsonToken.NULL) {
                 in.nextNull();
                 return null;
             }
 
             in.beginArray();
-            return new JsonReaderIterator1<>(in, elementTypeAdapter);
+            return (T) new JsonReaderIterator<>(in, elementTypeAdapter);
         }
 
     }
 
     @RequiredArgsConstructor
-    public static class JsonReaderIterator1<V> implements Iterator<V> {
+    public static class JsonReaderIterator<V> implements Iterator<V> {
 
         protected final JsonReader in;
         protected final TypeAdapter<V> typeAdapter;
