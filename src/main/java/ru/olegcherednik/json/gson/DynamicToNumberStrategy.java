@@ -47,6 +47,7 @@ public final class DynamicToNumberStrategy implements ToNumberStrategy {
             return (int) val;
         if (Double.compare((long) val, val) == 0)
             return (long) val;
+
         return new BigInteger(str);
     }
 
