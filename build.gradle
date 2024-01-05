@@ -87,7 +87,6 @@ dependencies {
 
     api 'ru.oleg-cherednik.json:json-api:3.0'
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
     compileOnly "com.google.code.gson:gson:${property('gson.version')}"
 
     testAnnotationProcessor "org.projectlombok:lombok:${property('lombok.version')}"
@@ -98,7 +97,6 @@ dependencies {
     }
 
     testImplementation "com.google.code.gson:gson:${property('gson.version')}"
-
     testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation 'org.mockito:mockito-core:4.11.0'
     testImplementation 'commons-io:commons-io:2.15.0'
