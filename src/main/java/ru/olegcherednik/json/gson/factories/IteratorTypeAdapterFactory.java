@@ -24,17 +24,17 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import ru.olegcherednik.json.api.JsonException;
 import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
+import ru.olegcherednik.json.gson.adapters.IteratorTypeAdapter;
+import ru.olegcherednik.json.gson.types.JsonReaderAutoCloseableIterator;
+import ru.olegcherednik.json.gson.types.JsonReaderIterator;
 
-import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.function.BiFunction;
 
 /**
  * @author Oleg Cherednik
@@ -47,73 +47,33 @@ public class IteratorTypeAdapterFactory implements TypeAdapterFactory {
 
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
-        if (AutoCloseableIterator.class.isAssignableFrom(typeToken.getRawType()))
-            return AutoCloseableIteratorTypeAdapterFactory.INSTANCE.create(gson, typeToken);
-        if (Iterator.class.isAssignableFrom(typeToken.getRawType()))
-            return new AdapterBar<>(gson.getAdapter(Object.class));
+        BiFunction<JsonReader, TypeAdapter<Object>, Iterator<?>> createId = getCreateIt(typeToken.getRawType());
+
+        if (createId == null)
+            return null;
+
+        Type elementType = getElementType(typeToken.getType());
+        TypeAdapter<Object> elementTypeAdapter = (TypeAdapter<Object>) gson.getAdapter(TypeToken.get(elementType));
+        return new IteratorTypeAdapter<>(elementTypeAdapter, createId);
+    }
+
+    protected BiFunction<JsonReader, TypeAdapter<Object>, Iterator<?>> getCreateIt(Class<?> rawType) {
+        if (AutoCloseableIterator.class.isAssignableFrom(rawType))
+            return JsonReaderAutoCloseableIterator::new;
+        if (Iterator.class.isAssignableFrom(rawType))
+            return JsonReaderIterator::new;
         return null;
     }
 
-    @RequiredArgsConstructor
-    public static class AdapterBar<T> extends TypeAdapter<T> {
+    protected static Type getElementType(Type type) {
+        if (type instanceof ParameterizedType) {
+            Type[] actualTypeArguments = ((ParameterizedType) type).getActualTypeArguments();
 
-        protected final TypeAdapter<Object> elementTypeAdapter;
-
-        @Override
-        public void write(JsonWriter out, T it) throws IOException {
-            if (it == null) {
-                out.nullValue();
-                return;
-            }
-
-            out.beginArray();
-
-            while (((Iterator<?>) it).hasNext()) {
-                elementTypeAdapter.write(out, ((Iterator<?>) it).next());
-            }
-
-            out.endArray();
+            if (actualTypeArguments.length > 0)
+                return actualTypeArguments[0];
         }
 
-        @Override
-        public T read(JsonReader in) throws IOException {
-            if (in.peek() == JsonToken.NULL) {
-                in.nextNull();
-                return null;
-            }
-
-            in.beginArray();
-            return (T) new JsonReaderIterator<>(in, elementTypeAdapter);
-        }
-
-    }
-
-    @RequiredArgsConstructor
-    public static class JsonReaderIterator<V> implements Iterator<V> {
-
-        protected final JsonReader in;
-        protected final TypeAdapter<V> typeAdapter;
-
-        @Override
-        public boolean hasNext() {
-            try {
-                return in.hasNext();
-            } catch (IOException e) {
-                throw new JsonException(e);
-            }
-        }
-
-        @Override
-        public V next() {
-            try {
-                if (!hasNext())
-                    throw new NoSuchElementException();
-                return typeAdapter.read(in);
-            } catch (IOException e) {
-                throw new JsonException(e);
-            }
-        }
-
+        return Object.class;
     }
 
 }

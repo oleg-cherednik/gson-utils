@@ -30,11 +30,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 11.01.2021
  */
 @Test
-public class MapParameterizedTypeTest {
+public class LinkedHashMapParameterizedTypeTest {
 
     @SuppressWarnings("PMD.LooseCoupling")
     public void shouldRetrieveGivenClassesWhenCreateNewInstance() {
-        MapParameterizedType<String, Integer> type = new MapParameterizedType<>(String.class, Integer.class);
+        LinkedHashMapParameterizedType<String, Integer> type =
+                new LinkedHashMapParameterizedType<>(String.class, Integer.class);
         assertThat(type.getActualTypeArguments()).containsExactly(String.class, Integer.class);
         assertThat(type.getRawType()).isSameAs(LinkedHashMap.class);
         assertThat(type.getOwnerType()).isNull();

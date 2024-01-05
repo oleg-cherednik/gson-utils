@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 import ru.olegcherednik.json.gson.types.AutoCloseableIteratorParameterizedType;
-import ru.olegcherednik.json.gson.types.MapParameterizedType;
+import ru.olegcherednik.json.gson.types.LinkedHashMapParameterizedType;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -71,7 +71,7 @@ public class GsonEngine implements JsonEngine {
 
     @Override
     public <K, V> Map<K, V> readMap(String json, Class<K> keyClass, Class<V> valueClass) {
-        return gson.fromJson(json, new MapParameterizedType<>(keyClass, valueClass));
+        return gson.fromJson(json, new LinkedHashMapParameterizedType<>(keyClass, valueClass));
     }
 
     // ---------- read Reader ----------
@@ -119,7 +119,7 @@ public class GsonEngine implements JsonEngine {
     @Override
     public <K, V> Map<K, V> readMap(Reader reader, Class<K> keyClass, Class<V> valueClass) throws IOException {
         try (Reader r = reader) {
-            Type type = new MapParameterizedType<>(keyClass, valueClass);
+            Type type = new LinkedHashMapParameterizedType<>(keyClass, valueClass);
             return gson.fromJson(r, type);
         }
     }

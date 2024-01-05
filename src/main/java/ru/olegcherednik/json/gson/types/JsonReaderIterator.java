@@ -19,35 +19,44 @@
 
 package ru.olegcherednik.json.gson.types;
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
 import lombok.RequiredArgsConstructor;
-import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
+import ru.olegcherednik.json.api.JsonException;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * @param <V> Type of the value object
  * @author Oleg Cherednik
- * @since 09.01.2021
+ * @since 05.01.2024
  */
 @RequiredArgsConstructor
-public class AutoCloseableIteratorParameterizedType<V> implements ParameterizedType {
+public class JsonReaderIterator<V> implements Iterator<V> {
 
-    protected final Class<V> valueClass;
+    protected final JsonReader in;
+    protected final TypeAdapter<V> typeAdapter;
 
     @Override
-    public Type[] getActualTypeArguments() {
-        return new Type[] { valueClass };
+    public boolean hasNext() {
+        try {
+            return in.hasNext();
+        } catch (IOException e) {
+            throw new JsonException(e);
+        }
     }
 
     @Override
-    public Type getRawType() {
-        return AutoCloseableIterator.class;
-    }
-
-    @Override
-    public Type getOwnerType() {
-        return null;
+    public V next() {
+        try {
+            if (!hasNext())
+                throw new NoSuchElementException();
+            return typeAdapter.read(in);
+        } catch (IOException e) {
+            throw new JsonException(e);
+        }
     }
 
 }

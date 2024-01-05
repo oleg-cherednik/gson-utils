@@ -28,7 +28,6 @@ import ru.olegcherednik.json.api.JsonSettings;
 import ru.olegcherednik.json.gson.DynamicToNumberStrategy;
 import ru.olegcherednik.json.gson.GsonEngine;
 import ru.olegcherednik.json.gson.datetime.JavaTimeModule;
-import ru.olegcherednik.json.gson.factories.AutoCloseableIteratorTypeAdapterFactory;
 import ru.olegcherednik.json.gson.factories.EnumIdTypeAdapterFactory;
 import ru.olegcherednik.json.gson.factories.IteratorTypeAdapterFactory;
 
