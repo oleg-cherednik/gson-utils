@@ -158,7 +158,7 @@ public class Snippet {
 ```java
 public class Snippet {
 
-    public static Map<String, ?> jsonStringToMap() {
+    public static Map<String, Object> jsonStringToMap() {
         String json = """
                       {
                           "victory" : {
@@ -319,7 +319,7 @@ public class Snippet {
 ```java
 public class Snippet {
 
-    public static Map<String, ?> readJsonFromFileToMap(File file) {
+    public static Map<String, Object> readJsonFromFileToMap(File file) {
         try (Reader in = new FileReader(file)) {
             return GsonUtils.readMap(in);
         }
