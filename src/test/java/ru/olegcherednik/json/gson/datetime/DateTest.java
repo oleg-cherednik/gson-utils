@@ -21,6 +21,7 @@ package ru.olegcherednik.json.gson.datetime;
 
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonException;
 import ru.olegcherednik.json.gson.MapUtils;
 import ru.olegcherednik.json.gson.ResourceData;
 
@@ -33,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Oleg Cherednik
@@ -64,6 +66,14 @@ public class DateTest {
         Map<String, Date> actual = Json.readMap(json, String.class, Date.class);
         assertThat(actual).isNotNull();
         assertThat(actual).isEqualTo(expected);
+    }
+
+    public void shouldThrowJsonExceptionWhenProblemWhileParseDate() {
+        String json = "{\"date\":\"2017-07-23T13:57:14.225\"}";
+
+        assertThatThrownBy(() -> Json.readMap(json, String.class, Date.class))
+                .isExactlyInstanceOf(JsonException.class)
+                .hasMessageContaining("Unparseable date");
     }
 
     private static Map<String, Date> createData() throws ParseException {
