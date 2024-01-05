@@ -85,7 +85,7 @@ pmdTest {
 dependencies {
     annotationProcessor "org.projectlombok:lombok:${property('lombok.version')}"
 
-    api 'ru.oleg-cherednik.json:json-api:666'
+    api 'ru.oleg-cherednik.json:json-api:3.0'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
     compileOnly "com.google.code.gson:gson:${property('gson.version')}"
