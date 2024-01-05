@@ -21,7 +21,7 @@ package ru.olegcherednik.json.gson.types;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
+import ru.olegcherednik.json.api.AutoCloseableIterator;
 
 /**
  * @param <V> Type of the value object

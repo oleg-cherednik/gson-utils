@@ -20,7 +20,7 @@
 package ru.olegcherednik.json.gson.types;
 
 import org.testng.annotations.Test;
-import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
+import ru.olegcherednik.json.api.AutoCloseableIterator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

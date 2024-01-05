@@ -22,8 +22,8 @@ package ru.olegcherednik.json.gson;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;
+import ru.olegcherednik.json.api.AutoCloseableIterator;
 import ru.olegcherednik.json.api.JsonEngine;
-import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 import ru.olegcherednik.json.gson.types.AutoCloseableIteratorParameterizedType;
 import ru.olegcherednik.json.gson.types.LinkedHashMapParameterizedType;
 

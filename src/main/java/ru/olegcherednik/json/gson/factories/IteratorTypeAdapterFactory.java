@@ -26,7 +26,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
+import ru.olegcherednik.json.api.AutoCloseableIterator;
 import ru.olegcherednik.json.gson.adapters.IteratorTypeAdapter;
 import ru.olegcherednik.json.gson.types.JsonReaderAutoCloseableIterator;
 import ru.olegcherednik.json.gson.types.JsonReaderIterator;

@@ -20,7 +20,7 @@
 package ru.olegcherednik.json.gson.types;
 
 import lombok.RequiredArgsConstructor;
-import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
+import ru.olegcherednik.json.api.AutoCloseableIterator;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

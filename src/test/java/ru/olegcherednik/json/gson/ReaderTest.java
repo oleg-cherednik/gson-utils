@@ -20,9 +20,9 @@
 package ru.olegcherednik.json.gson;
 
 import org.testng.annotations.Test;
+import ru.olegcherednik.json.api.AutoCloseableIterator;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonException;
-import ru.olegcherednik.json.api.iterator.AutoCloseableIterator;
 import ru.olegcherednik.json.gson.data.Book;
 import ru.olegcherednik.json.gson.data.Data;
 
