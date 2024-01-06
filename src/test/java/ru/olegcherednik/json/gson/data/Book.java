@@ -22,6 +22,7 @@ package ru.olegcherednik.json.gson.data;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import ru.olegcherednik.json.gson.ListUtils;
 
 import java.time.ZonedDateTime;
@@ -34,6 +35,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class Book {
 
     public static final Book THINKING_IN_JAVA = new Book("Thinking in Java",

@@ -23,6 +23,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Scanner;
 
@@ -33,6 +34,7 @@ import java.util.Scanner;
 @SuppressWarnings("unused")
 @NoArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class Data {
 
     public static final Data EMPTY = new Data();
