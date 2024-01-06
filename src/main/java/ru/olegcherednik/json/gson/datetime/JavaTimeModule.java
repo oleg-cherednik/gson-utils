@@ -50,7 +50,6 @@ import java.util.function.Consumer;
  */
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@SuppressWarnings("all")
 public class JavaTimeModule implements Consumer<GsonBuilder> {
 
     protected final DateTimeFormatter instant;

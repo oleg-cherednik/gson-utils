@@ -19,21 +19,12 @@
 
 package ru.olegcherednik.json.impl;
 
-import com.google.gson.GsonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ru.olegcherednik.json.api.JsonEngine;
 import ru.olegcherednik.json.api.JsonEngineFactory;
 import ru.olegcherednik.json.api.JsonSettings;
-import ru.olegcherednik.json.gson.DynamicToNumberStrategy;
-import ru.olegcherednik.json.gson.GsonEngine;
-import ru.olegcherednik.json.gson.datetime.JavaTimeModule;
-import ru.olegcherednik.json.gson.factories.EnumIdTypeAdapterFactory;
-import ru.olegcherednik.json.gson.factories.IteratorTypeAdapterFactory;
-
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 /**
  * @author Oleg Cherednik
@@ -41,61 +32,26 @@ import java.util.Objects;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@SuppressWarnings("unused")
 public final class StaticJsonEngineFactory implements JsonEngineFactory {
 
     private static final StaticJsonEngineFactory INSTANCE = new StaticJsonEngineFactory();
 
-    @SuppressWarnings("unused")
     public static StaticJsonEngineFactory getInstance() {
         return INSTANCE;
     }
 
-    // ---------- JsonEngineFactory ----------
-
-    @Override
-    public GsonEngine createJsonEngine(JsonSettings settings) {
-        GsonBuilder builder = createGsonBuilder(settings);
-        return new GsonEngine(builder.create());
+    public static String getMainClass() {
+        return "com.google.gson.Gson";
     }
 
     @Override
-    public GsonEngine createPrettyPrintJsonEngine(JsonSettings settings) {
-        GsonBuilder builder = createGsonBuilder(settings).setPrettyPrinting();
-        return new GsonEngine(builder.create());
+    public JsonEngine createJsonEngine(JsonSettings settings) {
+        return GsonFactory.createJsonEngine(settings);
     }
 
-    private static GsonBuilder createGsonBuilder(JsonSettings settings) {
-        Objects.requireNonNull(settings);
-
-        GsonBuilder builder = new GsonBuilder()
-                .setObjectToNumberStrategy(DynamicToNumberStrategy.INSTANCE)
-                .enableComplexMapKeySerialization()
-                .registerTypeAdapterFactory(EnumIdTypeAdapterFactory.INSTANCE)
-                .registerTypeAdapterFactory(IteratorTypeAdapterFactory.INSTANCE);
-
-        if (settings.isSerializeNull())
-            builder.serializeNulls();
-
-        createJavaTimeModuleConsumer(settings).accept(builder);
-        return builder;
+    @Override
+    public JsonEngine createPrettyPrintJsonEngine(JsonSettings settings) {
+        return GsonFactory.createPrettyPrintJsonEngine(settings);
     }
-
-    private static JavaTimeModule createJavaTimeModuleConsumer(JsonSettings settings) {
-        return JavaTimeModule.builder()
-                             .date(settings.getDateFormatter())
-                             .instant(settings.getInstantFormatter())
-                             .localDate(settings.getLocalDateFormatter())
-                             .localTime(settings.getLocalTimeFormatter())
-                             .localDateTime(settings.getLocalDateTimeFormatter())
-                             .offsetTime(settings.getOffsetTimeFormatter())
-                             .offsetDateTime(withZoneId(settings.getOffsetDateTimeFormatter(), settings.getZoneId()))
-                             .offsetDateTime(withZoneId(settings.getOffsetDateTimeFormatter(), settings.getZoneId()))
-                             .zonedDateTime(withZoneId(settings.getZonedDateTimeFormatter(), settings.getZoneId()))
-                             .build();
-    }
-
-    private static DateTimeFormatter withZoneId(DateTimeFormatter df, ZoneId zoneId) {
-        return zoneId == null ? df : df.withZone(zoneId);
-    }
-
 }

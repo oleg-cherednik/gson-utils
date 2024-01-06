@@ -24,7 +24,7 @@ repositories {
 }
 
 group = 'ru.oleg-cherednik.json'
-version = '3.0'
+version = '3.0.0'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -85,7 +85,7 @@ pmdTest {
 dependencies {
     annotationProcessor "org.projectlombok:lombok:${property('lombok.version')}"
 
-    api 'ru.oleg-cherednik.json:json-api:3.0'
+    api 'ru.oleg-cherednik.json:json-api:3.0.0'
 
     compileOnly "com.google.code.gson:gson:${property('gson.version')}"
 
