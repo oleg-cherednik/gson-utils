@@ -17,7 +17,6 @@
 package ru.olegcherednik.json.gson;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;
 import ru.olegcherednik.json.api.AutoCloseableIterator;
