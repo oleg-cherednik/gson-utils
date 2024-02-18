@@ -83,7 +83,7 @@ public class MapWithNullValueTypeAdapter implements TypeAdapterFactory {
             }
         }
 
-        private void writeKey(JsonWriter out, Object key, boolean actualSerializeNulls) throws IOException {
+        protected void writeKey(JsonWriter out, Object key, boolean actualSerializeNulls) throws IOException {
             out.setSerializeNulls(actualSerializeNulls);
 
             if (key == null)
@@ -95,7 +95,7 @@ public class MapWithNullValueTypeAdapter implements TypeAdapterFactory {
             }
         }
 
-        private void writeValue(JsonWriter out, Object value, boolean actualSerializeNulls) throws IOException {
+        protected void writeValue(JsonWriter out, Object value, boolean actualSerializeNulls) throws IOException {
             if (value == null) {
                 out.setSerializeNulls(true);
                 out.nullValue();
