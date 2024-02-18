@@ -16,9 +16,13 @@
 
 package ru.olegcherednik.json.gson;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
 import ru.olegcherednik.json.api.JsonSettings;
+import ru.olegcherednik.json.api.enumid.EnumId;
 
 import java.util.Map;
 
@@ -58,6 +62,33 @@ public class MapWithNullValueTest {
         Map<String, String> actual = Json.readMap(json, String.class, String.class);
         assertThat(actual).containsOnlyKeys(ONE)
                           .containsEntry(ONE, "1");
+    }
+
+    public void shouldSerializeNulWhenWriteMapWithEnumKey() {
+        Map<Auto, String> expected = MapUtils.of(Auto.AUDI, "RS3",
+                                                 Auto.MERCEDES, "G64",
+                                                 Auto.BMW, null);
+        String json = Json.writeValue(expected);
+        assertThat(json).isNotNull();
+        assertThat(json).isEqualTo("{\"audi\":\"RS3\",\"mercedes\":\"G64\",\"bmw\":null}");
+
+        Map<Auto, String> actual = Json.readMap(json, Auto.class, String.class);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+    public enum Auto implements EnumId {
+
+        AUDI("audi"),
+        BMW("bmw"),
+        MERCEDES("mercedes");
+
+        private final String id;
+
+        public static Auto parseId(String id) {
+            return EnumId.parseId(Auto.class, id);
+        }
     }
 
 }

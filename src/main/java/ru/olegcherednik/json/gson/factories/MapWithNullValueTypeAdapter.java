@@ -17,6 +17,8 @@
 package ru.olegcherednik.json.gson.factories;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
@@ -83,13 +85,16 @@ public class MapWithNullValueTypeAdapter implements TypeAdapterFactory {
             }
         }
 
-        private static void writeKey(JsonWriter out, Object value, boolean actualSerializeNulls) throws IOException {
+        private void writeKey(JsonWriter out, Object key, boolean actualSerializeNulls) throws IOException {
             out.setSerializeNulls(actualSerializeNulls);
 
-            if (value == null)
+            if (key == null)
                 out.nullValue();
-            else
-                out.name(String.valueOf(value));
+            else {
+                TypeToken<Object> typeToken = (TypeToken<Object>) TypeToken.get(key.getClass());
+                TypeAdapter<Object> typeAdapter = gson.getAdapter(typeToken);
+                out.name(typeAdapter.toJsonTree(key).getAsString());
+            }
         }
 
         private void writeValue(JsonWriter out, Object value, boolean actualSerializeNulls) throws IOException {
@@ -104,6 +109,23 @@ public class MapWithNullValueTypeAdapter implements TypeAdapterFactory {
 
             out.setSerializeNulls(false);
         }
+
+        //        private static String keyToString(JsonElement keyElement) {
+        //            if (keyElement.isJsonPrimitive()) {
+        //                JsonPrimitive primitive = keyElement.getAsJsonPrimitive();
+        //                if (primitive.isNumber()) {
+        //                    return String.valueOf(primitive.getAsNumber());
+        //                } else if (primitive.isBoolean()) {
+        //                    return Boolean.toString(primitive.getAsBoolean());
+        //                } else if (primitive.isString()) {
+        //                    return primitive.getAsString();
+        //                } else {
+        //                    throw new AssertionError();
+        //                }
+        //            } else {
+        //                throw new AssertionError();
+        //            }
+        //        }
 
     }
 
