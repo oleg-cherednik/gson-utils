@@ -34,7 +34,7 @@ import java.util.function.BiFunction;
 @RequiredArgsConstructor
 public class IteratorTypeAdapter<T> extends TypeAdapter<T> {
 
-    protected final TypeAdapter<Object> elementTypeAdapter;
+    protected final TypeAdapter<Object> itemTypeAdapter;
     protected final BiFunction<JsonReader, TypeAdapter<Object>, Iterator<?>> createIt;
 
     @Override
@@ -48,7 +48,7 @@ public class IteratorTypeAdapter<T> extends TypeAdapter<T> {
         Iterator<?> it = (Iterator<?>) value;
 
         while (it.hasNext()) {
-            elementTypeAdapter.write(out, it.next());
+            itemTypeAdapter.write(out, it.next());
         }
 
         out.endArray();
@@ -62,7 +62,7 @@ public class IteratorTypeAdapter<T> extends TypeAdapter<T> {
         }
 
         in.beginArray();
-        return (T) createIt.apply(in, elementTypeAdapter);
+        return (T) createIt.apply(in, itemTypeAdapter);
     }
 
 }

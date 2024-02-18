@@ -49,9 +49,9 @@ public class IteratorTypeAdapterFactory implements TypeAdapterFactory {
         if (createId == null)
             return null;
 
-        Type elementType = getElementType(typeToken.getType());
-        TypeAdapter<Object> elementTypeAdapter = (TypeAdapter<Object>) gson.getAdapter(TypeToken.get(elementType));
-        return new IteratorTypeAdapter<>(elementTypeAdapter, createId);
+        Type itemType = getItemType(typeToken.getType());
+        TypeAdapter<Object> itemTypeAdapter = (TypeAdapter<Object>) gson.getAdapter(TypeToken.get(itemType));
+        return new IteratorTypeAdapter<>(itemTypeAdapter, createId);
     }
 
     protected BiFunction<JsonReader, TypeAdapter<Object>, Iterator<?>> getCreateIt(Class<?> rawType) {
@@ -62,7 +62,7 @@ public class IteratorTypeAdapterFactory implements TypeAdapterFactory {
         return null;
     }
 
-    protected static Type getElementType(Type type) {
+    protected static Type getItemType(Type type) {
         if (type instanceof ParameterizedType) {
             Type[] actualTypeArguments = ((ParameterizedType) type).getActualTypeArguments();
 

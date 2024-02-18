@@ -16,7 +16,9 @@
 
 package ru.olegcherednik.json.gson;
 
+import org.testng.annotations.Test;
 import ru.olegcherednik.json.api.Json;
+import ru.olegcherednik.json.api.JsonSettings;
 
 import java.util.Map;
 
@@ -26,20 +28,36 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Oleg Cherednik
  * @since 06.02.2024
  */
-// TODO should be fixed, because Jackson works with this
-// @Test
-public class MapNullKeyValueTest {
+@Test
+public class MapWithNullValueTest {
+
+    private static final String ONE = "one";
 
     public void shouldSerializeNulWhenWriteMap() {
-        Map<String, String> expected = MapUtils.of("one", "1",
+        Map<String, String> expected = MapUtils.of(ONE, "1",
                                                    "two", null);
         String json = Json.writeValue(expected);
         assertThat(json).isNotNull();
-        assertThat(json).isEqualTo("{\"one\":\"1\",\"two\":null}");
+        assertThat(json).isEqualTo("{\"" + ONE + "\":\"1\",\"two\":null}");
 
         Map<String, String> actual = Json.readMap(json, String.class, String.class);
         assertThat(actual).isEqualTo(expected);
+    }
 
+    public void shouldNotSerializeNulWhenWriteMapWithCustomSetting() {
+        JsonSettings settings = JsonSettings.builder()
+                                            .serializeNullMapValue(false)
+                                            .build();
+
+        Map<String, String> expected = MapUtils.of(ONE, "1",
+                                                   "two", null);
+        String json = Json.createWriter(settings).writeValue(expected);
+        assertThat(json).isNotNull();
+        assertThat(json).isEqualTo("{\"" + ONE + "\":\"1\"}");
+
+        Map<String, String> actual = Json.readMap(json, String.class, String.class);
+        assertThat(actual).containsOnlyKeys(ONE)
+                          .containsEntry(ONE, "1");
     }
 
 }

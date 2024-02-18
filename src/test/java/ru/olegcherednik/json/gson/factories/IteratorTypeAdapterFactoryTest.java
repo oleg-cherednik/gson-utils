@@ -58,7 +58,7 @@ public class IteratorTypeAdapterFactoryTest {
 
         assertThat(actual).isNotNull().isExactlyInstanceOf(IteratorTypeAdapter.class);
 
-        Field field = IteratorTypeAdapter.class.getDeclaredField("elementTypeAdapter");
+        Field field = IteratorTypeAdapter.class.getDeclaredField("itemTypeAdapter");
         field.setAccessible(true);
         assertThat(field.get(actual)).isSameAs(elementTypeAdapter);
     }

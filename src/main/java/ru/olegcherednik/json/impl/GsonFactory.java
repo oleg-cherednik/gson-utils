@@ -25,6 +25,7 @@ import ru.olegcherednik.json.gson.GsonEngine;
 import ru.olegcherednik.json.gson.datetime.JavaTimeModule;
 import ru.olegcherednik.json.gson.factories.EnumIdTypeAdapterFactory;
 import ru.olegcherednik.json.gson.factories.IteratorTypeAdapterFactory;
+import ru.olegcherednik.json.gson.factories.MapWithNullValueTypeAdapter;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -54,7 +55,8 @@ final class GsonFactory {
                 .setObjectToNumberStrategy(DynamicToNumberStrategy.INSTANCE)
                 .enableComplexMapKeySerialization()
                 .registerTypeAdapterFactory(EnumIdTypeAdapterFactory.INSTANCE)
-                .registerTypeAdapterFactory(IteratorTypeAdapterFactory.INSTANCE);
+                .registerTypeAdapterFactory(IteratorTypeAdapterFactory.INSTANCE)
+                .registerTypeAdapterFactory(new MapWithNullValueTypeAdapter(settings.isSerializeNullMapValue()));
 
         if (settings.isSerializeNull())
             builder.serializeNulls();
