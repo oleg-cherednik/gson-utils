@@ -3,7 +3,6 @@ import com.github.jk1.license.render.InventoryHtmlReportRenderer
 
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
     }
 }
